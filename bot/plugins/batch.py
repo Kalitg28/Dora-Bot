@@ -61,7 +61,7 @@ async def batch(bot:Client, update:Message):
     if not msg_id1<=msg_id2:
         return await update.reply_text("The First Message Has To Be Posted Above The Second In The Channel To Generate A Batch")
 
-    encoded = encode(f"{str(chat_id1).replace('-100','')} {msg_id1} {msg_id2}")
+    encoded = await encode(f"{str(chat_id1).replace('-100','')} {msg_id1} {msg_id2}")
     url = f"https://t.me/DoraFilterBot?start=a{encoded}"
 
     await update.reply_text(f"Woohoo... I've Successfully Generated A Link For Your Batch\n{url}\nPS:This Link Will Only Work As Long As I AM An Admin In The From Channel")

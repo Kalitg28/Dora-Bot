@@ -94,7 +94,7 @@ class Batch():
         try :
 
             channel_id, msg1, msg2 = re.findall(r"^a(.+)a(.+)a(.+)", batch)
-            channel_id, msg1, msg2 = (Batch.decode(channel_id), Batch.decode(msg1), Batch.decode(msg2))
+            channel_id, msg1, msg2 = (await Batch.decode(channel_id), await Batch.decode(msg1), await Batch.decode(msg2))
             for id in range(int(msg1), int(msg2)):
                 try :
                     message = await bot.get_messages(chat_id=int(channel_id), message_ids=id)

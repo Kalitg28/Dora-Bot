@@ -28,7 +28,7 @@ async def auto_filter(bot, update:Message):
     """
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
     """
-    group_id = update.chat.id
+    chat_id = update.chat.id
     chat_type = update.chat.type
 
     if chat_type=="private":

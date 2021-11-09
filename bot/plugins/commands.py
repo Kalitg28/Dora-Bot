@@ -75,7 +75,7 @@ async def help(bot, update):
     reply_markup = InlineKeyboardMarkup(buttons)
     
     await bot.send_photo(
-        photo="PhotoURL",
+        photo="https://telegra.ph/file/82b6cf45d478fb5fd33c0.jpg",
         chat_id=update.chat.id,
         caption=Translation.HELP_TEXT.format(update.grom_user.mention),
         reply_markup=reply_markup,

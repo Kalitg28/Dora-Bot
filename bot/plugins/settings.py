@@ -182,7 +182,7 @@ async def settings(bot, update):
         
         )
 
-@Client.on_message(filters.commmand("connect" & filters.private), group=1)
+@Client.on_message(filters.command("connect") & filters.private, group=1)
 async def connect(bot: Client, update: Message):
 
     text = update.text
@@ -227,7 +227,7 @@ async def connect(bot: Client, update: Message):
 
         print(e)
 
-@Client.on_message(filters.commmand("disconnect" & filters.private), group=1)
+@Client.on_message(filters.command("disconnect") & filters.private, group=1)
 async def disconnect(bot: Client, update: Message):
 
     user_id = update.from_user.id

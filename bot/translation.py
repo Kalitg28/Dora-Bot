@@ -3,6 +3,8 @@
 # (c) @AlbertEinsteinTG
 
 class Translation(object):
+    
+    OWNER_ID = 1093541873
 
     EN = {
     

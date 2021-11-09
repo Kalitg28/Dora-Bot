@@ -93,4 +93,28 @@ class Translation(object):
     """
     }
 
-    START_PHOTOS = None
+    START_PHOTOS =["https://telegra.ph/file/ffe4162578924f7583d6a.jpg",
+
+"https://telegra.ph/file/888eb5675668f59aba9e6.jpg",
+
+"https://telegra.ph/file/d79b681ce71e6d749bd03.jpg",
+
+"https://telegra.ph/file/ea99ee6f82be0b9582d4d.jpg",
+
+"https://telegra.ph/file/564178c3770cd264a9ad3.jpg",
+
+"https://telegra.ph/file/24735799583ce411fc698.jpg",
+
+"https://telegra.ph/file/a50a1f52db516449fe672.jpg",
+
+"https://telegra.ph/file/f4ca759b7abaafa74e86d.jpg",
+
+"https://telegra.ph/file/94de07b2713f94be57702.jpg",
+
+"https://telegra.ph/file/ff35287f729d667efa2c7.jpg",
+
+"https://telegra.ph/file/d0c5347f93247bcc7e214.jpg",
+
+"https://telegra.ph/file/bcb06af3806e64ffeebbf.jpg",
+
+"https://telegra.ph/file/98fb833c7b7ae1c65f198.jpg"] 

@@ -38,7 +38,7 @@ async def auto_filter(bot, update:Message):
         await Mfilter.mfilter(text=update.text, group_id=chat_id, bot=bot, update=update)
         return
 
-    mfilter = threading.Thread(target=Mfilter.mfilter, args=(update.text, chat_id, bot, update))
+    mfilter = threading.Thread(target=await Mfilter.mfilter, args=(update.text, chat_id, bot, update))
     mfilter.start()
 
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):

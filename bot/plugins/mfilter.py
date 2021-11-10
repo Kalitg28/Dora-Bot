@@ -22,7 +22,7 @@ class Mfilter():
     '''A Function To Get Manual Filters Of A Chat'''
 
     query = text
-    result = await db.find_mfilter(group_id=group_id, query=query)
+    result = db.find_mfilter(group_id=group_id, query=query)
     if not result :
         return
     else:
@@ -32,36 +32,36 @@ class Mfilter():
 
     if sticker and file_id:
         if buttons:
-            await update.reply_sticker(
+            update.reply_sticker(
                 sticker=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode="html"
                 )
         else :
-            await update.reply_sticker(sticker=file_id)
+            update.reply_sticker(sticker=file_id)
     elif file_id:
         if buttons:
-            await update.reply_cached_media(
+            update.reply_cached_media(
                 file_id=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode="html",
                 caption=content
             )
         else:
-            await update.reply_cached_media(
+            update.reply_cached_media(
                 file_id=file_id,
                 parse_mode="html",
                 caption=content
             )
     else :
         if buttons:
-            await update.reply_text(
+            update.reply_text(
                 text=content,
                 parse_mode="html",
                 reply_markup=InlineKeyboardMarkup(buttons)
             )
         else :
-            await update.reply_text(
+            update.reply_text(
                 text=content,
                 parse_mode="html"
             )

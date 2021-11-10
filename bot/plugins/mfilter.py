@@ -66,7 +66,7 @@ class Mfilter():
                 parse_mode="html"
             )
 
-@Client.on_message(filters.command("filter", case_sensitive=False) & filters.incoming, group=1)
+@Client.on_message(filters.command("filter") & filters.incoming, group=1)
 async def n_filter(bot, update: Message):
 
     chat_id = update.chat.id

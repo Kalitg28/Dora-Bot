@@ -533,7 +533,8 @@ class Database:
 
             else :
 
-                conn = self.ucol.find_one({"_id": user_id}).get("chat")
+                conn = self.ucol.find_one({"_id": user_id})
+                conn = conn.get('chat')
 
                 if not conn :
 
@@ -555,15 +556,7 @@ class Database:
     async def conn_user(self, user_id: int, group_id: int):
 
         try:
-
-            user = self.ucol.find_one({"_id": user_id})
-
-            if not user :
-                self.ucol.insert_one({"_id": user_id, "chat": group_id, "lang": "En"})
-                self.ucache[str(user_id)] = group_id
-                return True
-            else :
-                self.ucol.find_one_and_replace({"_id": user_id},{"_id": user_id, "chat": group_id, "lang": "En"})
+                self.ucol.update_one({"_id": user_id},{'$set':{'chat': group_id}})
                 self.ucache[str(user_id)] = group_id
                 return True
 

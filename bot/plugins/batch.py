@@ -94,7 +94,7 @@ class Batch():
         try :
 
             channel_id, msg1, msg2 = re.findall(r"^a(.+)a(.+)a(.+)", batch)[0]
-            channel_id, msg1, msg2 = (Batch.decode(channel_id), Batch.decode(msg1), Batch.decode(msg2))
+            channel_id, msg1, msg2 = (int("-100"+Batch.decode(channel_id)), Batch.decode(msg1), Batch.decode(msg2))
             for id in range(int(msg1), int(msg2)):
                 try :
                     message = await bot.get_messages(chat_id=int(channel_id), message_ids=id)
@@ -145,6 +145,7 @@ class Batch():
                     pass
                 except PeerIdInvalid:
                     await update.reply_text("Failed To Get Messages\nReason : Im not A Member of The Original Channel")
+                    return
                 except Exception as e:
                     print(e)
         except Exception as e : print(e)

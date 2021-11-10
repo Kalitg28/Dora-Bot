@@ -38,8 +38,8 @@ async def auto_filter(bot, update:Message):
         await Mfilter.mfilter(text=update.text, group_id=chat_id, bot=bot, update=update)
         return
 
-    mfilter = threading.Thread(target=await Mfilter.mfilter, args=(update.text, chat_id, bot, update))
-    mfilter.start()
+    mfilter = await threading.Thread(target=Mfilter.mfilter, args=(update.text, chat_id, bot, update))
+    await mfilter.start()
 
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):
         return
@@ -65,7 +65,7 @@ async def auto_filter(bot, update:Message):
         return
     movie = await cleanse(update.text)
     imdb = threading.Thread(target=Helpers.get_movie, args=(movie,))
-    imdb.start()
+    await imdb.start()
     
     allow_video = True
     allow_audio = False

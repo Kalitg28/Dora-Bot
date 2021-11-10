@@ -23,6 +23,20 @@ INVITE_LINK = {}
 ACTIVE_CHATS = {}
 db = Database()
 
+def redirect_mf(text, chat_id, bot, update):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    loop.run_until_complete(Mfilter.mfilter(text, chat_id, bot, update))
+    loop.close()
+
+def redirect_imdb(text):
+    looper = asyncio.new_event_loop()
+    asyncio.set_event_loop(looper)
+    
+    looper.run_until_complete(HELPERS.get_movie(text))
+    looper.close()
+
 @Bot.on_message(filters.text & filters.incoming & ~filters.bot, group=0)
 async def auto_filter(bot, update:Message):
     """
@@ -38,7 +52,7 @@ async def auto_filter(bot, update:Message):
         await Mfilter.mfilter(text=update.text, group_id=chat_id, bot=bot, update=update)
         return
 
-    mfilter = threading.Thread(target=Mfilter.mfilter, args=(update.text, chat_id, bot, update))
+    mfilter = threading.Thread(target=redirect_mf, args=(update.text, chat_id, bot, update))
     await mfilter.start()
 
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):
@@ -64,7 +78,7 @@ async def auto_filter(bot, update:Message):
     if not configs:
         return
     movie = await cleanse(update.text)
-    imdb = threading.Thread(target=Helpers.get_movie, args=(movie,))
+    imdb = threading.Thread(target=redirect_imdb, args=(movie,))
     await imdb.start()
     
     allow_video = True

@@ -3,7 +3,6 @@
 import re 
 import imdb
 from imdb import Movie
-from pyrogram.types.messages_and_media.message import Str
 
 
 searcher = imdb.IMDb()
@@ -58,7 +57,7 @@ class Helpers() :
 
     IMDB[my_movie] = movie_info
 
- async def cleanse(query:Str):
+ async def cleanse(query:str):
 
     keywords = ["movie", "malayalam", "tamil", "kannada", "hd", "subtitle", "subtitles"]
     query = query.lower()

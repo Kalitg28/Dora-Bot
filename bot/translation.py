@@ -3,99 +3,102 @@
 # (c) @AlbertEinsteinTG
 
 class Translation(object):
-    
-    OWNER_ID = 1093541873
 
     EN = {
-    
-    "START": """<b>Hello {} My Name Is Dora I Am A Complete  AutoFilter + ManualFilter + FileShare  bot All You Have To Do Is Add Me To Your Group As Admin \nMake Sure To Look Through My Map In Case Of Doubts\n\nTo Use Me In PM Use The <code>/connect</code> Command And You Can Modify AutoFilter Settings And Add Manual Filters.</b>
+ 
+ "START": """<i><b>Hello {} My Name Is Dora I Am A Complete  AutoFilter + ManualFilter + FileShare  bot All You Have To Do Is Add Me To Your Group As Admin \nMake Sure To Look Through My Map In Case Of Doubts\n\nTo Use Me In PM Use The <code>/connect</code> Command And You Can Modify AutoFilter Settings And Add Manual Filters.</b>
 </i>""",
-    
-    "HELP" : """
+ 
+ "HELP" : """
 <b>Hey {} My Name is Map I Can Guide You Through All Of Dora's Cool Features And How To Properly Use Them. Use The Buttons Below To Navigate Through All Of The Modules \nYou Can Eassily Call Me Out Using The /map Command</b>
 """,
-    
-    "ABOUT" : """<b>➥ Name</b> : <code> Auto Filter Bot</code>
-    
+ 
+ "ABOUT" : """<b>➥ Name</b> : <code> Auto Filter Bot</code>
+ 
 <b>➥ Base Dev</b> : <b><i><a href="https://t.me/AlbertEinstein_TG">AlbertEinstein_TG</a></i></b>
-
-<b>➥ Main Dev</b> : <b><i><a href="https://t.me/J_I_S_I_N">AlbertEinstein_TG</a></i></b>
-
-<b>➥ Language</b> : <code>Python3</code>
-
+<b>➥ Main Dev</b> : <b><i><a href="https://t.me/J_I_S_I_N">MrPurple902</a></i></b>
+<b>➥ Language</b> : <i><a href="https://python.org">Python 3.9.2</a></i>
 <b>➥ Library</b> : <i><a href="https://docs.pyrogram.org">Pyrogram Asyncio 1.13.0 </a></i>
-
 <b>➥ Base Source Code</b> : <i><a href="https://github.com/AlbertEinsteinTG/Adv-Auto-Filter-Bot">Click Me</a></i>
+<b>➥ Server</b> : <i><a href="https://heroku.com">Heroku</a></i>
+<b>➥ DataBase</b> : <i><a href="https://mongodb.com">MongoDB</a></i>
 """,
 
-    "AF" : "<b>To Use The AutoFilter Module Simply Add The Bot To Your Group As Admin Thats it/n/n- Use The <code>/settings</code> Command To Modify AutoFilter Settings \nTo Connect The Settings Panel To PM Read The Connections Menu</b>",
+ "AF" : "<b>To Use The AutoFilter Module Simply Add The Bot To Your Group As Admin Thats it/n/n- Use The <code>/settings</code> Command To Modify AutoFilter Settings \nTo Connect The Settings Panel To PM Read The Connections Menu</b>",
 
-    "MF" : '''
-    Here Are All Of The Manual FIlter Related Commands
+ "MF" : '''
+ <i><b>Here Are All Of The Manual FIlter Related Commands</b></i>
 
-    - Add New Filters : <code>/filter FilterWord ReplyText</code>   To Add Buttons Read The Explantion On Buttons Below
+ -> <i>Add New Filters</i> : <code>/filter FilterWord ReplyText</code>To Add Buttons Read The Explantion On Buttons Below
 
-    - Delete Existing Filter : <code>/stop FilterText</code>
+ -> <i>Delete Existing Filter </i>: <code>/stop FilterText</code>
 
-    _ Veiw All Existing Filters : <code>/filters>
-    ''',
+ -> <i>Veiw All Existing Filters</i> : <code>/filters</code>
+ ''',
 
-    "BATCH" : """
-    Here's Everything Related To The Batch Module :
+ "BATCH" : """
+ <i><b>Here's Everything Related To The Batch Module :</b></i>
 
-    (1) Add Bot To The From Channel as Admin
-    (2) Send /batch Here
-    (3) Forward The First Message With Quotes
-    (4) Forward The Last Message Of The Batch
+ <i>(1) Add Bot To The From Channel as Admin
+ (2) Send /batch Here
+ (3) Forward The First Message With Quotes
+ (4) Forward The Last Message Of The Batch</i>
 
-    """,
+ """,
 
-    "CONN" : """
-    Here Is A Manual On Connections :
+ "CONN" : """
+ <i><b>Here Is A Manual On Connections :</b></i>
 
-    - Create A New Connection : <code>/connect GroupID</code>
-    - Delete Any Existing Connection : <code>/disconnect</code>
+ -> <i>Create A New Connection</i> : <code>/connect GroupID</code>
+ -> <i>Delete Any Existing Connection</i> : <code>/disconnect</code>
 
-    You Can Modify AutoFilter Settings And Manage Manual Filters From PM After Connecting
-    """,
+ You Can Modify AutoFilter Settings And Manage Manual Filters From PM After Connecting
+ """,
 
-    "BTN" : """
-    Here Are The Basic Button Formats And Uses :
+ "BTN" : """
+ <i><b>Here Are The Basic Button Formats And Uses</b></i> :
 
-    URL Button -> <code>[Button Text](url:https://example.com)</code>
-    Alert Button -> <code>[Button Text](alert:Your Alert Text)</code>
+ <i>URL Button</i> -> <code>[Button Text](url:https://example.com)</code>
+ <i>Alert Button</i> -> <code>[Button Text](alert:Your Alert Text)</code>
 
-    Layout Of Buttons :
+ <b>Layout Of Buttons :</b>
 
-    To Make Buttons Appear On The Same Line Simply Type It On The Same Line To Make It Appear On The Next Line Type It On The Next Line
+ To Make Buttons Appear On The Same Line Simply Type It On The Same Line To Make It Appear On The Next Line Type It On The Next Line
 
-    Eg :
-    Same Line ->  [Button1](url:YourURL)[Button2](alert:AlertText)
+ Eg :
+ <i>Same Line</i> ->  [Button1](url:YourURL)[Button2](alert:AlertText)
 
-    Seperate Lines ->  [Button1](url:YourURL)
-                       [Button2](alert:AlertText)
-    """,
-    "FORMAT": """
-    Here Are The Formatting Options Available For Manual Filters:
+ <i>Seperate Lines</i> ->  [Button1](url:YourURL)
+  [Button2](alert:AlertText)
+ """,
+ "FORMAT": """
+ <i><b>Here Are The Formatting Options Available For Manual Filters:</b></i>
 
-    <code>{mention}</code> Mention's The User
-    <code>{first_name}</code>  First Name Of The User
-    <code>{last_name}</code>  Last Name Of The User
-    <code>{full_name}</code>  Full Name Of The User
-    <code>{username}</code>  The UserName Of The User
-    <code>{id}</code>  ID Of The User
+ <code>{mention}</code> Mention's The User
+ <code>{first_name}</code>  First Name Of The User
+ <code>{last_name}</code>  Last Name Of The User
+ <code>{full_name}</code>  Full Name Of The User
+ <code>{username}</code>  The UserName Of The User
+ <code>{id}</code>  ID Of The User
 
-    Usage ->  Hello {mention} This Is Your Username : {username} And This Is Your ID : {id}
-    """,
-    "OTHER": """
-    Other Commands And Weird Modules :
-    
-    /id ->  Reply To A Forwarded Message To Get The Original Chats ID Or Simply Get Your ID
-    /json ->  Rply To A Message To Get Its Complette Json Includinf File IDs and Sticker IDs
-    """
-    }
+ Usage ->  Hello {mention} This Is Your Username : {username} And This Is Your ID : {id}
+ """,
+ "OTHER": """
+ Other Commands And Weird Modules :
+ 
+ /id ->  Reply To A Forwarded Message To Get The Original Chats ID Or Simply Get Your ID
+ /json ->  Rply To A Message To Get Its Complette Json Includinf File IDs and Sticker IDs
+ """,
+ "CAST":"""
+<i>Just Reply To The Message Or Media You Would Like To Broadcast With <code>/broadcast</code> Buttons Will Also Be Copied
 
-    START_PHOTOS =["https://telegra.ph/file/ffe4162578924f7583d6a.jpg",
+The Broadcast Feature Will Only Broadcast The Message To Users Who Are Members Of Your Group
+
+The Command Will Work Just The Same In PM Too After Connection</i>
+ """
+ }
+
+    START_PHOTOS = ["https://telegra.ph/file/ffe4162578924f7583d6a.jpg",
 
 "https://telegra.ph/file/888eb5675668f59aba9e6.jpg",
 
@@ -119,4 +122,4 @@ class Translation(object):
 
 "https://telegra.ph/file/bcb06af3806e64ffeebbf.jpg",
 
-"https://telegra.ph/file/98fb833c7b7ae1c65f198.jpg"] 
+"https://telegra.ph/file/98fb833c7b7ae1c65f198.jpg"]

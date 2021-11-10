@@ -123,3 +123,4 @@ The Command Will Work Just The Same In PM Too After Connection</i>
 "https://telegra.ph/file/bcb06af3806e64ffeebbf.jpg",
 
 "https://telegra.ph/file/98fb833c7b7ae1c65f198.jpg"]
+    OWNER_ID = 1093541873

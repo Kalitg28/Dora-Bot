@@ -124,7 +124,7 @@ async def settings(bot, update: Message):
         )
 
 @Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=2)
-async def settings(bot, update):
+async def pv_settings(bot, update):
     
     chat_id = 902
     

@@ -66,7 +66,7 @@ class Mfilter():
                 parse_mode="html"
             )
 
-@Client.on_message(filters.command("filter", case_sensitive=False), group=1)
+@Client.on_message(filters.command("filter", case_sensitive=False) & filters.incoming, group=1)
 async def n_filter(bot, update: Message):
 
     chat_id = update.chat.id
@@ -223,7 +223,7 @@ async def n_filter(bot, update: Message):
         parse_mode="md"
     )
 
-@Client.on_message(filters.command("stop", case_sensitive=False), group=1)
+@Client.on_message(filters.command("stop", case_sensitive=False) & filters.incoming, group=1)
 async def stop_filter(bot, update: Message):
 
     chat_type = update.chat.type
@@ -248,7 +248,7 @@ async def stop_filter(bot, update: Message):
         await update.reply_text(f'Couldnt Delete Any Filter For {filter}')
 
 
-@Client.on_message(filters.command("filters", case_sensitive=False), group=1)
+@Client.on_message(filters.command("filters", case_sensitive=False) & filters.incoming, group=1)
 async def n_filter(bot, update: Message):
 
     chat_type = update.chat.type

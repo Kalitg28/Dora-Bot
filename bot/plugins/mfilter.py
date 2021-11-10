@@ -18,11 +18,11 @@ from bot.translation import Translation
 db = Database()
 
 class Mfilter():
-  def mfilter(text:str, group_id, bot:Client, update:Message):
+  async def mfilter(text:str, group_id, bot:Client, update:Message):
     '''A Function To Get Manual Filters Of A Chat'''
 
     query = text
-    result = db.find_mfilter(group_id=group_id, query=query)
+    result = await db.find_mfilter(group_id=group_id, query=query)
     if not result :
         return
     else:
@@ -32,36 +32,36 @@ class Mfilter():
 
     if sticker and file_id:
         if buttons:
-            update.reply_sticker(
+            await update.reply_sticker(
                 sticker=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode="html"
                 )
         else :
-            update.reply_sticker(sticker=file_id)
+            await update.reply_sticker(sticker=file_id)
     elif file_id:
         if buttons:
-            update.reply_cached_media(
+            await update.reply_cached_media(
                 file_id=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode="html",
                 caption=content
             )
         else:
-            update.reply_cached_media(
+            await update.reply_cached_media(
                 file_id=file_id,
                 parse_mode="html",
                 caption=content
             )
     else :
         if buttons:
-            update.reply_text(
+            await update.reply_text(
                 text=content,
                 parse_mode="html",
                 reply_markup=InlineKeyboardMarkup(buttons)
             )
         else :
-            update.reply_text(
+            await update.reply_text(
                 text=content,
                 parse_mode="html"
             )

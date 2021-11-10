@@ -3,6 +3,7 @@
 # (c) @AlbertEinsteinTG
 import re
 import random
+import threading
 
 from pyrogram import filters, Client
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
@@ -18,7 +19,7 @@ db = Database()
 @Client.on_message(filters.command(["start"]) & filters.private, group=1)
 async def start(bot, update):
 
-    
+    add = threading.Thread(target=db.add_user, args=(update.from_user.id,))
     try:
         file_uid = update.command[1]
     except IndexError:
@@ -77,7 +78,7 @@ async def help(bot, update):
     await bot.send_photo(
         photo="https://telegra.ph/file/82b6cf45d478fb5fd33c0.jpg",
         chat_id=update.chat.id,
-        caption=Translation.EN["HELP"].format(update.from_user.mention),
+        caption=Translation.HELP_TEXT.format(update.grom_user.mention),
         reply_markup=reply_markup,
         parse_mode="html",
         reply_to_message_id=update.message_id
@@ -112,6 +113,11 @@ async def get_id(bot:Client, update:Message):
 
     if chat_type=="private":
 
+        if not update.reply_to_message or update.reply_to_message.forward_from_chat:
+
+            await update.reply_text(f"<b>Your ID is : <code>{update.chat.id}</code></b>", parse_mode="html")
+            return
+
         if update.reply_to_message.forward_from_chat.id:
 
             await update.reply_text(f"<b>This Message Was Forwarded From : <code>{update.reply_to_message.forward_from_chat.id}</code></b>", parse_mode="html")
@@ -128,7 +134,7 @@ async def get_id(bot:Client, update:Message):
 
         else :
 
-            await update.reply_text(f"This Chat's ID is : <code>{update.chat.id}</code>", parse_mode="html")
+            await update.reply_text(f"This Chat's ID is : <code>-100{+update.chat.id}</code>", parse_mode="html")
 
     elif chat_type=="channel":
 
@@ -144,7 +150,7 @@ async def show_json(bot:Client, update:Message):
     if update.reply_to_message:
 
         message = update.reply_to_message
-        message = str(message).replace('"', '').replace(',','</code>,<code>').replace(':', '</code>:<code>')
+        message = str(message).replace('"', '').replace(',','</code>,<code>').replace(':', '</code>:<code>')[:4000]
 
         await update.reply_text(message, parse_mode="html")
 

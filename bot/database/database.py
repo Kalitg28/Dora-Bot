@@ -563,7 +563,7 @@ class Database:
                 self.ucache[str(user_id)] = group_id
                 return True
             else :
-                self.ucol.find_one_and_update({"_id": user_id},{"_id": user_id, "chat": group_id, "lang": "En"})
+                self.ucol.find_one_and_replace({"_id": user_id},{"_id": user_id, "chat": group_id, "lang": "En"})
                 self.ucache[str(user_id)] = group_id
                 return True
 

@@ -18,7 +18,7 @@ from bot.translation import Translation
 db = Database()
 
 class Mfilter():
-  async def mfilter(text:str, group_id, bot:Client, update:Message):
+  def mfilter(text:str, group_id, bot:Client, update:Message):
     '''A Function To Get Manual Filters Of A Chat'''
 
     query = text

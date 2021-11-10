@@ -681,6 +681,25 @@ class Database:
             print(e)
             return False
 
+    async def add_user(self, user_id):
+
+        if not self.ucol.find_one({"_id": user_id}) :
+            self.ucol.insert_one({"_id": user_id})
+
+    async def get_alert(self, id, index):
+
+        try:
+            alert = self.fcache.get(id)
+            if alert :
+                return alert[int(index)]
+            alert = self.fcol.find_one({"_id": id}).get("alert")
+            if not alert:
+                return False
+            else :
+                return alert
+        except Exception as e:
+            print(e)
+
 def getLen(e):
 
         return(len(e["text"]))

@@ -104,7 +104,7 @@ class Batch():
                   message.audio or\
                   message.animation or\
                   message.sticker
-                    if message.reply_markup.inline_keyboard:
+                    if message.reply_markup:
                         btn = message.reply_markup.inline_keyboard
                         if file:
                             caption = "" if not message.caption.html else message.caption.html

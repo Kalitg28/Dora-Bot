@@ -610,7 +610,7 @@ class Database:
     async def find_mfilter(self, group_id, query):
       try :
 
-        filters:list = self.mcol.find_many({"group_id": group_id})
+        filters:list = self.mcol.find({"group_id": group_id})
         if filters :
 
             for filter in filters.sort(reverse=True, key=getLen):
@@ -676,7 +676,7 @@ class Database:
     async def add_user(self, user_id):
 
         if not self.ucol.find_one({"_id": user_id}) :
-            self.ucol.insert_one({"_id": user_id})
+            self.ucol.insert_one({"_id": user_id, 'chat': False})
 
     async def get_alert(self, id, index):
 

@@ -49,6 +49,7 @@ async def settings(bot, update: Message):
         chat_name = await bot.get_chat(int(chat_id)).title
     except PeerIdInvalid:
         await update.reply_text("Looks Like I Couldnt Access This Chat Make Sure This Chat ID is valid And I am an admin There")
+        return
     
     mp_count = settings["configs"]["max_pages"]
     mf_count = settings["configs"]["max_results"]
@@ -122,7 +123,7 @@ async def settings(bot, update: Message):
         
         )
 
-@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=1)
+@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=2)
 async def settings(bot, update):
     
     chat_id = 902
@@ -194,6 +195,7 @@ async def connect(bot: Client, update: Message):
         if not chat_id.startswith("-100"):
 
             await update.reply("<i>This isnt a valid Chat ID \nA Valid Chat ID Starts With <code>-100</code></i>")
+            return
         chat_id = int(chat_id)
 
         try :
@@ -201,13 +203,20 @@ async def connect(bot: Client, update: Message):
             link = await bot.export_chat_invite_link(chat_id=chat_id)
             grp = await bot.get_chat(chat_id)
 
+            user = await bot.get_chat_member(chat_id,update.from_user.id)
+            if not user.status in ("administrator","creator") :
+                await update.reply("Nice Try You Non-Admin")
+                return
+
         except PeerIdInvalid:
 
             await update.reply_text("This Doesnt Seem Like A Valid Chat ID \nMake Sure The ID is Correct if it is Make Sure I'm a member Of The Chat")
+            return
 
         except ChatAdminInviteRequired:
 
             await update.reply_text("I Dont Have Enough Admin Permission Here Please Add Me To The Chat With Full Admin Permissions")
+            return
         
         except Exception as e :
 

@@ -1756,8 +1756,20 @@ async def edit_caption(bot:Client, update: CallbackQuery):
 
     await bot.send_chat_action(update.message.chat.id, "typing")
 
-    await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+    await update.message.edit_caption(caption=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     await bot.send_chat_action(update.message.chat.id, "cancel")
+
+@Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=2)
+async def alerter(bot:Client, update: CallbackQuery):
+
+    id, index = re.findall(r"edit_c\((.+)\)", update.data)[0].split("|",1)
+
+    text = await db.get_alert(id, index)
+
+    if not text:
+        return
+
+    await update.answer(text, show_alert=True)
 
 def time_formatter(seconds: float) -> str:
     """ 

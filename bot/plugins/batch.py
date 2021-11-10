@@ -12,7 +12,7 @@ async def batch(bot:Client, update:Message):
 
     user_id = update.from_user.id
 
-    post1:Message = await bot.ask(chat_id=update.chat.id, text="Please Forward The First Post From The Channel (Where I Am an admin)", timeout=120)
+    post1:Message = await bot.ask(chat_id=update.chat.id, text="Please Forward The First Post From The Channel (Where I Am an admin)", timeout=360)
     if not post1: return
 
     if not post1.forward_from_chat:
@@ -36,7 +36,7 @@ async def batch(bot:Client, update:Message):
         print(e)
         return await update.reply_text("Something Went Wrong Please Try Again Later")
 
-    post2 = await bot.ask(chat_id=update.chat.id, text="Now Forward The Last Message From The Same Channel", timeout=120)
+    post2 = await bot.ask(chat_id=update.chat.id, text="Now Forward The Last Message From The Same Channel", timeout=360)
     if not post2 : return
 
     chat_id2 = post2.forward_from_chat.id
@@ -71,7 +71,7 @@ async def encode(text:str):
     encoder = {'1': 'B', '2':'Y', '3':'i', '4':'P', '5':'q', '6':'k', '7':'r', '8':'R', '9':'J', '0':'h', ' ':'a'}
 
     for key in encoder.keys():
-        string.replace(key, encoder[key])
+        string = string.replace(key, encoder[key])
 
     return string.strip()
 
@@ -83,7 +83,7 @@ class Batch():
         decoder = {'B':'1', 'Y':'2',  'i':'3', 'P':'4', 'q':'5', 'k':'6', 'r':'7', 'R':'8', 'J':'9', 'h':'0', 'a':' '}
 
         for key in decoder.keys():
-            string.replace(key, decoder[key])
+            string = string.replace(key, decoder[key])
     
         return string.strip()
 
@@ -94,7 +94,7 @@ class Batch():
         try :
 
             channel_id, msg1, msg2 = re.findall(r"^a(.+)a(.+)a(.+)", batch)
-            channel_id, msg1, msg2 = (await Batch.decode(channel_id), await Batch.decode(msg1), await Batch.decode(msg2))
+            channel_id, msg1, msg2 = (Batch.decode(channel_id), Batch.decode(msg1), Batch.decode(msg2))
             for id in range(int(msg1), int(msg2)):
                 try :
                     message = await bot.get_messages(chat_id=int(channel_id), message_ids=id)

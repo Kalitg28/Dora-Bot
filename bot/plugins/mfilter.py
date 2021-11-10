@@ -83,6 +83,7 @@ async def n_filter(bot, update: Message):
     if not chat_id :
 
         await update.reply_text("Please Connect To A Chat First To Use This Command In PM")
+        return
 
     st = await bot.get_chat_member(chat_id, userid)
     if not ((st.status == "administrator") or (st.status == "creator") or (str(userid) in Translation.OWNER_ID)):
@@ -244,7 +245,7 @@ async def stop_filter(bot, update: Message):
     if success :
         await update.reply_text(f"Successfully Deleted The Filter For {filter}")
     else :
-        await update.reply_text(f'Could Delete Any Filter For {filter}')
+        await update.reply_text(f'Couldnt Delete Any Filter For {filter}')
 
 
 @Client.on_message(filters.command("filters", case_sensitive=False), group=1)
@@ -265,6 +266,7 @@ async def n_filter(bot, update: Message):
 
     filters = await db.all_mfilter(chat_id)
     title = await bot.get_chat(chat_id).title
+    total_filters = ""
     for filter in filters :
         total_filters+=f"\n- <code>{filter}</code>"
 

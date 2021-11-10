@@ -5,7 +5,7 @@
 import re
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import PeerIdInvalid, ChatAdminInviteRequired
+from pyrogram.errors import PeerIdInvalid, ChatAdminInviteRequired, ChatAdminRequired
 from pyrogram.types.messages_and_media.message import Message
 
 from bot.database import Database
@@ -213,6 +213,10 @@ async def connect(bot: Client, update: Message):
         except ChatAdminInviteRequired:
 
             await update.reply_text("I Dont Have Enough Admin Permission Here Please Add Me To The Chat With Full Admin Permissions")
+            return
+        except ChatAdminRequired:
+            
+            await update.reply_text("Make Me An Admin In Your Group First")
             return
         
         except Exception as e :

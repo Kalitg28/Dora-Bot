@@ -580,11 +580,11 @@ class Database:
         return True
     async def add_mfilter(self, id, group_id, text, content, file, buttons, alert, sticker: bool) :
 
-        check = self.fcol.find_one({"group_id": group_id, "text": text})
+        check = self.mcol.find_one({"group_id": group_id, "text": text})
 
         if check:
             
-            self.fcol.delete_one({"_id": check["_id"]})
+            self.mcol.delete_one({"_id": check["_id"]})
 
         try :
 
@@ -638,11 +638,11 @@ class Database:
 
     async def del_mfilter(self, group_id, text):
 
-        check = self.fcol.find_one({"group_id": group_id, "text": text})
+        check = self.mcol.find_one({"group_id": group_id, "text": text})
 
         if check :
 
-            self.fcol.delete_one({"_id": check["_id"]})
+            self.mcol.delete_one({"_id": check["_id"]})
             return True
 
         else :
@@ -654,7 +654,7 @@ class Database:
 
         try :
 
-            results = self.fcol.find_many({"group_id": chat_id})
+            results = self.mcol.find_many({"group_id": chat_id})
 
             if results:
 
@@ -684,7 +684,7 @@ class Database:
             alert = self.fcache.get(id)
             if alert :
                 return alert[int(index)]
-            alert = self.fcol.find_one({"_id": id}).get("alert")
+            alert = self.mcol.find_one({"_id": id}).get("alert")
             if not alert:
                 return False
             else :

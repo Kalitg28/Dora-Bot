@@ -193,10 +193,6 @@ async def connect(bot: Client, update: Message):
     try :
 
         chat_id = text.replace("/connect", "").strip()
-        if not chat_id.startswith("-100"):
-
-            await update.reply("<i>This isnt a valid Chat ID \nA Valid Chat ID Starts With <code>-100</code></i>")
-            return
         chat_id = int(chat_id)
 
         try :

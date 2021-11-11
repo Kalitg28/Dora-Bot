@@ -67,7 +67,7 @@ async def pv_settings(bot, update):
     
     await bot.send_message (
         
-        chat_id=chat_id, 
+        chat_id=update.chat.id, 
         text=text, 
         reply_markup=reply_markup, 
         parse_mode="html",

@@ -134,7 +134,7 @@ async def get_id(bot:Client, update:Message):
 
         else :
 
-            await update.reply_text(f"This Chat's ID is : <code>-100{+update.chat.id}</code>", parse_mode="html")
+            await update.reply_text(f"This Chat's ID is : <code>{update.chat.id}</code>", parse_mode="html")
 
     elif chat_type=="channel":
 

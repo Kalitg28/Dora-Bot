@@ -277,13 +277,13 @@ def split_quotes(text: str):
     extract = re.findall(r'^("[^"]+")', text)
     if extract :
 
-        return extract[0].replace('"', '').strip(), text.strip('"').strip()
+        return [extract[0].strip('"'), text.strip('"').strip()]
 
     else :
 
         split = text.split(' ', 1)
 
-        return split[0], split[1]
+        return [split[0], split[1]]
 
 def parser(unique_id, reply_text: str, text: str, filter):
 

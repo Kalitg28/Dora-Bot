@@ -183,7 +183,8 @@ async def cb_settings(bot, update: CallbackQuery):
     bot_first_name= bot_info.first_name
     settings = await db.find_chat(int(chat_id))
     try :
-        chat_name = await bot.get_chat(int(chat_id)).title
+        chat_name = await bot.get_chat(int(chat_id))
+        chat_name = chat_name.title
     except PeerIdInvalid:
         await update.message.reply_text("Looks Like I Couldnt Access This Chat Make Sure This Chat ID is valid And I am an admin There")
     

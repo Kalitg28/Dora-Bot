@@ -15,6 +15,67 @@ from bot import VERIFY # pylint: disable=import-error
 
 db = Database()
 
+@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=2)
+async def pv_settings(bot, update):
+    
+    chat_id = 902
+    
+    bot_info = await bot.get_me()
+    bot_first_name= bot_info.first_name
+    
+    text =f"<i>{bot_first_name}'s</i> Settings Pannel.....\n"
+    text+=f"\n<i>You Can Use This Menu To Change Connectivity And Know Status Of Your Every Connected Channel, Change Filter Types, Configure Filter Results And To Know Status Of Your Group...</i>"
+    
+    buttons = [
+        [
+            InlineKeyboardButton
+                (
+                    "Channels", callback_data=f"channel_list({chat_id})"
+                ), 
+            
+            InlineKeyboardButton
+                (
+                    "Filter Types", callback_data=f"types({chat_id})"
+                )
+        ],
+        [
+            InlineKeyboardButton
+                (
+                    "Configure 🛠", callback_data=f"config({chat_id})"
+                )
+        ], 
+        [
+            InlineKeyboardButton
+                (
+                    "Status", callback_data=f"status({chat_id})"
+                ),
+            
+            InlineKeyboardButton
+                (
+                    "About", callback_data=f"about({chat_id})"
+                )
+        ],
+        [
+            InlineKeyboardButton
+                (
+                    "Close 🔐", callback_data="close"
+                )
+        ]
+    ]
+    
+    reply_markup = InlineKeyboardMarkup(buttons)
+    
+    await bot.send_message (
+        
+        chat_id=chat_id, 
+        text=text, 
+        reply_markup=reply_markup, 
+        parse_mode="html",
+        reply_to_message_id=update.message_id
+        
+        )
+
+
 @Client.on_message(filters.command(["settings"]) & filters.incoming, group=1)
 async def settings(bot, update: Message):
     
@@ -124,65 +185,6 @@ async def settings(bot, update: Message):
         
         )
 
-@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=2)
-async def pv_settings(bot, update):
-    
-    chat_id = 902
-    
-    bot_info = await bot.get_me()
-    bot_first_name= bot_info.first_name
-    
-    text =f"<i>{bot_first_name}'s</i> Settings Pannel.....\n"
-    text+=f"\n<i>You Can Use This Menu To Change Connectivity And Know Status Of Your Every Connected Channel, Change Filter Types, Configure Filter Results And To Know Status Of Your Group...</i>"
-    
-    buttons = [
-        [
-            InlineKeyboardButton
-                (
-                    "Channels", callback_data=f"channel_list({chat_id})"
-                ), 
-            
-            InlineKeyboardButton
-                (
-                    "Filter Types", callback_data=f"types({chat_id})"
-                )
-        ],
-        [
-            InlineKeyboardButton
-                (
-                    "Configure 🛠", callback_data=f"config({chat_id})"
-                )
-        ], 
-        [
-            InlineKeyboardButton
-                (
-                    "Status", callback_data=f"status({chat_id})"
-                ),
-            
-            InlineKeyboardButton
-                (
-                    "About", callback_data=f"about({chat_id})"
-                )
-        ],
-        [
-            InlineKeyboardButton
-                (
-                    "Close 🔐", callback_data="close"
-                )
-        ]
-    ]
-    
-    reply_markup = InlineKeyboardMarkup(buttons)
-    
-    await bot.send_message (
-        
-        chat_id=chat_id, 
-        text=text, 
-        reply_markup=reply_markup, 
-        parse_mode="html",
-        reply_to_message_id=update.message_id
-        
-        )
 
 @Client.on_message(filters.command("connect") & filters.private, group=1)
 async def connect(bot: Client, update: Message):

@@ -64,7 +64,7 @@ async def auto_filter(bot, update:Message):
     if not configs:
         return
     movie = await Helpers.cleanse(update.text)
-    imdb = threading.Thread(target=asyncio.run, args=Helpers.get_movie(movie))
+    imdb = threading.Thread(target=asyncio.run, args=(Helpers.get_movie(movie),))
     imdb.start()
     
     allow_video = True

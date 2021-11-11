@@ -18,8 +18,9 @@ class Database:
         self.col = self.db["Main"]
         self.acol = self.db["Active_Chats"]
         self.fcol = self.db["Filter_Collection"]
-        self.mcol = self.db["Manual_FIlters"]
+        self.mcol = self.db["Manual_Filters"]
         self.ucol = self.db["Users"]
+        self.ccol = self.db["Connections"]
         
         self.cache = {}
         self.acache = {}
@@ -95,7 +96,7 @@ class Database:
         Find all group id which is connected to a channel 
         for add a new files to db
         """
-        data = self.col.find({})
+        data:dict = self.col.find({})
         group_list = []
 
         for group_id in await data.to_list(length=50): # No Need Of Even 50
@@ -526,14 +527,15 @@ class Database:
     async def get_conn(self, user_id):
 
         try:
+            cached = self.ucache.get(str(user_id))
 
-            if self.ucache.get(str(user_id)) :
+            if  cached:
 
-                return self.ucache.get(str(user_id))
+                return cached
 
             else :
 
-                conn = self.ucol.find_one({"_id": user_id})
+                conn = self.ccol.find_one({"_id": user_id})
                 conn = conn.get('chat')
 
                 if not conn :
@@ -556,7 +558,11 @@ class Database:
     async def conn_user(self, user_id: int, group_id: int):
 
         try:
-                self.ucol.update_one({"_id": user_id},{'$set':{'chat': group_id}})
+                if self.ccol.find_one({"_id": user_id}):
+                    self.ccol.delete_one({"_id": user_id})
+                self.ccol.insert_one({"_id": user_id,'chat': group_id})
+                if self.ucache.get(str(user_id)):
+                    self.ucache.pop(str(user_id))
                 self.ucache[str(user_id)] = group_id
                 return True
 
@@ -567,7 +573,7 @@ class Database:
     async def del_conn(self, user_id):
 
         try :
-             self.ucol.delete_one({"_id": user_id})
+             self.ccol.delete_one({"_id": user_id})
         except Exception as e :
             return False
             print(e)
@@ -575,7 +581,7 @@ class Database:
         if self.ucache.get(str(user_id)):
 
             self.ucache.pop(str(user_id))
-            return True
+        return True
 
         return True
     async def add_mfilter(self, id, group_id, text, content, file, buttons, alert, sticker: bool) :
@@ -610,10 +616,10 @@ class Database:
     async def find_mfilter(self, group_id, query):
       try :
 
-        filters:list = self.mcol.find({"group_id": group_id})
+        filters = self.mcol.find({"group_id": group_id})
         if filters :
 
-            for filter in filters.sort(reverse=True, key=getLen):
+            for filter in filters.to_list.sort(reverse=True, key=getLen):
 
                 pattern = r"( |^|[^\w])" + filter["text"] + r"( |$|[^\w])"
                 result = re.search(pattern, query, flags=re.IGNORECASE)
@@ -676,7 +682,7 @@ class Database:
     async def add_user(self, user_id):
 
         if not self.ucol.find_one({"_id": user_id}) :
-            self.ucol.insert_one({"_id": user_id, 'chat': False})
+            self.ucol.insert_one({"_id": user_id})
 
     async def get_alert(self, id, index):
 

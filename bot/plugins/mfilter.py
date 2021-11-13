@@ -265,7 +265,8 @@ async def n_filter(bot, update: Message):
         return
 
     filters = await db.all_mfilter(chat_id)
-    title = await bot.get_chat(chat_id).title
+    chat = await bot.get_chat(chat_id)
+    title = chat.title
     total_filters = ""
     for filter in filters :
         total_filters+=f"\n- <code>{filter}</code>"

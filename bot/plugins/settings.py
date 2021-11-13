@@ -175,14 +175,10 @@ async def settings(bot, update: Message):
     
     reply_markup = InlineKeyboardMarkup(buttons)
     
-    await bot.send_message (
-        
-        chat_id=chat_id, 
+    await update.reply_text( 
         text=text, 
         reply_markup=reply_markup, 
-        parse_mode="html",
-        reply_to_message_id=update.message_id
-        
+        parse_mode="html"
         )
 
 

@@ -16,6 +16,8 @@ DB_NAME = os.environ.get("DB_NAME", "Adv_Auto_Filter")
 cluster = MongoClient(DB_URI)
 db = cluster[DB_NAME]
 ucol = db["Users"]
+mcol = db["Manual_Filters"]
+ccol = db["Connections"]
 
 class Database:
 
@@ -25,8 +27,6 @@ class Database:
         self.col = self.db["Main"]
         self.acol = self.db["Active_Chats"]
         self.fcol = self.db["Filter_Collection"]
-        self.mcol = self.db["Manual_Filters"]
-        self.ccol = self.db["Connections"]
         
         self.cache = {}
         self.acache = {}
@@ -541,7 +541,7 @@ class Database:
 
             else :
 
-                conn = self.ccol.find_one({"_id": user_id})
+                conn = ccol.find_one({"_id": user_id})
                 conn = conn.get('chat')
 
                 if not conn :
@@ -564,9 +564,9 @@ class Database:
     async def conn_user(self, user_id: int, group_id: int):
 
         try:
-                if self.ccol.find_one({"_id": user_id}):
-                    self.ccol.delete_one({"_id": user_id})
-                self.ccol.insert_one({"_id": user_id,'chat': group_id})
+                if ccol.find_one({"_id": user_id}):
+                    ccol.delete_one({"_id": user_id})
+                ccol.insert_one({"_id": user_id,'chat': group_id})
                 if self.ucache.get(str(user_id)):
                     self.ucache.pop(str(user_id))
                 self.ucache[str(user_id)] = group_id
@@ -579,7 +579,7 @@ class Database:
     async def del_conn(self, user_id):
 
         try :
-             self.ccol.delete_one({"_id": user_id})
+             ccol.delete_one({"_id": user_id})
         except Exception as e :
             return False
             print(e)
@@ -592,11 +592,11 @@ class Database:
         return True
     async def add_mfilter(self, id, group_id, text, content, file, buttons, alert, sticker: bool) :
 
-        check = self.mcol.find_one({"group_id": group_id, "text": text})
+        check = mcol.find_one({"group_id": group_id, "text": text})
 
         if check:
             
-            self.mcol.delete_one({"_id": check["_id"]})
+            mcol.delete_one({"_id": check["_id"]})
 
         try :
 
@@ -613,7 +613,7 @@ class Database:
                 "sticker": sticker
             }
 
-            self.mcol.insert_one(document)
+            mcol.insert_one(document)
             self.fcache[unique_id] = alert
 
         except Exception as e:
@@ -622,7 +622,7 @@ class Database:
     async def find_mfilter(self, group_id, query):
       try :
 
-        filters = self.mcol.find({"group_id": group_id})
+        filters = mcol.find({"group_id": group_id})
         if filters :
 
             for filter in filters.to_list.sort(reverse=True, key=getLen):
@@ -650,11 +650,11 @@ class Database:
 
     async def del_mfilter(self, group_id, text):
 
-        check = self.mcol.find_one({"group_id": group_id, "text": text})
+        check = mcol.find_one({"group_id": group_id, "text": text})
 
         if check :
 
-            self.mcol.delete_one({"_id": check["_id"]})
+            mcol.delete_one({"_id": check["_id"]})
             return True
 
         else :
@@ -666,7 +666,7 @@ class Database:
 
         try :
 
-            results = self.mcol.find_many({"group_id": chat_id})
+            results = mcol.find_many({"group_id": chat_id})
 
             if results:
 
@@ -696,7 +696,7 @@ class Database:
             alert = self.fcache.get(id)
             if alert :
                 return alert[int(index)]
-            alert = self.mcol.find_one({"_id": id}).get("alert")
+            alert = mcol.find_one({"_id": id}).get("alert")
             if not alert:
                 return False
             else :

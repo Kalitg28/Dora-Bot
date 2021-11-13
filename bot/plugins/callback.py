@@ -1716,7 +1716,7 @@ async def callback_data(bot, update: CallbackQuery):
         reply_markup = InlineKeyboardMarkup(buttons)
         
         await update.message.edit_caption(
-            Translation.EN["START"].format(update.message.from_user.mention),
+            Translation.EN["START"].format(update.from_user.mention),
             reply_markup=reply_markup,
             parse_mode="html"
         )
@@ -1728,7 +1728,7 @@ async def callback_data(bot, update: CallbackQuery):
         reply_markup = InlineKeyboardMarkup(buttons)
         
         await update.message.edit_caption(
-            Translation.EN["HELP"].format(update.message.from_user.mention),
+            Translation.EN["HELP"].format(update.from_user.mention),
             reply_markup=reply_markup,
             parse_mode="html"
         )
@@ -1760,7 +1760,7 @@ async def edit_caption(bot:Client, update: CallbackQuery):
     if STRING=="FORMAT":
         await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     else :
-        await update.message.edit_caption(caption=Translation.EN[STRING].format(update.message.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+        await update.message.edit_caption(caption=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     await bot.send_chat_action(update.message.chat.id, "cancel")
 
 @Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=2)

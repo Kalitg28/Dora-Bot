@@ -1757,7 +1757,10 @@ async def edit_caption(bot:Client, update: CallbackQuery):
 
     await bot.send_chat_action(update.message.chat.id, "typing")
 
-    await update.message.edit_caption(caption=Translation.EN[STRING].format(update.message.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+    if STRING=="FORMAT":
+        await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+    else :
+        await update.message.edit_caption(caption=Translation.EN[STRING].format(update.message.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     await bot.send_chat_action(update.message.chat.id, "cancel")
 
 @Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=2)

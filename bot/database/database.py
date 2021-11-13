@@ -7,8 +7,15 @@ from bot import DB_URI
 import random
 import string
 
+import pymongo
+from pymongo import MongoClient
+from pymongo.collection import InsertOneResult
+
 DB_NAME = os.environ.get("DB_NAME", "Adv_Auto_Filter")
 
+cluster = MongoClient(DB_URI)
+db = cluster[DB_NAME]
+ucol = db["Users"]
 
 class Database:
 
@@ -19,7 +26,6 @@ class Database:
         self.acol = self.db["Active_Chats"]
         self.fcol = self.db["Filter_Collection"]
         self.mcol = self.db["Manual_Filters"]
-        self.ucol = self.db["Users"]
         self.ccol = self.db["Connections"]
         
         self.cache = {}
@@ -56,7 +62,7 @@ class Database:
                 video=True
             ),
             configs = dict(
-                accuracy=0.60,
+                accuracy=0.70,
                 max_pages=5,
                 max_results=50,
                 max_per_page=10,
@@ -447,7 +453,7 @@ class Database:
         await self.create_index()
 
         chat = await self.find_chat(group_id)
-        chat_accuracy = float(chat["configs"].get("accuracy", 0.60))
+        chat_accuracy = float(chat["configs"].get("accuracy", 0.70))
         achats = await self.find_active(group_id)
         
         achat_ids=[]
@@ -521,7 +527,7 @@ class Database:
         A Function To Count The Total Number Of Users Of The Bot
         """
 
-        return await self.ucol.count_documents()
+        return await ucol.count_documents()
 
 
     async def get_conn(self, user_id):
@@ -681,8 +687,8 @@ class Database:
 
     async def add_user(self, user_id):
 
-        if not self.ucol.find_one({"_id": user_id}) :
-            self.ucol.insert_one({"_id": user_id})
+        if not ucol.find_one({"_id": user_id}) :
+            ucol.insert_one({"_id": user_id})
 
     async def get_alert(self, id, index):
 

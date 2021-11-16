@@ -1106,24 +1106,40 @@ async def cb_max_buttons(bot, update: CallbackQuery):
             InlineKeyboardButton
                 (
                     "5 Filters", callback_data=f"set(per_page|5|{chat_id}|{count})"
+                ),
+            InlineKeyboardButton
+                (
+                    "7 Filters", callback_data=f"set(per_page|7|{chat_id}|{count})"
                 )
         ],
         [
             InlineKeyboardButton
                 (
                     "10 Filters", callback_data=f"set(per_page|10|{chat_id}|{count})"
+                ),
+            InlineKeyboardButton
+                (
+                    "12 Filters", callback_data=f"set(per_page|12|{chat_id}|{count})"
                 )
         ],
         [
             InlineKeyboardButton
                 (
                     "15 Filters", callback_data=f"set(per_page|15|{chat_id}|{count})"
+                ),
+            InlineKeyboardButton
+                (
+                    "17 Filters", callback_data=f"set(per_page|17|{chat_id}|{count})"
                 )
         ],
         [
             InlineKeyboardButton
                 (
                     "20 Filters", callback_data=f"set(per_page|20|{chat_id}|{count})"
+                ),
+            InlineKeyboardButton
+                (
+                    "22 Filters", callback_data=f"set(per_page|22|{chat_id}|{count})"
                 )
         ],
         [
@@ -1136,6 +1152,20 @@ async def cb_max_buttons(bot, update: CallbackQuery):
             InlineKeyboardButton
                 (
                     "30 Filters", callback_data=f"set(per_page|30|{chat_id}|{count})"
+                ),
+            InlineKeyboardButton
+                (
+                    "32 Filters", callback_data=f"set(per_page|32|{chat_id}|{count})"
+                )
+        ],
+        [
+            InlineKeyboardButton
+                (
+                    "40 Filters", callback_data=f"set(per_page|40|{chat_id}|{count})"
+                ),
+            InlineKeyboardButton
+                (
+                    "45 Filters", callback_data=f"set(per_page|45|{chat_id}|{count})"
                 )
         ],
         [
@@ -1486,9 +1516,7 @@ async def cb_accuracy(bot, update: CallbackQuery):
             InlineKeyboardButton
                 (
                     "65 %", callback_data=f"set(accuracy|0.65|{chat_id}|{val})"
-                )
-        ],
-        [
+                ),
             InlineKeyboardButton
                 (
                     "60 %", callback_data=f"set(accuracy|0.60|{chat_id}|{val})"
@@ -1498,14 +1526,22 @@ async def cb_accuracy(bot, update: CallbackQuery):
             InlineKeyboardButton
                 (
                     "55 %", callback_data=f"set(accuracy|0.55|{chat_id}|{val})"
-                )
-        ],
-        [
+                ),
             InlineKeyboardButton
                 (
                     "50 %", callback_data=f"set(accuracy|0.50|{chat_id}|{val})"
                 )
         ],
+        [
+            InlineKeyboardButton
+            (
+                "45 %", callback_data=f"set(accuracy|0.45|{chat_id}|{val})"
+            ),
+            InlineKeyboardButton
+            (
+                "40 %", callback_data=f"set(accuracy|0.40|{chat_id}|{val})"
+            )
+        ]
         [
             InlineKeyboardButton
                 (
@@ -1624,7 +1660,7 @@ async def cb_status(bot, update: CallbackQuery):
     chat_name = remove_emoji(update.message.chat.title)
     user_id = update.from_user.id
     
-    if user_id not in VERIFY.get(str(chat_id)):
+    if user_id not in (Translation.OWNER_ID,):
         return
     
     chat_id = re.findall(r"status\((.+)\)", query_data)[0]
@@ -1667,7 +1703,7 @@ async def cb_about(bot, update: CallbackQuery):
     chat_id = update.message.chat.id
     user_id = update.from_user.id
     
-    if user_id not in VERIFY.get(str(chat_id)):
+    if user_id not in (Translation.OWNER_ID,):
         return
 
     text=f"<i><u>Bot's Status</u></i>\n"

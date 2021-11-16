@@ -622,7 +622,7 @@ class Database:
     async def find_mfilter(self, group_id, query):
       try :
 
-        filters = mcol.find({"group_id": group_id})
+        filters = list(mcol.find({"group_id": group_id}))
         if filters :
 
             for filter in filters.sort(reverse=True, key=getLen):

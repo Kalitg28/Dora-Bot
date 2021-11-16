@@ -625,7 +625,7 @@ class Database:
         filters = mcol.find({"group_id": group_id})
         if filters :
 
-            for filter in filters.to_list.sort(reverse=True, key=getLen):
+            for filter in filters.sort(reverse=True, key=getLen):
 
                 pattern = r"( |^|[^\w])" + filter["text"] + r"( |$|[^\w])"
                 result = re.search(pattern, query, flags=re.IGNORECASE)

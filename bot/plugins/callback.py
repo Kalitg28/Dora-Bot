@@ -163,7 +163,7 @@ async def cb_settings(bot, update: CallbackQuery):
     A Callback Funtion For Back Button in /settings Command
     """
     chat_id = update.message.chat.id
-    user_id = update.message.from_user.id if update.from_user else None
+    user_id = update.from_user.id if update.from_user else None
     chat_type = update.message.chat.type
     global VERIFY
 

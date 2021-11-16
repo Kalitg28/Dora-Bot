@@ -1146,6 +1146,10 @@ async def cb_max_buttons(bot, update: CallbackQuery):
             InlineKeyboardButton
                 (
                     "25 Filters", callback_data=f"set(per_page|25|{chat_id}|{count})"
+                ),
+            InlineKeyboardButton
+                (
+                    "27 Filters", callback_data=f"set(per_page|27|{chat_id}|{count})"
                 )
         ],
         [
@@ -1541,7 +1545,7 @@ async def cb_accuracy(bot, update: CallbackQuery):
             (
                 "40 %", callback_data=f"set(accuracy|0.40|{chat_id}|{val})"
             )
-        ]
+        ],
         [
             InlineKeyboardButton
                 (

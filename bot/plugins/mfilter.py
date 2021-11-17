@@ -66,8 +66,8 @@ class Mfilter():
                 parse_mode="html"
             )
 
-@Client.on_message(filters.command("filter") & filters.all, group=1)
-async def n_filter(bot, update: Message):
+@Client.on_message(filters.command("filter") & filters.incoming, group=1)
+async def new_filter(bot, update: Message):
 
     chat_id = update.chat.id
     chat_type = update.chat.type
@@ -78,15 +78,17 @@ async def n_filter(bot, update: Message):
 
     if chat_type=="private" :
 
-        chat_id = await db.get_conn(chat_id)
+        chat_id = await db.get_conn(userid)
+        print("Mark 1")
 
-    if not chat_id :
+        if not chat_id :
 
-        await update.reply_text("Please Connect To A Chat First To Use This Command In PM")
-        return
-
+            await update.reply_text("Please Connect To A Chat First To Use This Command In PM")
+            return
+    
     st = await bot.get_chat_member(chat_id, userid)
-    if not ((st.status == "administrator") or (st.status == "creator") or (str(userid) in Translation.OWNER_ID)):
+    print("Mark 2")
+    if not ((st.status == "administrator") or (st.status == "creator") or (userid in (Translation.OWNER_ID,))):
         return
         
 
@@ -96,6 +98,8 @@ async def n_filter(bot, update: Message):
     
     extracted = split_quotes(args[1])
     text = extracted[0].lower()
+
+    print("Mark 3")
    
     if not update.reply_to_message and len(extracted) < 2:
         await update.reply_text("Add some content to save your filter!", quote=True)
@@ -268,6 +272,9 @@ async def n_filter(bot, update: Message):
     chat = await bot.get_chat(chat_id)
     title = chat.title
     total_filters = ""
+    if not filters :
+        await update.reply_text("Looks Like You Havent Saved Any Filters In This Chat", quote=True)
+        return
     for filter in filters :
         total_filters+=f"\n- <code>{filter}</code>"
 

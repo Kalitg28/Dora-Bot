@@ -17,7 +17,7 @@ from bot.translation import Translation
 
 db = Database()
 
-@Client.on_message(filters.text & filters.incoming & ~filters.bot & ~filters.edited, group=1)
+@Client.on_message(filters.text & filters.incoming & ~filters.bot & ~filters.edited, group=3)
 async def mfilter(bot:Client, update:Message):
     '''A Function To Get Manual Filters Of A Chat'''
 

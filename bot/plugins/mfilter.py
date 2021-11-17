@@ -35,7 +35,8 @@ class Mfilter():
             await update.reply_sticker(
                 sticker=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
-                parse_mode="html"
+                parse_mode="html",
+                quote=True
                 )
         else :
             await update.reply_sticker(sticker=file_id)
@@ -45,25 +46,29 @@ class Mfilter():
                 file_id=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode="html",
-                caption=content
+                caption=content,
+                quote=True
             )
         else:
             await update.reply_cached_media(
                 file_id=file_id,
                 parse_mode="html",
-                caption=content
+                caption=content,
+                quote=True
             )
     else :
         if buttons:
             await update.reply_text(
                 text=content,
                 parse_mode="html",
-                reply_markup=InlineKeyboardMarkup(buttons)
+                reply_markup=InlineKeyboardMarkup(buttons),
+                quote=True
             )
         else :
             await update.reply_text(
                 text=content,
-                parse_mode="html"
+                parse_mode="html",
+                quote=True
             )
 
 @Client.on_message(filters.command("filter") & filters.incoming, group=1)
@@ -290,8 +295,10 @@ def split_quotes(text: str):
     else :
 
         split = text.split(' ', 1)
-
-        return [split[0], split[1]]
+        if len(split)>1:
+            return [split[0], split[1]]
+        else:
+            return [split[0],""]
 
 def parser(unique_id, reply_text: str, text: str, filter):
 

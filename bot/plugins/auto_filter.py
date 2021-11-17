@@ -36,7 +36,7 @@ async def auto_filter(bot, update:Message):
         chat_id = await db.get_conn(update.from_user.id)
         if not chat_id:
             return
-        await Mfilter.mfilter(text=update.text, group_id=chat_id, bot=bot, update=update)
+        await Mfilter.mfilter(text=update.text, group_id=int(chat_id), bot=bot, update=update)
         return
     else :
         mfilter = threading.Thread(target=asyncio.run, args=(Mfilter.mfilter(text=update.text, group_id=chat_id, bot=bot, update=update),))
@@ -218,6 +218,7 @@ async def auto_filter(bot, update:Message):
         except Exception as e:
             print(e)
 
+        mfilter.join()
         return
 
 

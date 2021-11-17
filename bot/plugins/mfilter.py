@@ -22,8 +22,11 @@ class Mfilter():
     '''A Function To Get Manual Filters Of A Chat'''
 
     query = text
+    print("marked 1")
     result = await db.find_mfilter(group_id=group_id, query=query)
+    print("marked 2")
     if not result :
+        print("marked 3")
         return
     else:
         content, file_id, buttons, sticker = (result["content"], result["file_id"], result["buttons"], result["sticker"])

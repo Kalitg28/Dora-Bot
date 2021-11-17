@@ -39,7 +39,7 @@ async def auto_filter(bot, update:Message):
         await Mfilter.mfilter(text=update.text, group_id=int(chat_id), bot=bot, update=update)
         return
     mfilter = threading.Thread(target=asyncio.run, args=(Mfilter.mfilter(text=update.text, group_id=int(chat_id), bot=bot, update=update),))
-    mfilter.run()
+    mfilter.start()
 
     
 

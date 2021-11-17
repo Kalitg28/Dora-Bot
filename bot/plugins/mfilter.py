@@ -148,7 +148,7 @@ async def new_filter(bot, update: Message):
             alert = None
         except:
             reply_text = ""
-            btn = "[]" 
+            btn = False 
             fileid = None
             alert = None
 
@@ -158,7 +158,7 @@ async def new_filter(bot, update: Message):
             reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
         except:
             reply_text = ""
-            btn = "[]"
+            btn = False
             alert = None
 
     elif update.reply_to_message and update.reply_to_message.video:
@@ -167,7 +167,7 @@ async def new_filter(bot, update: Message):
             reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
         except:
             reply_text = ""
-            btn = "[]"
+            btn = False
             alert = None
 
     elif update.reply_to_message and update.reply_to_message.audio:
@@ -176,7 +176,7 @@ async def new_filter(bot, update: Message):
             reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
         except:
             reply_text = ""
-            btn = "[]"
+            btn = False
             alert = None
    
     elif update.reply_to_message and update.reply_to_message.document:
@@ -185,7 +185,7 @@ async def new_filter(bot, update: Message):
             reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
         except:
             reply_text = ""
-            btn = "[]"
+            btn = False
             alert = None
 
     elif update.reply_to_message and update.reply_to_message.animation:
@@ -194,7 +194,7 @@ async def new_filter(bot, update: Message):
             reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
         except:
             reply_text = ""
-            btn = "[]"
+            btn = False
             alert = None
 
     elif update.reply_to_message and update.reply_to_message.sticker:
@@ -204,7 +204,7 @@ async def new_filter(bot, update: Message):
             reply_text, btn, alert =  parser(unique_id, "", extracted[1], text)
         except:
             reply_text = ""
-            btn = "[]"
+            btn = False
             alert = None
 
     elif update.reply_to_message and update.reply_to_message.text:
@@ -213,7 +213,7 @@ async def new_filter(bot, update: Message):
             reply_text, btn, alert = parser(unique_id, update.reply_to_message.text.html, text)
         except:
             reply_text = ""
-            btn = "[]"
+            btn = False
             alert = None
 
     else:
@@ -320,6 +320,9 @@ def parser(unique_id, reply_text: str, text: str, filter):
                 alert.append(button[3])
                 alert_count+=1
 
-        total_buttons.append(line_buttons)
+        if len(line_buttons)>0:
+            total_buttons.append(line_buttons)
 
+    if len(total_buttons)<1:
+        total_buttons = False
     return text, total_buttons, alert

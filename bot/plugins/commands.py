@@ -3,6 +3,7 @@
 # (c) @AlbertEinsteinTG
 import re
 import random
+import asyncio
 import threading
 
 from pyrogram import filters, Client
@@ -19,7 +20,7 @@ db = Database()
 @Client.on_message(filters.command(["start"]) & filters.private, group=1)
 async def start(bot, update):
 
-    add = threading.Thread(target=db.add_user, args=(update.from_user.id,))
+    add = threading.Thread(target=asyncio.run, args=(db.add_user(update.from_user.id),))
     add.start()
     try:
         file_uid = update.command[1]

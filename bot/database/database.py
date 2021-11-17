@@ -2,7 +2,8 @@
 
 import os
 import re
-import motor.motor_asyncio # pylint: disable=import-error
+import motor.motor_asyncio
+from pymongo.cursor import Cursor # pylint: disable=import-error
 from bot import DB_URI
 import random
 import string
@@ -622,10 +623,10 @@ class Database:
     async def find_mfilter(self, group_id, query):
       try :
 
-        filters = list(mcol.find({"group_id": group_id}))
+        filters:Cursor = mcol.find({"group_id": group_id})
         if filters :
 
-            for filter in filters.sort(reverse=True, key=getLen):
+            for filter in filters:
 
                 pattern = r"( |^|[^\w])" + filter["text"] + r"( |$|[^\w])"
                 result = re.search(pattern, query, flags=re.IGNORECASE)
@@ -666,7 +667,7 @@ class Database:
 
         try :
 
-            results = mcol.find_many({"group_id": chat_id})
+            results = mcol.find({"group_id": chat_id})
 
             if results:
 

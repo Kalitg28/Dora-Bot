@@ -312,7 +312,7 @@ def split_quotes(text: str):
         else:
             return [split[0],""]
 
-def parser(unique_id, reply_text: str, text: str, filter):
+def parser(unique_id, reply_text: str, text: str):
 
     text = reply_text + " \n" + text
     alert_count = 0

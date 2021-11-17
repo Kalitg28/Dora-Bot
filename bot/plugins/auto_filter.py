@@ -17,8 +17,6 @@ from bot.helpers import(# pylint: disable=import-error
 Helpers, IMDB
 )
 
-from .mfilter import Mfilter
-
 FIND = {}
 INVITE_LINK = {}
 ACTIVE_CHATS = {}

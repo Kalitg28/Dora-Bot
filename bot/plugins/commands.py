@@ -20,6 +20,7 @@ db = Database()
 async def start(bot, update):
 
     add = threading.Thread(target=db.add_user, args=(update.from_user.id,))
+    add.start()
     try:
         file_uid = update.command[1]
     except IndexError:

@@ -639,7 +639,7 @@ class Database:
                     buttons = filter["buttons"]
                     sticker = filter["sticker"]
 
-                    return {"content":content, "file_id":file_id, "buttons":list(buttons), "sticker":bool(sticker)}
+                    return {"content":content, "file_id":file_id, "buttons":buttons, "sticker":bool(sticker)}
 
             return False
 

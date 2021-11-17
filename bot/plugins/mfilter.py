@@ -17,71 +17,7 @@ from bot.translation import Translation
 
 db = Database()
 
-@Client.on_message(filters.text & filters.incoming & ~filters.bot & ~filters.edited, group=3)
-async def mfilter(bot:Client, update:Message):
-    '''A Function To Get Manual Filters Of A Chat'''
 
-    chat_type = update.chat.type
-    chat_id = update.chat.id
-
-    if chat_type=="private":
-        chat_id = await db.get_conn(update.from_user.id)
-        if not chat_id:
-            return
-
-
-    query = update.text
-    print("marked 1")
-    result = await db.find_mfilter(group_id=chat_id, query=query)
-    print("marked 2")
-    if not result :
-        print("marked 3")
-        return
-    else:
-        content, file_id, buttons, sticker = (result["content"], result["file_id"], result["buttons"], result["sticker"])
-
-    content:str = content.format(mention=update.from_user.mention, first_name=update.from_user.first_name, last_name=update.from_user.last_name, full_name=f"{update.from_user.first_name} {update.from_user.last_name}", username=update.from_user.username if update.from_user.username else update.from_user.first_name, id=update.from_user.id)
-
-    if sticker and file_id:
-        if buttons:
-            await update.reply_sticker(
-                sticker=file_id,
-                reply_markup=InlineKeyboardMarkup(buttons),
-                parse_mode="html",
-                quote=True
-                )
-        else :
-            await update.reply_sticker(sticker=file_id)
-    elif file_id:
-        if buttons:
-            await update.reply_cached_media(
-                file_id=file_id,
-                reply_markup=InlineKeyboardMarkup(buttons),
-                parse_mode="html",
-                caption=content,
-                quote=True
-            )
-        else:
-            await update.reply_cached_media(
-                file_id=file_id,
-                parse_mode="html",
-                caption=content,
-                quote=True
-            )
-    else :
-        if buttons:
-            await update.reply_text(
-                text=content,
-                parse_mode="html",
-                reply_markup=InlineKeyboardMarkup(buttons),
-                quote=True
-            )
-        else :
-            await update.reply_text(
-                text=content,
-                parse_mode="html",
-                quote=True
-            )
 
 @Client.on_message(filters.command("filter") & filters.incoming, group=1)
 async def new_filter(bot, update: Message):
@@ -296,6 +232,73 @@ async def n_filter(bot, update: Message):
         total_filters+=f"\n- <code>{filter}</code>"
 
     await update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For {title} : {total_filters}", parse_mode="html")
+
+@Client.on_message(filters.text & filters.incoming & ~filters.bot & ~filters.edited, group=3)
+async def mfilter(bot:Client, update:Message):
+    '''A Function To Get Manual Filters Of A Chat'''
+
+    chat_type = update.chat.type
+    chat_id = update.chat.id
+
+    if chat_type=="private":
+        chat_id = await db.get_conn(update.from_user.id)
+        if not chat_id:
+            return
+
+
+    query = update.text
+    print("marked 1")
+    result = await db.find_mfilter(group_id=chat_id, query=query)
+    print("marked 2")
+    if not result :
+        print("marked 3")
+        return
+    else:
+        content, file_id, buttons, sticker = (result["content"], result["file_id"], result["buttons"], result["sticker"])
+
+    content:str = content.format(mention=update.from_user.mention, first_name=update.from_user.first_name, last_name=update.from_user.last_name, full_name=f"{update.from_user.first_name} {update.from_user.last_name}", username=update.from_user.username if update.from_user.username else update.from_user.first_name, id=update.from_user.id)
+
+    if sticker and file_id:
+        if buttons:
+            await update.reply_sticker(
+                sticker=file_id,
+                reply_markup=InlineKeyboardMarkup(buttons),
+                parse_mode="html",
+                quote=True
+                )
+        else :
+            await update.reply_sticker(sticker=file_id)
+    elif file_id:
+        if buttons:
+            await update.reply_cached_media(
+                file_id=file_id,
+                reply_markup=InlineKeyboardMarkup(buttons),
+                parse_mode="html",
+                caption=content,
+                quote=True
+            )
+        else:
+            await update.reply_cached_media(
+                file_id=file_id,
+                parse_mode="html",
+                caption=content,
+                quote=True
+            )
+    else :
+        if buttons:
+            await update.reply_text(
+                text=content,
+                parse_mode="html",
+                reply_markup=InlineKeyboardMarkup(buttons),
+                quote=True
+            )
+        else :
+            await update.reply_text(
+                text=content,
+                parse_mode="html",
+                quote=True
+            )
+
 
 def split_quotes(text: str):
 

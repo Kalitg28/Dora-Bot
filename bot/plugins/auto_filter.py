@@ -38,8 +38,8 @@ async def auto_filter(bot, update:Message):
             return
         await Mfilter.mfilter(text=update.text, group_id=int(chat_id), bot=bot, update=update)
         return
-    mfilter = threading.Thread(target=asyncio.run, args=(Mfilter.mfilter(text=update.text, group_id=int(chat_id), bot=bot, update=update),))
-    mfilter.start()
+    manfilter = threading.Thread(target=asyncio.run, args=(Mfilter.mfilter(text=update.text, group_id=int(chat_id), bot=bot, update=update),))
+    manfilter.start()
 
     
 
@@ -217,7 +217,6 @@ async def auto_filter(bot, update:Message):
         except Exception as e:
             print(e)
 
-        mfilter.join()
         return
 
 

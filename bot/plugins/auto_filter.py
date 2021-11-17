@@ -30,19 +30,6 @@ async def auto_filter(bot, update:Message):
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
     """
     chat_id = update.chat.id
-    chat_type = update.chat.type
-
-    if chat_type=="private":
-        chat_id = await db.get_conn(update.from_user.id)
-        if not chat_id:
-            return
-        await Mfilter.mfilter(text=update.text, group_id=int(chat_id), bot=bot, update=update)
-        return
-    manfilter = threading.Thread(target=asyncio.run, args=(Mfilter.mfilter(text=update.text, group_id=int(chat_id), bot=bot, update=update),))
-    manfilter.start()
-    print(update.text)
-
-    
 
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):
         return

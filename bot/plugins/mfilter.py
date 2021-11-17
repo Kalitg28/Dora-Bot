@@ -17,13 +17,22 @@ from bot.translation import Translation
 
 db = Database()
 
-class Mfilter():
-  async def mfilter(text:str, group_id, bot:Client, update:Message):
+@Client.on_message(filters.text & filters.incoming & ~filters.bot & ~filters.edited, group=1)
+async def mfilter(bot:Client, update:Message):
     '''A Function To Get Manual Filters Of A Chat'''
 
-    query = text
+    chat_type = update.chat.type
+    chat_id = update.chat.id
+
+    if chat_type=="private":
+        chat_id = await db.get_conn(update.from_user.id)
+        if not chat_id:
+            return
+
+
+    query = update.text
     print("marked 1")
-    result = await db.find_mfilter(group_id=group_id, query=query)
+    result = await db.find_mfilter(group_id=chat_id, query=query)
     print("marked 2")
     if not result :
         print("marked 3")

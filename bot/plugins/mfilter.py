@@ -108,7 +108,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.photo:
         try:
             fileid = update.reply_to_message.photo.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
+            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html+"\n"+extracted[1], text)
         except:
             reply_text = ""
             btn = False
@@ -117,7 +117,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.video:
         try:
             fileid = update.reply_to_message.video.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
+            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html+"\n"+extracted[1], text)
         except:
             reply_text = ""
             btn = False
@@ -126,7 +126,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.audio:
         try:
             fileid = update.reply_to_message.audio.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
+            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html+"\n"+extracted[1], text)
         except:
             reply_text = ""
             btn = False
@@ -135,7 +135,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.document:
         try:
             fileid = update.reply_to_message.document.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
+            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html+"\n"+extracted[1], text)
         except:
             reply_text = ""
             btn = False
@@ -144,7 +144,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.animation:
         try:
             fileid = update.reply_to_message.animation.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1], text)
+            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html+"\n"+extracted[1], text)
         except:
             reply_text = ""
             btn = False

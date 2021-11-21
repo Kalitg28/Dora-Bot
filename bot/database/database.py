@@ -12,6 +12,8 @@ import pymongo
 from pymongo import MongoClient
 from pymongo.collection import InsertOneResult
 
+from pyrogram.types import InlineKeyboardButton
+
 DB_NAME = os.environ.get("DB_NAME", "Adv_Auto_Filter")
 
 cluster = MongoClient(DB_URI)

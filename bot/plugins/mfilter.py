@@ -172,7 +172,7 @@ async def new_filter(bot, update: Message):
     else:
         return
     
-    await db.add_mfilter(unique_id, chat_id, text, reply_text, fileid, btn, alert, sticker)
+    await db.add_mfilter(unique_id, chat_id, text, reply_text, fileid, str(btn), alert, sticker)
 
     await update.reply_text(
         f"Filter for  `{text}`  added in  **{title}**",
@@ -257,7 +257,7 @@ async def mfilter(bot:Client, update:Message):
         content, file_id, btn, sticker = (result["content"], result["file_id"], result["buttons"], result["sticker"])
     if btn:
         print(btn)
-        buttons = list(btn)
+        buttons = eval(btn)
 
     content:str = content.format(mention=update.from_user.mention, first_name=update.from_user.first_name, last_name=update.from_user.last_name, full_name=f"{update.from_user.first_name} {update.from_user.last_name}", username=update.from_user.username if update.from_user.username else update.from_user.first_name, id=update.from_user.id)
 

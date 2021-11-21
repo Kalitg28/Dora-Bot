@@ -6,6 +6,7 @@ import logging
 import asyncio
 import random
 import string
+import pyrogram
 
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery

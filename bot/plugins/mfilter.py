@@ -240,6 +240,7 @@ async def mfilter(bot:Client, update:Message):
 
     chat_type = update.chat.type
     chat_id = update.chat.id
+    buttons = False
 
     if chat_type=="private":
         chat_id = await db.get_conn(update.from_user.id)
@@ -334,16 +335,16 @@ def parser(unique_id, reply_text: str, text: str):
 
         for button in re.finditer(pattern, the_buttons):
 
-            text.replace(button[0], '')
+            text = text.replace(button[1], '')
 
             if button[3]=="url":
 
-                line_buttons.append(InlineKeyboardButton(button[1], url=button[4]))
+                line_buttons.append(InlineKeyboardButton(button[2], url=button[4]))
 
             elif button[3]=="alert":
 
-                line_buttons.append(InlineKeyboardButton(button[1], callback_data=f"alert({unique_id}|{alert_count})"))
-                alert.append(button[3])
+                line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"alert({unique_id}|{alert_count})"))
+                alert.append(button[4])
                 alert_count+=1
 
         if len(line_buttons)>0:

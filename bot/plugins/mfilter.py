@@ -254,10 +254,10 @@ async def mfilter(bot:Client, update:Message):
         print("marked 3")
         return
     else:
-        content, file_id, buttons, sticker = (result["content"], result["file_id"], result["buttons"], result["sticker"])
-    if buttons:
-        print(buttons)
-        buttons = list(buttons)
+        content, file_id, btn, sticker = (result["content"], result["file_id"], result["buttons"], result["sticker"])
+    if btn:
+        print(btn)
+        buttons = list(btn)
 
     content:str = content.format(mention=update.from_user.mention, first_name=update.from_user.first_name, last_name=update.from_user.last_name, full_name=f"{update.from_user.first_name} {update.from_user.last_name}", username=update.from_user.username if update.from_user.username else update.from_user.first_name, id=update.from_user.id)
 

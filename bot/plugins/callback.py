@@ -1806,7 +1806,7 @@ async def edit_caption(bot:Client, update: CallbackQuery):
 @Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=2)
 async def alerter(bot:Client, update: CallbackQuery):
 
-    id, index = re.findall(r"edit_c\((.+)\)", update.data)[0].split("|",1)
+    id, index = re.findall(r"alert\((.+)\)", update.data)[0].split("|",1)
 
     text = await db.get_alert(id, index)
 

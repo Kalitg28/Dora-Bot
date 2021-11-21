@@ -172,7 +172,7 @@ async def new_filter(bot, update: Message):
     else:
         return
     
-    await db.add_mfilter(unique_id, chat_id, text, reply_text, fileid, btn, alert, sticker)
+    await db.add_mfilter(unique_id, chat_id, text, reply_text, fileid, str(btn), alert, sticker)
 
     await update.reply_text(
         f"Filter for  `{text}`  added in  **{title}**",

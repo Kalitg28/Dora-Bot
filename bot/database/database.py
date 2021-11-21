@@ -701,7 +701,7 @@ class Database:
             if not alert:
                 return False
             else :
-                return alert
+                return alert[int(index)]
         except Exception as e:
             print(e)
 

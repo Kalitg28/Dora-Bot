@@ -72,7 +72,7 @@ async def new_filter(bot, update: Message):
         ) for _ in range(15) )
 
     if (len(extracted) >= 2) and not update.reply_to_message:
-        reply_text, btn, alert = parser(unique_id, "", extracted[1], text)
+        reply_text, btn, alert = parser(unique_id, "", extracted[1])
         fileid = None
         if not reply_text:
             await update.reply_text("You cannot have buttons alone, give some text to go with it!", quote=True)
@@ -330,7 +330,7 @@ def parser(unique_id, reply_text: str, text: str):
 
         for button in re.finditer(pattern, the_buttons):
 
-            text.replace(button, '')
+            text.replace(button[0], '')
 
             if button[3]=="url":
 

@@ -35,7 +35,7 @@ async def broadcast(bot:Client, update:Message) :
 
     async for member in bot.iter_chat_members(chat_id=chat_id):
 
-        id = member.id
+        id = member.user.id
         try:
          if media :
             if not markup:

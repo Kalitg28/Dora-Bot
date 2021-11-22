@@ -599,6 +599,7 @@ class Database:
             
             mcol.delete_one({"_id": check["_id"]})
 
+        length = len(text)
         try :
 
             unique_id = id
@@ -611,7 +612,8 @@ class Database:
                 "file": file,
                 "buttons": str(buttons),
                 "alert": alert,
-                "sticker": sticker
+                "sticker": sticker,
+                "length": length
             }
 
             mcol.insert_one(document)
@@ -667,7 +669,7 @@ class Database:
 
         try :
 
-            results = mcol.find({"group_id": chat_id})
+            results = mcol.aggregate([{"group_id": chat_id},{'$sort':{'length': -1}}])
 
             if results:
 

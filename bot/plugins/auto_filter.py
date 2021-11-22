@@ -22,7 +22,7 @@ INVITE_LINK = {}
 ACTIVE_CHATS = {}
 db = Database()
 
-@Bot.on_message(filters.text & filters.incoming & ~filters.bot, group=0)
+@Bot.on_message(filters.text & filters.group & ~filters.bot, group=0)
 async def auto_filter(bot, update:Message):
     """
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
@@ -88,7 +88,7 @@ async def auto_filter(bot, update:Message):
             file_size = "" if file_size == ("[0 B]") else file_size
             
             # add emoji down below inside " " if you want..
-            button_text = f"{file_size}{file_name.replace(' ', '.')}"
+            button_text = f"{file_size} {file_name.replace(' ', '.')}"
             
 
             if file_type == "video":
@@ -169,16 +169,17 @@ async def auto_filter(bot, update:Message):
         if not movie_info: return print("You Idiot This Doesnt Work") 
 
 
-        text = f'''
-        📽️ Movie/Series : {query}
-        🌟 Rating : {movie_info["rating"]}
-        🗳️ Votes : {movie_info["votes"]}
-        🧬 Genres : {movie_info["genres"]}
-        📅 Released : {movie_info["original air date"]}
-        ⏱️ Duration : {movie_info["runtimes"]}
-        📁 Results : {(len_results)}
+        text = f'''<b>
+📽️ Movie/Series : <code>{query}<code/>
 
-        🅒 Uploaded By  {update.chat.title}
+🌟 Rating : {movie_info["rating"]}
+🗳️ Votes : {movie_info["votes"]}
+🧬 Genres : {str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}
+📅 Released : {movie_info["original air date"]}
+⏱️ Duration : {movie_info["runtimes"]}
+📁 Results : {(len_results)}
+
+🅒 Uploaded By  {update.chat.title} <b/>
         '''
 
         try:
@@ -194,7 +195,10 @@ async def auto_filter(bot, update:Message):
         except PhotoIdInvalid:
 
             await bot.reply_photo(
-                photo = random.choice(Translation.PHOTO_LIST)
+                photo = random.choice(Translation.START_PHOTOS),
+                caption=text,
+                reply_markup=reply_markup,
+                parse_mode="html"
             )
 
         except ButtonDataInvalid:

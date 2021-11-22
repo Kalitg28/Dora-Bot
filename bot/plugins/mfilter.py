@@ -37,7 +37,7 @@ async def new_filter(bot, update: Message):
 
         if not chat_id :
 
-            await update.reply_text("Please Connect To A Chat First To Use This Command In PM")
+            await update.reply_text("Please Connect To A Chat First To Use This Command In PM", quote=True)
             return
     
     st = await bot.get_chat_member(chat_id, userid)
@@ -176,7 +176,7 @@ async def new_filter(bot, update: Message):
     await db.add_mfilter(unique_id, chat_id, text, reply_text, fileid, str(btn), alert, sticker)
 
     await update.reply_text(
-        f"Filter for  `{text}`  added in  **{title}**",
+        f"Successfully Saved A Manual Filter For `{text}` in **{title}**",
         quote=True,
         parse_mode="md"
     )
@@ -193,7 +193,7 @@ async def stop_filter(bot, update: Message):
 
     if not chat_id:
 
-        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM")
+        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
         return
 
     filter = update.text.replace("/stop", '').strip()
@@ -201,9 +201,9 @@ async def stop_filter(bot, update: Message):
     success = await db.del_mfilter(chat_id, filter)
 
     if success :
-        await update.reply_text(f"Successfully Deleted The Filter For {filter}")
+        await update.reply_text(f"Successfully Deleted The Filter For {filter}", quote=True)
     else :
-        await update.reply_text(f'Couldnt Delete Any Filter For {filter}')
+        await update.reply_text(f'Couldnt Delete Any Filter For {filter}', quote=True)
 
 
 @Client.on_message(filters.command("filters", case_sensitive=False) & filters.incoming, group=1)
@@ -219,7 +219,7 @@ async def n_filter(bot, update: Message):
 
     if not chat_id:
 
-        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM")
+        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
         return
 
     filters = await db.all_mfilter(chat_id)
@@ -232,7 +232,7 @@ async def n_filter(bot, update: Message):
     for filter in filters :
         total_filters+=f"\n- <code>{filter}</code>"
 
-    await update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For {title} : {total_filters}", parse_mode="html")
+    await update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For {title} : {total_filters}", parse_mode="html", quote=True)
 
 @Client.on_message(filters.text & filters.incoming & ~filters.bot & ~filters.edited, group=3)
 async def mfilter(bot:Client, update:Message):
@@ -268,7 +268,6 @@ async def mfilter(bot:Client, update:Message):
             await update.reply_sticker(
                 sticker=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
-                parse_mode="html",
                 quote=True
                 )
         else :

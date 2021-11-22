@@ -669,7 +669,7 @@ class Database:
 
         try :
 
-            results = mcol.aggregate([{"group_id": chat_id},{'$sort':{'length': -1}}])
+            results = mcol.aggregate([{'$match':{"group_id": chat_id}},{'$sort':{'length': -1}}])
 
             if results:
 

@@ -17,7 +17,7 @@ from bot import Buttons
 
 db = Database()
 
-@Client.on_message(filters.command(["start"]) & filters.private, group=1)
+@Client.on_message(filters.command(["start"]) & filters.private, group=3)
 async def start(bot, update):
 
     add = threading.Thread(target=asyncio.run, args=(db.add_user(update.from_user.id),))
@@ -70,7 +70,7 @@ async def start(bot, update):
     await bot.send_chat_action(update.chat.id, "cancel")
 
 
-@Client.on_message(filters.command(["map"]) & filters.private, group=1)
+@Client.on_message(filters.command(["map"]) & filters.private, group=3)
 async def help(bot, update):
     await bot.send_chat_action(update.chat.id, "typing")
     buttons = Buttons.EN["HELP"]
@@ -88,7 +88,7 @@ async def help(bot, update):
     await bot.send_chat_action(update.chat.id, "cancel")
 
 
-@Client.on_message(filters.command(["about"]) & filters.private, group=1)
+@Client.on_message(filters.command(["about"]) & filters.private, group=3)
 async def about(bot, update):
 
     await bot.send_chat_action(update.message.chat.id, "typing")
@@ -106,7 +106,7 @@ async def about(bot, update):
     )
     await bot.send_chat_action(update.chat.id, "cancel")
 
-@Client.on_message(filters.command("id") & filters.incoming, group=1)
+@Client.on_message(filters.command("id") & filters.incoming, group=3)
 async def get_id(bot:Client, update:Message):
 
     chat_id = update.chat.id
@@ -144,7 +144,7 @@ async def get_id(bot:Client, update:Message):
 
     await bot.send_chat_action(update.chat.id, "cancel")
 
-@Client.on_message(filters.command("json") & filters.private, group=1)
+@Client.on_message(filters.command("json") & filters.private, group=3)
 async def show_json(bot:Client, update:Message):
 
     await bot.send_chat_action(update.chat.id, "typing")

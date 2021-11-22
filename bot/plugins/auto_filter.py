@@ -22,7 +22,7 @@ INVITE_LINK = {}
 ACTIVE_CHATS = {}
 db = Database()
 
-@Bot.on_message(filters.text & filters.group & ~filters.bot, group=0)
+@Bot.on_message(filters.text & filters.group & ~filters.bot, group=1)
 async def auto_filter(bot, update:Message):
     """
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
@@ -169,8 +169,7 @@ async def auto_filter(bot, update:Message):
         if not movie_info: return print("You Idiot This Doesnt Work") 
 
 
-        text = f'''<b>
-📽️ Movie/Series : <code>{query}</code>
+        text = f'''<b>📽️ Movie/Series : <code>{query}</code>
 
 🌟 Rating : {movie_info["rating"]}
 🗳️ Votes : {movie_info["votes"]}

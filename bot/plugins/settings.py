@@ -15,7 +15,7 @@ from bot import VERIFY # pylint: disable=import-error
 
 db = Database()
 
-@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=2)
+@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=3)
 async def pv_settings(bot, update):
     
     chat_id = 902
@@ -76,7 +76,7 @@ async def pv_settings(bot, update):
         )
 
 
-@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=1)
+@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=3)
 async def settings(bot, update: Message):
     
     chat_id = update.chat.id
@@ -182,7 +182,7 @@ async def settings(bot, update: Message):
         )
 
 
-@Client.on_message(filters.command("connect") & filters.private, group=1)
+@Client.on_message(filters.command("connect") & filters.private, group=3)
 async def connect(bot: Client, update: Message):
 
     text = update.text
@@ -235,7 +235,7 @@ async def connect(bot: Client, update: Message):
 
         print(e)
 
-@Client.on_message(filters.command("disconnect") & filters.private, group=1)
+@Client.on_message(filters.command("disconnect") & filters.private, group=3)
 async def disconnect(bot: Client, update: Message):
 
     user_id = update.from_user.id

@@ -22,7 +22,7 @@ from bot.database import Database # pylint: disable=import-error
 db = Database()
 
 
-@Client.on_callback_query(filters.regex(r"navigate\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"navigate\((.+)\)"), group=3)
 async def cb_navg(bot, update: CallbackQuery):
     """
     A Callback Funtion For The Next Button Appearing In Results
@@ -157,7 +157,7 @@ async def cb_navg(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"settings"), group=2)
+@Client.on_callback_query(filters.regex(r"settings"), group=3)
 async def cb_settings(bot, update: CallbackQuery):
     """
     A Callback Funtion For Back Button in /settings Command
@@ -259,7 +259,7 @@ async def cb_settings(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"warn\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"warn\((.+)\)"), group=3)
 async def cb_warn(bot, update: CallbackQuery):
     """
     A Callback Funtion For Acknowledging User's About What Are They Upto
@@ -319,7 +319,7 @@ async def cb_warn(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"channel_list\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"channel_list\((.+)\)"), group=3)
 async def cb_channel_list(bot, update: CallbackQuery):    
     """
     A Callback Funtion For Displaying All Channel List And Providing A Menu To Navigate
@@ -420,7 +420,7 @@ async def cb_channel_list(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"info\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"info\((.+)\)"), group=3)
 async def cb_info(bot, update: CallbackQuery):
     """
     A Callback Funtion For Displaying Details Of The Connected Chat And Provide
@@ -518,7 +518,7 @@ async def cb_info(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"^connect\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"^connect\((.+)\)"), group=3)
 async def cb_connect(bot, update: CallbackQuery):
     """
     A Callback Funtion Helping The user To Make A Chat Active Chat Which Will
@@ -592,7 +592,7 @@ async def cb_connect(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"disconnect\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"disconnect\((.+)\)"), group=3)
 async def cb_disconnect(bot, update: CallbackQuery):
     """
     A Callback Funtion Helping The user To Make A Chat inactive Chat Which Will
@@ -665,7 +665,7 @@ async def cb_disconnect(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"c_delete\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"c_delete\((.+)\)"), group=3)
 async def cb_channel_delete(bot, update: CallbackQuery):
     """
     A Callback Funtion For Delete A Channel Connection From A Group Chat History
@@ -717,7 +717,7 @@ async def cb_channel_delete(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"f_delete\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"f_delete\((.+)\)"), group=3)
 async def cb_filters_delete(bot, update: CallbackQuery):
     """
     A Callback Funtion For Delete A Specific Channel's Filters Connected To A Group
@@ -763,7 +763,7 @@ async def cb_filters_delete(bot, update: CallbackQuery):
     
 
 
-@Client.on_callback_query(filters.regex(r"types\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"types\((.+)\)"), group=3)
 async def cb_types(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Result Types To Be Shown In While Sending Results
@@ -847,7 +847,7 @@ async def cb_types(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"toggle\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"toggle\((.+)\)"), group=3)
 async def cb_toggle(bot, update: CallbackQuery):
     """
     A Callback Funtion Support handler For types()
@@ -961,7 +961,7 @@ async def cb_toggle(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"config\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"config\((.+)\)"), group=3)
 async def cb_config(bot, update: CallbackQuery):
     """
     A Callback Funtion For Chaning The Number Of Total Pages / 
@@ -1075,7 +1075,7 @@ async def cb_config(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"mr_count\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"mr_count\((.+)\)"), group=3)
 async def cb_max_buttons(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Result To Be Shown Per Page
@@ -1188,7 +1188,7 @@ async def cb_max_buttons(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"mp_count\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"mp_count\((.+)\)"), group=3)
 async def cb_max_page(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Maximum Result Pages To Be Shown
@@ -1263,7 +1263,7 @@ async def cb_max_page(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"mf_count\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"mf_count\((.+)\)"), group=3)
 async def cb_max_results(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Maximum Files TO Be Fetched From Database
@@ -1343,7 +1343,7 @@ async def cb_max_results(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"show_invites\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"show_invites\((.+)\)"), group=3)
 async def cb_show_invites(bot, update: CallbackQuery):
     """
     A Callback Funtion For Enabling Or Diabling Invite Link Buttons
@@ -1404,7 +1404,7 @@ async def cb_show_invites(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"inPM\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"inPM\((.+)\)"), group=3)
 async def cb_pm_file(bot, update: CallbackQuery):
     """
     A Callback Funtion For Enabling Or Diabling File Transfer Through Bot PM
@@ -1465,7 +1465,7 @@ async def cb_pm_file(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"accuracy\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"accuracy\((.+)\)"), group=3)
 async def cb_accuracy(bot, update: CallbackQuery):
     """
     A Callaback Funtion to control the accuracy of matching results
@@ -1562,7 +1562,7 @@ async def cb_accuracy(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"set\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"set\((.+)\)"), group=3)
 async def cb_set(bot, update: CallbackQuery):
     """
     A Callback Funtion Support For config()
@@ -1653,7 +1653,7 @@ async def cb_set(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"status\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"status\((.+)\)"), group=3)
 async def cb_status(bot, update: CallbackQuery):
     """
     A Callback Funtion For Showing Overall Status Of A Group
@@ -1698,7 +1698,7 @@ async def cb_status(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"about\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"about\((.+)\)"), group=3)
 async def cb_about(bot, update: CallbackQuery):
     """
     A Callback Funtion For Showing About Section In Bot Setting Menu
@@ -1744,7 +1744,7 @@ async def cb_about(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"^(start|help|about|close)$"), group=2)
+@Client.on_callback_query(filters.regex(r"^(start|help|about|close)$"), group=3)
 async def callback_data(bot, update: CallbackQuery):
     await bot.send_chat_action(update.message.chat.id, "typing")
 
@@ -1790,7 +1790,7 @@ async def callback_data(bot, update: CallbackQuery):
         await update.message.delete()
     await bot.send_chat_action(update.message.chat.id, "cancel")
 
-@Client.on_callback_query(filters.regex(r"edit_c\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"edit_c\((.+)\)"), group=3)
 async def edit_caption(bot:Client, update: CallbackQuery):
 
     STRING = re.findall(r"edit_c\((.+)\)", update.data)[0]
@@ -1803,7 +1803,7 @@ async def edit_caption(bot:Client, update: CallbackQuery):
         await update.message.edit_caption(caption=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     await bot.send_chat_action(update.message.chat.id, "cancel")
 
-@Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=2)
+@Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=3)
 async def alerter(bot:Client, update: CallbackQuery):
 
     id, index = re.findall(r"alert\((.+)\)", update.data)[0].split("|",1)

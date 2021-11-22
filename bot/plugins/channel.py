@@ -13,7 +13,7 @@ from bot import Translation
 
 db = Database()
 
-@Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=1)
+@Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=2)
 async def connect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /add Command TO COnnect A Chat With Group
@@ -182,7 +182,7 @@ async def connect(bot: Bot, update):
     await wait_msg.edit_text(f"Channel Was Sucessfully Added With <code>{len(data)}</code> Files..")
 
 
-@Client.on_message(filters.command(["del"]) & filters.chat(Translation.OWNER_ID), group=1)
+@Client.on_message(filters.command(["del"]) & filters.chat(Translation.OWNER_ID), group=2)
 async def disconnect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /del Command TO Disconnect A Chat With A Group
@@ -235,7 +235,7 @@ async def disconnect(bot: Bot, update):
     await wait_msg.edit_text("Sucessfully Deleted All Files From DB....")
 
 
-@Client.on_message(filters.command(["delall"]) & filters.chat(Translation.OWNER_ID), group=1)
+@Client.on_message(filters.command(["delall"]) & filters.chat(Translation.OWNER_ID), group=2)
 async def delall(bot: Bot, update):
     """
     A Funtion To Handle Incoming /delall Command TO Disconnect All Chats From A Group

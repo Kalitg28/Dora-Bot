@@ -5,7 +5,7 @@ from bot.database import Database
 
 db = Database()
 
-@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & ~filters.channel, group=2)
+@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & ~filters.channel, group=3)
 async def broadcast(bot:Client, update:Message) :
 
     chat_id = update.chat.id

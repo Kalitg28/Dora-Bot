@@ -42,10 +42,10 @@ class Helpers() :
 
     try :
 
-        runtime = int(movie_info["runtimes"])
+        runtime = int(movie_info["runtimes"][0])
 
         if runtime<=60:
-            movie_info.pop("runtimes")
+            
             movie_info["runtimes"] = f"{int(runtime/60)}hr {runtime%60}mins"
 
         else :

@@ -234,7 +234,7 @@ async def n_filter(bot, update: Message):
 
     await update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For {title} : {total_filters}", parse_mode="html", quote=True)
 
-@Client.on_message(filters.text & filters.incoming & ~filters.bot & ~filters.edited, group=3)
+@Client.on_message(filters.text & filters.incoming & ~filters.bot & ~filters.edited, group=0)
 async def mfilter(bot:Client, update:Message):
     '''A Function To Get Manual Filters Of A Chat'''
 

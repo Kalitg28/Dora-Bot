@@ -170,7 +170,7 @@ async def auto_filter(bot, update:Message):
 
 
         text = f'''<b>
-📽️ Movie/Series : <code>{query}<code/>
+📽️ Movie/Series : <code>{query}</code>
 
 🌟 Rating : {movie_info["rating"]}
 🗳️ Votes : {movie_info["votes"]}
@@ -179,7 +179,7 @@ async def auto_filter(bot, update:Message):
 ⏱️ Duration : {movie_info["runtimes"]}
 📁 Results : {(len_results)}
 
-🅒 Uploaded By  {update.chat.title} <b/>
+🅒 Uploaded By  {update.chat.title} </b>
         '''
 
         try:

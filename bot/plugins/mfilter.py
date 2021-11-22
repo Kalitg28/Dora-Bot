@@ -20,7 +20,7 @@ db = Database()
 
 
 
-@Client.on_message(filters.command(r"^filter(.)") & filters.incoming, group=1)
+@Client.on_message(filters.command(["filter","filter@DoraFilterBot"]) & filters.incoming, group=1)
 async def new_filter(bot, update: Message):
 
     chat_id = update.chat.id
@@ -181,7 +181,7 @@ async def new_filter(bot, update: Message):
         parse_mode="md"
     )
 
-@Client.on_message(filters.command(r"^stop(.)", case_sensitive=False) & filters.incoming, group=1)
+@Client.on_message(filters.command(["stop","stop@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=1)
 async def stop_filter(bot, update: Message):
 
     chat_type = update.chat.type
@@ -206,7 +206,7 @@ async def stop_filter(bot, update: Message):
         await update.reply_text(f'Couldnt Delete Any Filter For {filter}', quote=True)
 
 
-@Client.on_message(filters.command(r"^filters(.)", case_sensitive=False) & filters.incoming, group=1)
+@Client.on_message(filters.command(["filters","filters@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=1)
 async def n_filter(bot, update: Message):
 
     chat_type = update.chat.type

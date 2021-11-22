@@ -37,6 +37,7 @@ class Helpers() :
 
     if movie_info["kind"]!="movie":
 
+        movie_info.pop("original air date")
         movie_info["originl air date"] = movie.get("year")
 
     try :
@@ -44,11 +45,12 @@ class Helpers() :
         runtime = int(movie_info["runtimes"])
 
         if runtime<=60:
-
+            movie_info.pop("runtimes")
             movie_info["runtimes"] = f"{int(runtime/60)}hr {runtime%60}mins"
 
         else :
 
+            movie_info.pop("runtimes")
             movie_info["runtimes"] = f"{runtime} mins"
 
     except:

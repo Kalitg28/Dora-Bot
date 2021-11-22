@@ -20,7 +20,7 @@ db = Database()
 
 
 
-@Client.on_message(filters.command("filter") & filters.incoming, group=1)
+@Client.on_message(filters.command(r"^filter(.)") & filters.incoming, group=1)
 async def new_filter(bot, update: Message):
 
     chat_id = update.chat.id
@@ -181,7 +181,7 @@ async def new_filter(bot, update: Message):
         parse_mode="md"
     )
 
-@Client.on_message(filters.command("stop", case_sensitive=False) & filters.incoming, group=1)
+@Client.on_message(filters.command(r"^stop(.)", case_sensitive=False) & filters.incoming, group=1)
 async def stop_filter(bot, update: Message):
 
     chat_type = update.chat.type
@@ -196,7 +196,7 @@ async def stop_filter(bot, update: Message):
         await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
         return
 
-    filter = update.text.replace("/stop", '').strip()
+    filter = update.text.split()[1]
 
     success = await db.del_mfilter(chat_id, filter)
 
@@ -206,7 +206,7 @@ async def stop_filter(bot, update: Message):
         await update.reply_text(f'Couldnt Delete Any Filter For {filter}', quote=True)
 
 
-@Client.on_message(filters.command("filters", case_sensitive=False) & filters.incoming, group=1)
+@Client.on_message(filters.command(r"^filters(.)", case_sensitive=False) & filters.incoming, group=1)
 async def n_filter(bot, update: Message):
 
     chat_type = update.chat.type

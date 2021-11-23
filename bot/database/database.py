@@ -626,7 +626,7 @@ class Database:
       try :
 
         filters:Cursor = mcol.aggregate([{'$match':{"group_id": group_id}},
-        {'$sort': {"length": 1}}])
+        {'$sort': {"length": -1}}])
         if filters :
 
             for filter in filters:

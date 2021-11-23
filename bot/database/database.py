@@ -13,12 +13,14 @@ from pymongo import MongoClient
 from pymongo.collection import InsertOneResult
 
 DB_NAME = os.environ.get("DB_NAME", "Adv_Auto_Filter")
+FSUB = {}
 
 cluster = MongoClient(DB_URI)
 db = cluster[DB_NAME]
 ucol = db["Users"]
 mcol = db["Manual_Filters"]
 ccol = db["Connections"]
+main = db["Main"]
 
 class Database:
 
@@ -62,9 +64,10 @@ class Database:
                 document=True,
                 video=True
             ),
+            fsub=False,
             configs = dict(
                 accuracy=0.70,
-                max_pages=5,
+                max_pages=20,
                 max_results=50,
                 max_per_page=10,
                 pm_fchat=True,
@@ -714,6 +717,24 @@ class Database:
         except Exception as e:
             print(e)
 
+    async def set_fsub(group_id, channel_id, title):
+
+        try :
+            main.update_one({'_id': group_id}, {'$set':{'fsub':{'id': channel_id, 'title': title}}})
+
+        except Exception as e :
+            print(e)
+
+    async def del_fsub(group_id):
+
+        try :
+            main.update_one({'_id': group_id}, {'$set':{'fsub': False}})
+
+        except Exception as e :
+            print(e)
+
 def getLen(e):
 
         return(len(e["text"]))
+
+    

@@ -598,8 +598,7 @@ class Database:
         if check:
             
             mcol.delete_one({"_id": check["_id"]})
-
-        length = len(text)
+            
         try :
 
             unique_id = id
@@ -612,8 +611,7 @@ class Database:
                 "file": file,
                 "buttons": str(buttons),
                 "alert": alert,
-                "sticker": sticker,
-                "length": length
+                "sticker": sticker
             }
 
             mcol.insert_one(document)
@@ -625,7 +623,12 @@ class Database:
     async def find_mfilter(self, group_id, query):
       try :
 
-        filters:Cursor = mcol.find({"group_id": group_id})
+        filters:Cursor = mcol.aggregate([{'$match':{"group_id": group_id}},{'$project': {
+            "text": 1,
+            "field_length": { '$strLenCP': "$text" }
+        }},
+        {'$sort': {"field_length": 1}},
+        {'$project': {"field_length": 0}}])
         if filters :
 
             for filter in filters:
@@ -673,7 +676,7 @@ class Database:
             "text": 1,
             "field_length": { '$strLenCP': "$text" }
         }},
-        {'$sort': {"field_length": -1}},
+        {'$sort': {"field_length": 1}},
         {'$project': {"field_length": 0}}])
 
             if results:

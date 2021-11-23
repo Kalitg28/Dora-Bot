@@ -717,7 +717,7 @@ class Database:
         except Exception as e:
             print(e)
 
-    async def set_fsub(group_id, channel_id, title):
+    async def set_fsub(self, group_id, channel_id, title):
 
         try :
             main.update_one({'_id': group_id}, {'$set':{'fsub':{'id': channel_id, 'title': title}}})
@@ -725,7 +725,7 @@ class Database:
         except Exception as e :
             print(e)
 
-    async def del_fsub(group_id):
+    async def del_fsub(self, group_id):
 
         try :
             main.update_one({'_id': group_id}, {'$set':{'fsub': False}})

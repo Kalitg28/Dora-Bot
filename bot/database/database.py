@@ -669,7 +669,12 @@ class Database:
 
         try :
 
-            results = mcol.aggregate([{'$match':{"group_id": chat_id}},{'$project': {'length':{'$strLenCP': {'$getField': 'text'}}}},{'$sort': {'length': 1}}])
+            results = mcol.aggregate([{'$match':{"group_id": chat_id}},{'$project': {
+            "text": 1,
+            "field_length": { '$strLenCP': "$text" }
+        }},
+        {'$sort': {"field_length": -1}},
+        {'$project': {"field_length": 0}}])
 
             if results:
 

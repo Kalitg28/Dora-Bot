@@ -306,14 +306,14 @@ async def mfilter(bot:Client, update:Message):
 
 def split_quotes(text: str):
 
-    extract = re.findall(r'^("[^"]+")', text)
+    extract = re.findall(r'^("([^"]+)")', text)
     if extract :
 
-        return [extract[0].strip('"'), text.strip('"').strip()]
+        return extract[1], text.replace(extract[0],'')
 
     else :
 
-        split = text.split(' ', 1)
+        split = text.split(None, 1)
         if len(split)>1:
             return [split[0], split[1]]
         else:

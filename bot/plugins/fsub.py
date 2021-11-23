@@ -14,7 +14,7 @@ db = Database()
 @Client.on_callback_query(filters.regex(r'fsub\((.+)\)'), group=3)
 async def fsub(bot:Client, update:CallbackQuery):
 
-    action, group_id = re.findall(r'fsub\((.+)\)', update.data).split('|',1)
+    action, group_id = re.findall(r'fsub\((.+)\)', update.data)[0].split('|',1)
 
     if action=='off':
         await db.del_fsub(int(group_id))

@@ -26,10 +26,10 @@ async def fsub(bot:Client, update:CallbackQuery):
 
     try :
         group_id = int(group_id)
-        channel:Chat = await bot.get_chat(int(response))
+        channel:Chat = await bot.get_chat(int(response.text))
         if not channel.invite_link : return await update.message.edit("I Dont Have Enough Permissions In The Fsub Channel")
 
-        await db.set_fsub(group_id,int(response), channel.title)
+        await db.set_fsub(group_id,int(response.text), channel.title)
         await update.message.edit("Fsub Channel Was Set Successfully...!!")
 
     except PeerIdInvalid:

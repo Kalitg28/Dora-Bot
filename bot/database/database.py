@@ -669,12 +669,13 @@ class Database:
 
         try :
 
-            results = mcol.aggregate([{'$match':{"group_id": chat_id}},{'$project': {'text':1, 'length':{'strLenBytes':'$text'}}},{'$sort':{'length': 1}},{'$project':{'length':0}}])
+            results = mcol.aggregate([{'$match':{"group_id": chat_id}},{'$sort':{'$strLenCP': {'getField': 'text'}}}])
 
             if results:
 
                 for result in results:
 
+                    print(result)
                     filters.append(result["text"])
                     self.fcache[result["_id"]] = result.get("alert")
 

@@ -31,20 +31,21 @@ async def start(bot:Client , update):
     await bot.send_chat_action(update.chat.id, "typing")
     
     if file_uid:
-        groups = await bot.get_common_chats(update.from_user.id)
-        try :
-            if groups:
-                grp_id = groups[0].id
-                settings = db.find_chat(int(grp_id))
-                fsub = settings['fsub']['id']
-                if fsub:
+        results = re.findall(r"^z(.+)z(.+)z$", file_uid)
+        if len(results)<2: return await update.reply_text("Thats Not A Valid Url Man...!")
+        file_uid = results[0]
+        fsub = Batch.decode(results[1])
+        if not fsub=='5555':
                     try:
-                        member = await bot.get_chat_member(grp_id, update.from_user.id)
+                        member = await bot.get_chat_member(int(fsub), update.from_user.id)
                         if member.status=='kicked':
                             await update.reply("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!")
                             return
                     except PeerIdInvalid:
                         pass
+                    except TypeError:
+                        await update.reply_text("Thats Not A Valid Url Man...!")
+                        return
                     except UserNotParticipant:
                         chat = await bot.get_chat(int(fsub))
                         await update.reply(
@@ -53,10 +54,6 @@ async def start(bot:Client , update):
                         return
                     except Exception as e:
                         print(e)
-        except IndexError:
-            pass
-        except Exception as e:
-            print(e)
 
         if re.findall(r"^a(.+)a(.+)a(.+)", file_uid):
             await Batch.get_batch(file_uid, bot, update)

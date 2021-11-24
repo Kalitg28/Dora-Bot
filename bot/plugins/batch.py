@@ -77,10 +77,19 @@ async def encode(text:str):
 
 class Batch():
 
+    def encode(text:str):
+        string = text
+        encoder = {'1': 'B', '2':'Y', '3':'i', '4':'P', '5':'q', '6':'k', '7':'r', '8':'R', '9':'J', '0':'h', ' ':'a', '-': 'u'}
+
+        for key in encoder.keys():
+            string = string.replace(key, encoder[key])
+
+        return string.strip()
+
     def decode(text:str):
 
         string = text
-        decoder = {'B':'1', 'Y':'2',  'i':'3', 'P':'4', 'q':'5', 'k':'6', 'r':'7', 'R':'8', 'J':'9', 'h':'0', 'a':' '}
+        decoder = {'B':'1', 'Y':'2',  'i':'3', 'P':'4', 'q':'5', 'k':'6', 'r':'7', 'R':'8', 'J':'9', 'h':'0', 'a':' ', 'u': '-'}
 
         for key in decoder.keys():
             string = string.replace(key, decoder[key])

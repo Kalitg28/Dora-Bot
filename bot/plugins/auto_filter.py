@@ -5,17 +5,17 @@ import random
 import threading
 
 from pyrogram import Client, filters
-from pyrogram.methods.users import get_common_chats
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.errors import ButtonDataInvalid, FloodWait, PhotoIdInvalid
 
 from bot.database import Database # pylint: disable=import-error
 from bot.bot import Bot
 from bot.translation import Translation # pylint: disable=import-error
-
 from bot.helpers import(# pylint: disable=import-error 
 Helpers, IMDB
 )
+
+from .batch import Batch
 
 FIND = {}
 INVITE_LINK = {}
@@ -63,6 +63,11 @@ async def auto_filter(bot, update:Message):
     pm_file_chat = configs["configs"]["pm_fchat"] # should file to be send from bot pm to user
     max_results = configs["configs"]["max_results"] # maximum total result of a query
     max_per_page = configs["configs"]["max_per_page"] # maximum buttom per page 
+    fsub = configs["fsub"]
+    if fsub:
+        fsub_txt = await Batch.encode(str(fsub['id']))
+    else :
+        fsub_txt = "5555"
     
     filters = await db.get_filters(902, query)
     
@@ -124,7 +129,7 @@ async def auto_filter(bot, update:Message):
                         FIND["bot_details"] = bot_
                 
                 bot_ = FIND.get("bot_details")
-                file_link = f"https://t.me/{bot_.username}?start={unique_id}"
+                file_link = f"https://t.me/{bot_.username}?start=z{unique_id}z{fsub_txt}z"
             
             results.append(
                 [

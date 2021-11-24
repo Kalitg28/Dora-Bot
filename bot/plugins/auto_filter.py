@@ -65,7 +65,7 @@ async def auto_filter(bot, update:Message):
     max_per_page = configs["configs"]["max_per_page"] # maximum buttom per page 
     fsub = configs["fsub"]
     if fsub:
-        fsub_txt = await Batch.encode(str(fsub['id']))
+        fsub_txt = Batch.encode(str(fsub['id']))
     else :
         fsub_txt = "5555"
     

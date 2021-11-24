@@ -133,7 +133,7 @@ async def settings(bot, update: Message):
     if not settings['fsub']:
         text+=f"\n - Force Subscribe: Inactive ❎\n"
     else:
-        text+=f"- Force Subscribe: {settings['fsub']['title']} ✅"
+        text+=f"- Force Subscribe: {settings['fsub']['title']} ✅\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[

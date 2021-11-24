@@ -15,7 +15,7 @@ db = Database()
 async def fsub(bot:Client, update:CallbackQuery):
 
     action, group_id = re.findall(r'fsub\((.+)\)', update.data)[0].split('|',1)
-    buttons = [
+    buttons = [[
             InlineKeyboardButton
                 (
                     "🔙 Back", callback_data="settings"
@@ -25,7 +25,7 @@ async def fsub(bot:Client, update:CallbackQuery):
                 (
                     "Close 🔐", callback_data="close"
                 )
-        ]
+        ]]
 
     if action=='off':
         await db.del_fsub(int(group_id))
@@ -33,9 +33,9 @@ async def fsub(bot:Client, update:CallbackQuery):
         return
 
     response:Message = await bot.ask(update.message.chat.id, "Ok Now Send ONLY THE ID Of The Force Sub Channel And Make Sure I'm An Admin There Too \n\nTo See The ID Go To The Channel And Send <code>/id</code>\n\nTo Abort The Process Send /cancel", timeout=300)
-    if not response : return await update.message.reply("Request Timed Out !!", quote=True, reply_markup=InlineKeyboardMarkup(buttons))
+    if not response : return await update.message.reply("Request Timed Out !!",  reply_markup=InlineKeyboardMarkup(buttons))
     if response.text.startswith('/cancel'):
-        await update.message.edit('Process SuccessFully Aborted...!!', quote=True, reply_markup=InlineKeyboardMarkup(buttons))
+        await update.message.edit('Process SuccessFully Aborted...!!', reply_markup=InlineKeyboardMarkup(buttons))
         return
 
     try :

@@ -204,6 +204,11 @@ async def cb_settings(bot, update: CallbackQuery):
     text+=f"\n - Max Filter Per Page: <code>{mr_count}</code>\n"
 
     text+=f"\n - Accuracy Percentage: <code>{accuracy_point}</code>\n"
+
+    if not settings['fsub']:
+        text+=f"\n - Force Subscribe: Inactive ❎\n"
+    else:
+        text+=f"- Force Subscribe: {settings['fsub']['title']} ✅\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -228,6 +233,35 @@ async def cb_settings(bot, update: CallbackQuery):
                 )
         ]
     )
+
+    if settings['fsub']:
+
+        buttons.append(
+            [
+                InlineKeyboardButton
+            (
+                "🦾 Force Sub 🦾", callback_data='ignore'
+            ),
+            InlineKeyboardButton(
+                'Disable ❎', callback_data=f'fsub(off|{chat_id})'
+            ),
+            InlineKeyboardButton(
+                "Change 💱", callback_data=f'fsub(toggle|{chat_id})'
+            )
+            ]
+        )
+    else :
+        buttons.append(
+            [
+                InlineKeyboardButton
+            (
+                "🦾 Force Sub 🦾", callback_data='ignore'
+            ),
+            InlineKeyboardButton(
+                "Set New ✅", callback_data=f'fsub(toggle|{chat_id})'
+            )
+            ]
+        )
 
     buttons.append(
         [

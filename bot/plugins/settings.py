@@ -130,7 +130,10 @@ async def settings(bot, update: Message):
 
     text+=f"\n - Accuracy Percentage: <code>{accuracy_point}</code>\n"
 
-    text+=f"\n - Force Subscribe: {'Active ✅' if settings['fsub'] else 'Inactive ❎'}"
+    if not settings['fsub']:
+        text+=f"\n - Force Subscribe: Inactive ❎\n"
+    else:
+        text+=f"- Force Subscribe: {settings['fsub']['title']} ✅"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[

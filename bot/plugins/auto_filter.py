@@ -169,16 +169,15 @@ async def auto_filter(bot, update:Message):
         if not movie_info: return print("You Idiot This Doesnt Work") 
 
 
-        text = f'''<b>📽️ Movie/Series : <code>{query}</code>
+        text = f'''<b>📽️ Movie/Series</b> : <code>{query}</code>
+🌟 <b>Rating</b> : {movie_info["rating"]}
+🗳️ <b>Votes</b> : {movie_info["votes"]}
+🧬 <b>Genres</b> : {str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}
+📅 <b>Released</b> : {movie_info["original air date"]}
+⏱️ <b>Duration</b> : {movie_info["runtimes"]}
+📁 <b>Results</b> : {(len_results)}
 
-🌟 Rating : {movie_info["rating"]}
-🗳️ Votes : {movie_info["votes"]}
-🧬 Genres : {str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}
-📅 Released : {movie_info["original air date"]}
-⏱️ Duration : {movie_info["runtimes"]}
-📁 Results : {(len_results)}
-
-🅒 Uploaded By  {update.chat.title} </b>
+<b>🅒 Uploaded By  {update.chat.title} </b>
         '''
 
         try:

@@ -7,6 +7,7 @@ import asyncio
 import threading
 
 from pyrogram import filters, Client
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.types.messages_and_media import photo
 from pyrogram.types.messages_and_media.message import Message
@@ -18,7 +19,7 @@ from bot import Buttons
 db = Database()
 
 @Client.on_message(filters.command(["start"]) & filters.private, group=3)
-async def start(bot, update):
+async def start(bot:Client , update):
 
     add = threading.Thread(target=asyncio.run, args=(db.add_user(update.from_user.id),))
     add.start()
@@ -30,6 +31,33 @@ async def start(bot, update):
     await bot.send_chat_action(update.chat.id, "typing")
     
     if file_uid:
+        groups = await bot.get_common_chats(update.from_user.id)
+        try :
+            if groups:
+                grp_id = groups[0].id
+                settings = db.find_chat(int(grp_id))
+                fsub = settings['fsub']['id']
+                if fsub:
+                    try:
+                        member = await bot.get_chat_member(grp_id, update.from_user.id)
+                        if member.status=='kicked':
+                            await update.reply("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!")
+                            return
+                    except PeerIdInvalid:
+                        pass
+                    except UserNotParticipant:
+                        chat = await bot.get_chat(int(fsub))
+                        await update.reply(
+                            text="Sorry Man You'll Have To Join My Channel First To Use Me 🙂🙂\n\nJust Click On The Join Button Below And Come Back And Click On Retry......"
+                        )
+                        return
+                    except Exception as e:
+                        print(e)
+        except IndexError:
+            pass
+        except Exception as e:
+            print(e)
+
         if re.findall(r"^a(.+)a(.+)a(.+)", file_uid):
             await Batch.get_batch(file_uid, bot, update)
             await bot.send_chat_action(update.chat.id, "cancel")

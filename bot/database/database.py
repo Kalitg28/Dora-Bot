@@ -22,6 +22,15 @@ mcol = db["Manual_Filters"]
 ccol = db["Connections"]
 main = db["Main"]
 
+def_config = dict(
+                accuracy=0.70,
+                max_pages=20,
+                max_results=50,
+                max_per_page=10,
+                pm_fchat=True,
+                show_invite_link=True
+            )
+
 class Database:
 
     def __init__(self):
@@ -720,7 +729,19 @@ class Database:
     async def set_fsub(self, group_id, channel_id, title):
 
         try :
-            main.update_one({'_id': group_id}, {'$set':{'fsub':{'id': channel_id, 'title': title}}})
+            doc = {'id': channel_id, 'title': title}
+            prev = main.find_one({'_id':group_id})
+            if prev:
+                main.update_one({'_id': group_id}, {'$set':{'fsub': doc}})
+            else :
+                main.insert_one(
+                    {
+                        "_id": group_id,
+                        'configs': def_config,
+                        'fsub': doc
+                    }
+                )
+            await self.refresh_cache(group_id)
 
         except Exception as e :
             print(e)
@@ -729,6 +750,8 @@ class Database:
 
         try :
             main.update_one({'_id': group_id}, {'$set':{'fsub': False}})
+            await self.refresh_cache(group_id)
+
 
         except Exception as e :
             print(e)

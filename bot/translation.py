@@ -13,15 +13,15 @@ class Translation(object):
 <b>Hey {} My Name is Map I Can Guide You Through All Of Dora's Cool Features And How To Properly Use Them. Use The Buttons Below To Navigate Through All Of The Modules \nYou Can Eassily Call Me Out Using The /map Command</b>
 """,
  
- "ABOUT" : """<b>➥ Name</b> : <code> Auto Filter Bot</code>
- 
-<b>➥ Base Dev</b> : <b><i><a href="https://t.me/AlbertEinstein_TG">AlbertEinstein_TG</a></i></b>
-<b>➥ Main Dev</b> : <b><i><a href="https://t.me/J_I_S_I_N">MrPurple902</a></i></b>
-<b>➥ Language</b> : <i><a href="https://python.org">Python 3.9.2</a></i>
-<b>➥ Library</b> : <i><a href="https://docs.pyrogram.org">Pyrogram Asyncio 1.13.0 </a></i>
-<b>➥ Base Source Code</b> : <i><a href="https://github.com/AlbertEinsteinTG/Adv-Auto-Filter-Bot">Click Me</a></i>
-<b>➥ Server</b> : <i><a href="https://heroku.com">Heroku</a></i>
-<b>➥ DataBase</b> : <i><a href="https://mongodb.com">MongoDB</a></i>
+ "ABOUT" : """<b>🗲 Bot Type</b> : <i> Auto + Manual Filter + FileShare</i>
+<b>🗲 Developers</b> : <b><i><a href="https://t.me/AlbertEinstein_TG">AlbertEinstein_TG</a>, <a href="https://t.me/J_I_S_I_N">MrPurple902</a></i></b>
+<b>🗲 Language</b> : <i><a href="https://python.org">Python 3.9.2</a></i>
+<b>🗲 Library</b> : <i><a href="https://docs.pyrogram.org">Pyrogram Asyncio 1.13.0 </a></i>
+<b>🗲 Server</b> : <i><a href="https://heroku.com">Heroku</a></i>
+<b>🗲 DataBase</b> : <i><a href="https://mongodb.com">MongoDB</a></i>
+<b>🗲 DataBase Driver</b> : <i><a href="https://motor.readthedocs.io">Motor Asyncio 2.5.1</a></i>
+<b>🗲 IMdB Scraper</b> : <i><a href="https://pypi.org/project/IMdBPY">IMdBPY</a></i>
+<b>🗲 Base Source Code</b> : <i><a href="https://github.com/AlbertEinsteinTG/Adv-Auto-Filter-Bot">Click Me</a></i>
 """,
 
  "AF" : "<b>To Use The AutoFilter Module Simply Add The Bot To Your Group As Admin Thats it/n/n- Use The <code>/settings</code> Command To Modify AutoFilter Settings \nTo Connect The Settings Panel To PM Read The Connections Menu</b>",
@@ -69,7 +69,7 @@ class Translation(object):
  <i>Same Line</i> ->  [Button1](url:YourURL)[Button2](alert:AlertText)
 
  <i>Seperate Lines</i> ->  [Button1](url:YourURL)
-  [Button2](alert:AlertText)
+  Button2](alert:AlertText)
  """,
  "FORMAT": """
  <i><b>Here Are The Formatting Options Available For Manual Filters:</b></i>
@@ -87,7 +87,7 @@ class Translation(object):
  Other Commands And Weird Modules :
  
  /id ->  Reply To A Forwarded Message To Get The Original Chats ID Or Simply Get Your ID
- /json ->  Rply To A Message To Get Its Complette Json Includinf File IDs and Sticker IDs
+ /json ->  Rply To A Message To Get Its Complete Json Including File IDs and Sticker IDs
  """,
  "CAST":"""
 <i>Just Reply To The Message Or Media You Would Like To Broadcast With <code>/broadcast</code> Buttons Will Also Be Copied

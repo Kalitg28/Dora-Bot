@@ -15,11 +15,13 @@ class Helpers() :
 
     info = ["localized title", "rating", "votes", "genres", "runtimes", "original air date", "full-size cover url", "kind"]
 
+    global IMDB
     movies = searcher.search_movie(my_movie)
+    if len(movies)<1:
+        IMDB[my_movie] = False
+        return
     movie_id = movies[0].movieID
     movie = searcher.get_movie(movie_id, info=Movie.Movie.default_info)
-
-    global IMDB
 
     movie_info = {}
 

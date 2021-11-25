@@ -19,7 +19,7 @@ class Translation(object):
 <b>🗲 Library</b> : <i><a href="https://docs.pyrogram.org">Pyrogram Asyncio 1.13.0 </a></i>
 <b>🗲 Server</b> : <i><a href="https://heroku.com">Heroku</a></i>
 <b>🗲 DataBase</b> : <i><a href="https://mongodb.com">MongoDB</a></i>
-<b>🗲 DataBase Driver</b> : <i><a href="https://motor.readthedocs.io">Motor Asyncio 2.5.1</a></i>
+<b>🗲 DB Driver</b> : <i><a href="https://motor.readthedocs.io">Motor Asyncio 2.5.1</a></i>
 <b>🗲 IMdB Scraper</b> : <i><a href="https://pypi.org/project/IMdBPY">IMdBPY</a></i>
 <b>🗲 Base Source Code</b> : <i><a href="https://github.com/AlbertEinsteinTG/Adv-Auto-Filter-Bot">Click Me</a></i>
 """,

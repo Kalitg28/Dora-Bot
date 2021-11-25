@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import PeerIdInvalid
+from pyrogram.errors import PeerIdInvalid, UserIsBot
 from bot.database import Database
 
 db = Database()
@@ -66,8 +66,11 @@ async def broadcast(bot:Client, update:Message) :
                     chat_id=id,
                     reply_markup=InlineKeyboardMarkup(markup)
                 )
+         count+=1
          await status.edit(f"Broadcasted Successfully To {count} Users")
         except PeerIdInvalid:
+            pass
+        except UserIsBot:
             pass
         except Exception as e:
             print(e)

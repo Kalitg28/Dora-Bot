@@ -35,7 +35,8 @@ async def broadcast(bot:Client, update:Message) :
     count = 0
 
     status = await bot.send_message(
-        "Starting Broadcast...."
+        chat_id=update.chat.id,
+        text="Starting Broadcast...."
     )
     async for member in bot.iter_chat_members(chat_id=chat_id):
 

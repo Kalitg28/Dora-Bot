@@ -155,7 +155,7 @@ async def connect(bot: Bot, update):
                         file_id=file_id, # Done
                         unique_id=unique_id,
                         file_name=file_name,
-                        file_caption=file_caption,
+                        file_caption="",
                         file_size=file_size,
                         file_type=file_type,
                         file_link=file_link,
@@ -308,7 +308,7 @@ async def new_files(bot: Bot, update):
                     file_id=file_id, # File Id For Future Updates Maybe...
                     unique_id=unique_id,
                     file_name=file_name,
-                    file_caption=file_caption,
+                    file_caption="",
                     file_size = file_size,
                     file_type=file_type,
                     file_link=file_link,

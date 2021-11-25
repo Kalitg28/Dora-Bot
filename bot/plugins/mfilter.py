@@ -309,7 +309,7 @@ def split_quotes(text: str):
     extract = re.findall(r'^("([^"]+)")', text)
     if extract :
 
-        return extract[0][1], text.replace(extract[0][1],'')
+        return extract[0][1], text.replace(extract[0][1],'').replace('"','')
 
     else :
 

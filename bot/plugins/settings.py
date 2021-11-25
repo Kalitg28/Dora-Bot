@@ -131,7 +131,7 @@ async def settings(bot, update: Message):
     text+=f"\n - Accuracy Percentage: <code>{accuracy_point}</code>\n"
 
     if not settings['fsub']:
-        text+=f"\n - Force Subscribe: Inactive ❎\n"
+        text+=f"\n - Force Subscribe: Inactive ❌\n"
     else:
         text+=f"\n- Force Subscribe: {settings['fsub']['title']} ✅\n"
     
@@ -167,7 +167,7 @@ async def settings(bot, update: Message):
                 "🦾 Force Sub 🦾", callback_data='ignore'
             ),
             InlineKeyboardButton(
-                'Disable ❎', callback_data=f'fsub(off|{chat_id})'
+                'Disable ❌', callback_data=f'fsub(off|{chat_id})'
             ),
             InlineKeyboardButton(
                 "Change 💱", callback_data=f'fsub(toggle|{chat_id})'

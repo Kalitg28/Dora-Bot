@@ -171,8 +171,15 @@ async def auto_filter(bot, update:Message):
 
         movie_info = IMDB.get(movie)
 
-        if not movie_info: return print("You Idiot This Doesnt Work") 
+        if not movie_info:
 
+            await bot.reply_photo(
+                photo = random.choice(Translation.START_PHOTOS),
+                caption=f"<b>Heres What I Found In My Database For <code>{update.text}</code></b>",
+                reply_markup=reply_markup,
+                parse_mode="html"
+            )
+            return
 
         text = f'''<b>📽️ Movie/Series</b> : <code>{query}</code>
 🌟 <b>Rating</b> : {movie_info["rating"]}

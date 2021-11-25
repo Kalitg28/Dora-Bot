@@ -31,9 +31,15 @@ async def start(bot:Client , update):
     await bot.send_chat_action(update.chat.id, "typing")
     
     if file_uid:
+
+        if re.findall(r"^a(.+)a(.+)a(.+)", file_uid):
+            await Batch.get_batch(file_uid, bot, update)
+            await bot.send_chat_action(update.chat.id, "cancel")
+            return
+
         results = re.findall(r"^z(.+)z(.+)z$", file_uid)[0]
         if len(results)<2: return await update.reply_text("Thats Not A Valid Url Man...!", quote=True)
-        file_uid = results[0]
+        new_uid = results[0]
         fsub = Batch.decode(results[1])
         if not fsub=='5555':
                     try:
@@ -48,18 +54,19 @@ async def start(bot:Client , update):
                         return
                     except UserNotParticipant:
                         chat = await bot.get_chat(int(fsub))
-                        await update.reply(
-                            text="Sorry Man You'll Have To Join My Channel First To Use Me 🙂🙂\n\nJust Click On The Join Button Below And Come Back And Click On Retry......"
+                        link = chat.invite_link
+                        if link:
+                            buttons = [[InlineKeyboardButton("Join 🤓"),InlineKeyboardButton("Retry ♻️")]]
+                            await update.reply(
+                            text="<b>Sorry Man You'll Have To Join My Channel First To Use Me 🙂🙂\n\nJust Click On The Join Button Below And Come Back And Click On Retry......</b>",
+                            quote=True,
+                            reply_markup=InlineKeyboardMarkup(buttons)
                         )
                         return
                     except Exception as e:
                         print(e)
 
-        if re.findall(r"^a(.+)a(.+)a(.+)", file_uid):
-            await Batch.get_batch(file_uid, bot, update)
-            await bot.send_chat_action(update.chat.id, "cancel")
-            return
-        file_id, file_name, file_caption, file_type = await db.get_file(file_uid)
+        file_id, file_name, file_caption, file_type = await db.get_file(new_uid)
         
         if (file_id or file_type) == None:
             await bot.send_chat_action(update.chat.id, "cancel")

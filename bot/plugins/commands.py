@@ -56,7 +56,7 @@ async def start(bot:Client , update):
                         chat = await bot.get_chat(int(fsub))
                         link = chat.invite_link
                         if link:
-                            buttons = [[InlineKeyboardButton("Join 🤓"),InlineKeyboardButton("Retry ♻️")]]
+                            buttons = [[InlineKeyboardButton("Join 🤓", url=link),InlineKeyboardButton("Retry ♻️", url=f"https://t.me/DoraFilterBot?start={file_uid}")]]
                             await update.reply(
                             text="<b>Sorry Man You'll Have To Join My Channel First To Use Me 🙂🙂\n\nJust Click On The Join Button Below And Come Back And Click On Retry......</b>",
                             quote=True,

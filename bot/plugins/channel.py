@@ -39,12 +39,12 @@ async def connect(bot: Bot, update):
         await update.reply_text("Invalid Input...\nYou Should Specify Valid <code>chat_id(-100xxxxxxxxxx)</code> or <code>@username</code>")
         return
     
-    try:
-        join_link = await bot.export_chat_invite_link(target)
-    except Exception as e:
-        print(e)
-        await update.reply_text(f"Make Sure Im Admin At <code>{target}</code> And Have Permission For '<i>Inviting Users via Link</i>' And Try Again.....!!!")
-        return
+   # try:
+   #     join_link = await bot.export_chat_invite_link(target)
+   # except Exception as e:
+   #     print(e)
+   #     await update.reply_text(f"Make Sure Im Admin At <code>{target}</code> And Have Permission For '<i>Inviting Users via Link</i>' And Try Again.....!!!")
+   #     return
     
     userbot_info = await bot.USER.get_me()
     userbot_id = userbot_info.id

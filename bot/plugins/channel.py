@@ -50,15 +50,15 @@ async def connect(bot: Bot, update):
     userbot_id = userbot_info.id
     userbot_name = userbot_info.first_name
     
-    try:
-        await bot.USER.join_chat(join_link)
+   # try:
+   #     await bot.USER.join_chat(join_link)
         
-    except UserAlreadyParticipant:
-        pass
+   # except UserAlreadyParticipant:
+   #     pass
     
-    except Exception:
-        await update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Join The Channel `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
-        return
+   # except Exception:
+   #     await update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Join The Channel `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
+   #     return
     
     try:
         c_chat = await bot.get_chat(target)

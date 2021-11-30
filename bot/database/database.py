@@ -28,7 +28,8 @@ def_config = dict(
                 max_results=50,
                 max_per_page=10,
                 pm_fchat=True,
-                show_invite_link=True
+                show_invite_link=True,
+                fsub=False
             )
 
 class Database:

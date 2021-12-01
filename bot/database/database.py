@@ -757,6 +757,22 @@ class Database:
         except Exception as e :
             print(e)
 
+    async def set_main(self, id, key, value):
+
+        try:
+            main.update_one({'_id': id}, {'$set':{key: value}})
+            await self.refresh_cache(id)
+        except Exception as e :
+            print(e)
+
+    async def del_main(self, id, key):
+
+        try:
+            main.update_one({'_id': id}, {'$set':{key: False}})
+            await self.refresh_cache(id)
+        except Exception as e :
+            print(e)
+
 def getLen(e):
 
         return(len(e["text"]))

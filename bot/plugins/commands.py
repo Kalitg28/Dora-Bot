@@ -42,12 +42,13 @@ async def start(bot:Client , update):
         new_uid = results[0]
         group_id = Batch.decode(results[1])
         settings = await db.find_chat(int(group_id))
-        fsub = settings.get("fsub", None).get("id")
+        fsub = settings.get("fsub", None)
         caption = settings.get("caption", None)
         if not caption : 
             caption=''
 
         if fsub:
+                    fsub = fsub["id"]
                     try:
                         member = await bot.get_chat_member(int(fsub), update.from_user.id)
                         if member.status=='kicked':

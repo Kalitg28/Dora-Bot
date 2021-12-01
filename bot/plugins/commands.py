@@ -117,7 +117,7 @@ async def help(bot, update):
     await bot.send_photo(
         photo="https://telegra.ph/file/82b6cf45d478fb5fd33c0.jpg",
         chat_id=update.chat.id,
-        caption=Translation.HELP.format(update.from_user.mention),
+        caption=Translation.EN["HELP"].format(update.from_user.mention),
         reply_markup=reply_markup,
         parse_mode="html",
         reply_to_message_id=update.message_id

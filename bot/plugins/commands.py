@@ -44,7 +44,8 @@ async def start(bot:Client , update):
         settings = await db.find_chat(int(group_id))
         fsub = settings.get("fsub", None)
         caption = settings.get("caption", None)
-        if not caption : caption=''
+        if not caption : 
+            caption=''
 
         if fsub:
                     try:

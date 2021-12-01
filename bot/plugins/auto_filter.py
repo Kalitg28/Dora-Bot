@@ -6,7 +6,7 @@ import threading
 
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from pyrogram.errors import ButtonDataInvalid, FloodWait, PhotoIdInvalid
+from pyrogram.errors import ButtonDataInvalid, FloodWait, PhotoIdInvalid, MediaEmpty
 
 from bot.database import Database # pylint: disable=import-error
 from bot.bot import Bot
@@ -169,7 +169,7 @@ async def auto_filter(bot, update:Message):
 
         if not movie_info:
 
-            await bot.reply_photo(
+            await update.reply_photo(
                 photo = random.choice(Translation.START_PHOTOS),
                 caption=f"<b>Heres What I Found In My Database For <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
@@ -198,9 +198,9 @@ async def auto_filter(bot, update:Message):
                 reply_to_message_id=update.message_id
             )
 
-        except PhotoIdInvalid:
+        except PhotoIdInvalid or MediaEmpty:
 
-            await bot.reply_photo(
+            await update.reply_photo(
                 photo = random.choice(Translation.START_PHOTOS),
                 caption=text,
                 reply_markup=reply_markup,

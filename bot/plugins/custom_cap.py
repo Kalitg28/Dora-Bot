@@ -10,7 +10,7 @@ from bot import VERIFY
 
 db = Database()
 
-@Client.on_message(filters.command("setcaption"))
+@Client.on_message(filters.command("setcaption"), group=4)
 async def setcaption(bot:Client, update:Message):
 
     chat_id = update.chat.id
@@ -46,7 +46,7 @@ async def setcaption(bot:Client, update:Message):
     await db.set_main(int(chat_id), "caption", caption)
     await update.reply("Your Custom Caption Was Saved Successfully...", quote=True)
 
-@Client.on_message(filters.command("delcaption"))
+@Client.on_message(filters.command("delcaption"), group=3)
 async def setcaption(bot:Client, update:Message):
 
     chat_id = update.chat.id

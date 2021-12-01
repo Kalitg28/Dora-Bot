@@ -55,7 +55,8 @@ async def start(bot:Client , update):
                             return
                     except PeerIdInvalid:
                         pass
-                    except TypeError:
+                    except TypeError as e:
+                        print(e)
                         await update.reply_text("Thats Not A Valid Url Man...!", quote=True)
                         return
                     except UserNotParticipant:

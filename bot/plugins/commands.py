@@ -40,8 +40,13 @@ async def start(bot:Client , update):
         results = re.findall(r"^z(.+)z(.+)z$", file_uid)[0]
         if len(results)<2: return await update.reply_text("Thats Not A Valid Url Man...!", quote=True)
         new_uid = results[0]
-        fsub = Batch.decode(results[1])
-        if not fsub=='5555':
+        group_id = Batch.decode(results[1])
+        settings = await db.find_chat(int(group_id))
+        fsub = settings.get("fsub")
+        caption = settings.get("caption")
+        if not caption : caption=''
+
+        if fsub:
                     try:
                         member = await bot.get_chat_member(int(fsub), update.from_user.id)
                         if member.status=='kicked':
@@ -72,12 +77,12 @@ async def start(bot:Client , update):
             await bot.send_chat_action(update.chat.id, "cancel")
             return
         
-        caption = "<b>" + file_name + "</b>"
+        file_caption = "<b>" + file_name + "</b>\n\n" + caption
         try:
             await update.reply_cached_media(
                 file_id,
                 quote=True,
-                caption = caption,
+                caption = file_caption,
                 parse_mode="html",
             )
         except Exception as e:

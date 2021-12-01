@@ -117,6 +117,7 @@ async def settings(bot, update: Message):
     mf_count = settings["configs"]["max_results"]
     mr_count = settings["configs"]["max_per_page"]
     accuracy_point = settings["configs"].get("accuracy", 0.70)
+    caption = settings.get("caption")
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -134,6 +135,8 @@ async def settings(bot, update: Message):
         text+=f"\n - Force Subscribe: Inactive ❌\n"
     else:
         text+=f"\n- Force Subscribe: {settings['fsub']['title']} ✅\n"
+
+    text+=f"\nCustom Caption {'Activated ✅' if caption else 'Inactive ❌'}"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[

@@ -39,26 +39,26 @@ async def connect(bot: Bot, update):
         await update.reply_text("Invalid Input...\nYou Should Specify Valid <code>chat_id(-100xxxxxxxxxx)</code> or <code>@username</code>")
         return
     
-   # try:
-   #     join_link = await bot.export_chat_invite_link(target)
-   # except Exception as e:
-   #     print(e)
-   #     await update.reply_text(f"Make Sure Im Admin At <code>{target}</code> And Have Permission For '<i>Inviting Users via Link</i>' And Try Again.....!!!")
-   #     return
+    try:
+        join_link = await bot.export_chat_invite_link(target)
+    except Exception as e:
+        print(e)
+        await update.reply_text(f"Make Sure Im Admin At <code>{target}</code> And Have Permission For '<i>Inviting Users via Link</i>' And Try Again.....!!!")
+        return
     
     userbot_info = await bot.USER.get_me()
     userbot_id = userbot_info.id
     userbot_name = userbot_info.first_name
     
-   # try:
-   #     await bot.USER.join_chat(join_link)
+    #try:
+    #    await bot.USER.join_chat(join_link)
         
-   # except UserAlreadyParticipant:
-   #     pass
+    #except UserAlreadyParticipant:
+    #    pass
     
-   # except Exception:
-   #     await update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Join The Channel `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
-   #     return
+    #except Exception:
+    #    await update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Join The Channel `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
+    #   return
     
     try:
         c_chat = await bot.get_chat(target)
@@ -101,7 +101,6 @@ async def connect(bot: Bot, update):
                             continue
                         file_id = file_id.video.file_id
                         file_name = msgs.video.file_name[0:-4]
-                        file_caption  = msgs.caption if msgs.caption else ""
                         file_size = msgs.video.file_size
                         file_type = "video"
                     
@@ -116,7 +115,6 @@ async def connect(bot: Bot, update):
                             continue
                         file_id = file_id.audio.file_id
                         file_name = msgs.audio.file_name[0:-4]
-                        file_caption  = msgs.caption if msgs.caption else ""
                         file_size = msgs.audio.file_size
                         file_type = "audio"
                     
@@ -131,7 +129,6 @@ async def connect(bot: Bot, update):
                             continue
                         file_id = file_id.document.file_id
                         file_name = msgs.document.file_name[0:-4]
-                        file_caption  = msgs.caption if msgs.caption else ""
                         file_size = msgs.document.file_size
                         file_type = "document"
                     

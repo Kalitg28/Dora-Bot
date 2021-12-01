@@ -63,15 +63,11 @@ async def auto_filter(bot, update:Message):
     pm_file_chat = configs["configs"]["pm_fchat"] # should file to be send from bot pm to user
     max_results = configs["configs"]["max_results"] # maximum total result of a query
     max_per_page = configs["configs"]["max_per_page"] # maximum buttom per page 
-    fsub = configs["fsub"]
-    if fsub:
-        fsub_txt = Batch.encode(str(fsub['id']))
-    else :
-        fsub_txt = "5555"
     
     filters = await db.get_filters(902, query)
     
     if filters:
+        group_text = Batch.encode(str(chat_id))
         for filter in filters: # iterating through each files
             file_name = filter.get("file_name")
             file_type = filter.get("file_type")
@@ -129,7 +125,7 @@ async def auto_filter(bot, update:Message):
                         FIND["bot_details"] = bot_
                 
                 bot_ = FIND.get("bot_details")
-                file_link = f"https://t.me/{bot_.username}?start=z{unique_id}z{fsub_txt}z"
+                file_link = f"https://t.me/{bot_.username}?start=z{unique_id}z{group_text}z"
             
             results.append(
                 [

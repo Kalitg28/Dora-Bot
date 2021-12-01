@@ -173,7 +173,7 @@ async def new_filter(bot, update: Message):
     else:
         return
     
-    await db.add_mfilter(unique_id, chat_id, text, reply_text, fileid, str(btn), alert, sticker)
+    await db.add_mfilter(unique_id, chat_id, text, reply_text.replace('"',''), fileid, str(btn), alert, sticker)
 
     await update.reply_text(
         f"Successfully Saved A Manual Filter For `{text}` in **{title}**",
@@ -309,7 +309,7 @@ def split_quotes(text: str):
     extract = re.findall(r'^("([^"]+)")', text)
     if extract :
 
-        return extract[0][1], text.replace(extract[0][1],'').replace('"','')
+        return extract[0][1], text.replace(extract[0][1],'')
 
     else :
 

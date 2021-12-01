@@ -3,6 +3,7 @@
 import re 
 import imdb
 from imdb import Movie
+from pyrogram.types import InlineQueryResultPhoto
 
 
 searcher = imdb.IMDb()
@@ -20,7 +21,12 @@ class Helpers() :
     if len(movies)<1:
         IMDB[my_movie] = False
         return
-    movie_id = movies[0].movieID
+    try:
+       movie_id = movies[0].movieID
+    except IndexError:
+        IMDB[my_movie] = False
+        return
+
     movie = searcher.get_movie(movie_id, info=Movie.Movie.default_info)
 
     movie_info = {}
@@ -37,10 +43,11 @@ class Helpers() :
 
             print(e)
 
-    if movie_info["kind"]!="movie":
+    air_date = movie.get("original air date", None)
+    if not air_date:
 
-        movie_info.pop("original air date")
         movie_info["originl air date"] = movie.get("year")
+    
 
     try :
 
@@ -55,7 +62,7 @@ class Helpers() :
             movie_info.pop("runtimes")
             movie_info["runtimes"] = f"{runtime} mins"
 
-    except:
+    except Exception:
 
         pass
 
@@ -72,3 +79,14 @@ class Helpers() :
             query = query.replace(key, '')
 
     return query
+
+ async def all_imdb(query):
+
+     results = await searcher.search_movie(query)
+     try:
+          for result in results:
+
+              movie = await searcher.get_movie(result.movieID)
+     except Exception as e:
+         print(e)
+              

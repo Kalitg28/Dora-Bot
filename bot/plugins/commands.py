@@ -42,8 +42,8 @@ async def start(bot:Client , update):
         new_uid = results[0]
         group_id = Batch.decode(results[1])
         settings = await db.find_chat(int(group_id))
-        fsub = settings.get("fsub")
-        caption = settings.get("caption")
+        fsub = settings.get("fsub", None)
+        caption = settings.get("caption", None)
         if not caption : caption=''
 
         if fsub:

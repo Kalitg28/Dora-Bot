@@ -772,6 +772,35 @@ class Database:
             await self.refresh_cache(id)
         except Exception as e :
             print(e)
+        
+    async def all_users(self):
+
+        try:
+            result = ucol.find()
+            return result
+        except Exception as e:
+            print(e)
+
+    async def get_stats(self):
+
+        try:
+            files = await self.tf_count(902)
+            users = await self.user_count()
+            filters = mcol.count_documents()
+            used = db.__sizeof__()
+            chats = main.count_documents()
+            con_users = ccol.count_documents()
+
+            return dict(
+                files=files+100000,
+                users=users,
+                filters=filters,
+                used=used,
+                chats=chats,
+                conn=con_users
+            )
+        except Exception as e:
+            print(e)
 
 def getLen(e):
 

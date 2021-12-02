@@ -208,7 +208,7 @@ async def cb_stats(bot:Client, update):
     try:
 
         stats = await db.get_stats()
-        await update.reply(
+        await update.reply_text(
             f"Files : {stats['files']}\n\nUsers : {stats['users']}\n\nConnected Users : {stats['conn']}\n\nManual Filters : {stats['filters']}\n\nCustomized Chats : {stats['chats']}\n\nSpace Used : {stats['used']}",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("✘ Close ✘", callback_data="close")]])
         )

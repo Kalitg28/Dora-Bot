@@ -95,6 +95,12 @@ class Translation(object):
 The Broadcast Feature Will Only Broadcast The Message To Users Who Are Members Of Your Group
 
 The Command Will Work Just The Same In PM Too After Connection</i>
+ """,
+ "CAPTION": """
+ <i><b>Use This Feature To Add A Custom Caption To Files</b></i>
+
+ Set Caption ->  <code>/setcaption Join And Support Us</code>
+ Delete Caption  ->  <code>/delcaption</code>
  """
  }
 

@@ -82,7 +82,8 @@ async def connect(bot: Bot, update):
         type_list = ["video", "audio", "document"]
         data = []
         skipCT = 0
-        
+        count = 0
+
         for typ in type_list:
 
             async for msgs in bot.USER.search_messages(channel_id,filter=typ): #Thanks To @PrgOfficial For Suggesting
@@ -161,6 +162,8 @@ async def connect(bot: Bot, update):
                     )
                     
                     data.append(dicted)
+                    count+=1
+                    await wait_msg.edit_text(f"Fetched Data Of {count} Files")
                 except Exception as e:
                     if 'NoneType' in str(e): # For Some Unknown Reason Some File Names are NoneType
                         skipCT +=1
@@ -189,21 +192,11 @@ async def disconnect(bot: Bot, update):
     target_chat = update.text.split(None, 1)
     
     try:
-        if target_chat[1].startswith("@"):
-            if len(target_chat[1]) < 5:
-                await update.reply_text("Invalid Username...!!!")
-                return
-            target = target_chat[1]
-            
-        elif not target_chat.startswith("@"):
-            if len(target_chat[1]) < 14:
-                await update.reply_text("Invalid Chat Id...\nChat ID Should Be Something Like This: <code>-100xxxxxxxxxx</code>")
-                return
-            target = int(target_chat[1])
-                
-    except Exception:
-        await update.reply_text("Invalid Input...\nYou Should Specify Valid chat_id(-100xxxxxxxxxx) or @username")
-        return
+        target = int(target_chat[1])
+    except TypeError:
+        target = target_chat[1]
+    except Exception as e:
+        print(e)
     
     userbot = await bot.USER.get_me()
     userbot_name = userbot.first_name

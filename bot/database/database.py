@@ -120,6 +120,8 @@ class Database:
         group_list = []
 
         for group_id in await data.to_list(length=50): # No Need Of Even 50
+            grp_data = group_id.get("chat_ids", None)
+            if not grp_data : return None
             for y in group_id["chat_ids"]:
                 if int(y["chat_id"]) == int(channel_id):
                     group_list.append(group_id["_id"])
@@ -784,8 +786,8 @@ class Database:
     async def get_stats(self):
 
         try:
-            files = self.tf_count(902)
-            users = self.user_count()
+            files = await self.tf_count(902)
+            users = await self.user_count()
             filters = mcol.count_documents({})
             used = db.__sizeof__()
             chats = main.count_documents({})

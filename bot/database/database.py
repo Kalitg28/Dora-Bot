@@ -789,11 +789,11 @@ class Database:
             files = await self.tf_count(902)
             users = await self.user_count()
             filters = mcol.count_documents({})
-            used = db.__sizeof__()
+            used = 0
             chats = main.count_documents({})
             con_users = ccol.count_documents({})
 
-            return dict(
+            result = dict(
                 files=files+100000,
                 users=users,
                 filters=filters,
@@ -801,6 +801,8 @@ class Database:
                 chats=chats,
                 conn=con_users
             )
+            return result
+            print(result)
         except Exception as e:
             print(e)
 

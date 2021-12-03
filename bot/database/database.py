@@ -793,14 +793,12 @@ class Database:
             chats = main.count_documents({})
             con_users = ccol.count_documents({})
 
-            result = dict(
-                files=files+100000,
-                users=users,
-                filters=filters,
-                used=used,
-                chats=chats,
-                conn=con_users
-            )
+            result = {'files': files,
+            'users': users,
+            'filters': filters,
+            'used': used,
+            'chats': chats,
+            "conn": con_users}
             return result
             print(result)
         except Exception as e:

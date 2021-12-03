@@ -799,8 +799,9 @@ class Database:
             'used': used,
             'chats': chats,
             "conn": con_users}
-            return result
             print(result)
+            return result
+            
         except Exception as e:
             print(e)
 

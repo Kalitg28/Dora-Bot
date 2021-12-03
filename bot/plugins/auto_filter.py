@@ -167,8 +167,16 @@ async def auto_filter(bot, update:Message):
 
         movie_info = IMDB.get(movie)
 
-        if movie_info["full-size cover url"]=="Unknown" or not movie_info :
+        if not movie_info :
 
+            await update.reply_photo(
+                photo = random.choice(Translation.START_PHOTOS),
+                caption=f"<b>Heres What I Found In My Database For <code>{update.text}</code></b>",
+                reply_markup=reply_markup,
+                parse_mode="html"
+            )
+            return
+        elif movie_info["full-size cover url"]=="Unknown":
             await update.reply_photo(
                 photo = random.choice(Translation.START_PHOTOS),
                 caption=f"<b>Heres What I Found In My Database For <code>{update.text}</code></b>",

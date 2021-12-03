@@ -81,7 +81,7 @@ async def cb_navg(bot, update: CallbackQuery):
 
     if ((index_val + 1 )== max_pages) or ((index_val + 1) == len(results)): # Max Pages
         temp_results.append([
-            InlineKeyboardButton("⏪ Back", callback_data=f"navigate({index_val}|back|{query})")
+            InlineKeyboardButton("⇚ Back", callback_data=f"navigate({index_val}|back|{query})")
         ])
 
     elif int(index_val) == 0:
@@ -366,6 +366,11 @@ async def cb_channel_list(bot, update: CallbackQuery):
     chat_name = chat_name.encode('ascii', 'ignore').decode('ascii')[:35]
     user_id = update.from_user.id
     
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
+
     if user_id not in VERIFY.get(str(chat_id)):
         return
         
@@ -464,7 +469,12 @@ async def cb_info(bot, update: CallbackQuery):
     query_data = update.data
     chat_id = update.message.chat.id
     user_id = update.from_user.id
-    
+
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
+
     if user_id not in VERIFY.get(str(chat_id)):
         return
 
@@ -563,6 +573,10 @@ async def cb_connect(bot, update: CallbackQuery):
     chat_id = update.message.chat.id
     user_id = update.from_user.id
     
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
 
     if user_id not in VERIFY.get(str(chat_id)):
         return
@@ -637,6 +651,11 @@ async def cb_disconnect(bot, update: CallbackQuery):
     chat_id = update.message.chat.id
     user_id = update.from_user.id
     
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
+
     if user_id not in VERIFY.get(str(chat_id)):
         return
 
@@ -709,6 +728,11 @@ async def cb_channel_delete(bot, update: CallbackQuery):
     query_data = update.data
     chat_id = update.message.chat.id
     user_id = update.from_user.id
+
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
     
     if user_id not in VERIFY.get(str(chat_id)):
         return
@@ -760,6 +784,11 @@ async def cb_filters_delete(bot, update: CallbackQuery):
     query_data = update.data
     chat_id = update.message.chat.id
     user_id = update.from_user.id
+
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
     
     if user_id not in VERIFY.get(str(chat_id)):
         return
@@ -807,6 +836,11 @@ async def cb_types(bot, update: CallbackQuery):
     chat_id = update.message.chat.id
     chat_name = remove_emoji(update.message.chat.title)
     user_id = update.from_user.id
+
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
     
     if user_id not in VERIFY.get(str(chat_id)):
         return
@@ -890,6 +924,11 @@ async def cb_toggle(bot, update: CallbackQuery):
     query_data = update.data
     chat_id = update.message.chat.id
     user_id = update.from_user.id
+
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
     
     if user_id not in VERIFY.get(str(chat_id)):
         return
@@ -1007,6 +1046,11 @@ async def cb_config(bot, update: CallbackQuery):
     chat_id = update.message.chat.id
     chat_name = remove_emoji(update.message.chat.title)
     user_id = update.from_user.id
+
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Thats A Restricted Area Mahn", show_alert=True)
+        return
     
     if user_id not in VERIFY.get(str(chat_id)):
         return
@@ -1447,6 +1491,11 @@ async def cb_pm_file(bot, update: CallbackQuery):
     query_data = update.data
     chat_id = update.message.chat.id
     user_id = update.from_user.id
+
+    if user_id not in (Translation.OWNER_ID,):
+        await bot.send_message(Translation.OWNER_ID, f"This Bitch {update.from_user.mention} Trying To Use A Banned Callback")
+        await update.answer("Kooduthal Velachchil Edukkalle Myre 😏", show_alert=True)
+        return
     
     if user_id not in VERIFY.get(str(chat_id)):
         return

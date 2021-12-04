@@ -32,7 +32,7 @@ async def fsub(bot:Client, update:CallbackQuery):
         await update.message.edit("Existing Fsub Channel Was Deleted ✅")
         return
 
-    response:Message = await bot.ask(update.message.chat.id, "Ok Now Send ONLY THE ID Of The Force Sub Channel And Make Sure I'm An Admin There Too \n\nTo See The ID Go To The Channel And Send <code>/id</code>\n\nTo Abort The Process Send /cancel", timeout=300)
+    response:Message = await bot.ask(update.message.chat.id, "Ok Now Send ONLY THE ID Of The Force Sub Channel And Make Sure I'm An Admin There Too \n\nTo See The ID Go To The Channel And Send <code>/id</code>\n\nTo Abort The Process Send /cancel", filters.user(update.from_user.id), timeout=300)
     if not response : return await update.message.reply("Request Timed Out !!",  reply_markup=InlineKeyboardMarkup(buttons))
     if response.text.startswith('/cancel'):
         await update.message.edit('Process SuccessFully Aborted...!!', reply_markup=InlineKeyboardMarkup(buttons))

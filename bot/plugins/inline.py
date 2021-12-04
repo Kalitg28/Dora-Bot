@@ -8,20 +8,19 @@ async def inline_imdb(bot:Client, update:InlineQuery):
     text = update.query
 
     results = await Helpers.all_imdb(text)
-    if not results :
-        await update.answer(results=[],
-                        cache_time=0,
-                        switch_pm_text='No Results Were Found')
-        return
 
-    elif len(results)<1:
+    if len(results)<1:
         await update.answer(results=[],
                         cache_time=0,
-                        switch_pm_text=f'No Results Were Found For {text}')
+                        switch_pm_text=f'No Results Were Found For {text}',
+                        switch_pm_parameter='idk')
             
     else :
 
         await update.answer(
             results=results,
-            cache_time=0
+            cache_time=0,
+            switch_pm_text=f"Heres What I Found For {text}",
+            switch_pm_parameter="start",
+            next_offset=""
         )

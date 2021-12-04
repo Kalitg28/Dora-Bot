@@ -7,7 +7,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
 
     text = update.query
 
-    results = Helpers.all_imdb(text)
+    results = await Helpers.all_imdb(text)
     if not results :
         update.answer(results=[],
                         cache_time=0,

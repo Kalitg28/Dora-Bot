@@ -2,8 +2,13 @@
 
 import re 
 import imdb
+import random
 from imdb import Movie
 from pyrogram.types import InlineQueryResultPhoto
+from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
+from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
+
+from bot.translation import Translation
 
 
 searcher = imdb.IMDb()
@@ -17,7 +22,7 @@ class Helpers() :
     info = ["localized title", "rating", "votes", "genres", "runtimes", "original air date", "full-size cover url", "kind"]
 
     global IMDB
-    movies = searcher.search_movie(my_movie)
+    movies = searcher.search_movie(my_movie, results=2)
     if len(movies)<1:
         IMDB[my_movie] = False
         return
@@ -80,13 +85,67 @@ class Helpers() :
 
     return query
 
- async def all_imdb(query):
+ async def all_imdb(self, query):
 
-     results = await searcher.search_movie(query)
+     results = await searcher.search_movie(query, results=10)
+     Product = []
      try:
+          if len(results)<1: return False
           for result in results:
 
-              movie = await searcher.get_movie(result.movieID)
+                movie = await searcher.get_movie(result.movieID)
+                if len(movie)<1: return False
+
+                url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))
+                caption = ""
+
+                rating = movie.get("rating", None)
+                if rating :
+                  caption+=f"🌟 <b>Rating</b> : {rating}"
+               
+                votes = movie.get("votes", None)
+                if votes:
+                   caption+=f"🗳️ <b>Votes</b> : {votes}"
+
+                genres = movie.get("genres", None)
+                if genres:
+                   caption+=f"🧬 <b>Genres</b> : {genres}"
+
+                released = movie.get("original air date", None)
+                if released:
+                    caption+=f"📅 <b>Released</b> : {released}"
+                else:
+                    released = movie.get("year", None)
+                    if released:
+                        caption+=f"📅 <b>Released</b> : {released}"
+
+                duration = movie.get("runtimes", None)
+                if duration :
+                    try :
+                        duration = duration[0]
+                        runtime = int(duration)
+                        if runtime<60:
+                            caption+=f"⏱️ <b>Duration</b> : {duration}mins"
+                        else:
+                            caption+=f"⏱️ <b>Duration</b> : {runtime/60}hr {runtime%60}mins"
+                    except Exception as e:
+                        print(e)
+
+                plot = movie.get("plot", None)
+                if plot:
+                    caption+=f"🗺️ Storyline : {plot[0]}"
+                
+                year = movie.get("year", "")
+                
+                buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]]
+                Product.append(InlineQueryResultPhoto(
+                    photo_url=url,
+                    thumb_url=url,
+                    title=movie.get("localized title","") + f" {year}",
+                    caption=caption,
+                    reply_markup=InlineKeyboardMarkup(buttons)
+                ))
+
      except Exception as e:
          print(e)
               

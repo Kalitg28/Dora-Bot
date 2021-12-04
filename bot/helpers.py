@@ -87,13 +87,13 @@ class Helpers() :
 
  async def all_imdb(query):
 
-     results = await searcher.search_movie(query, results=10)
+     results = searcher.search_movie(query, results=10)
      Product = []
      try:
           if len(results)<1: return False
           for result in results:
 
-                movie = await searcher.get_movie(result.movieID)
+                movie = searcher.get_movie(result.movieID)
                 if len(movie)<1: return False
 
                 url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))

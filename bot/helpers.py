@@ -85,7 +85,7 @@ class Helpers() :
 
     return query
 
- async def all_imdb(self, query):
+ async def all_imdb(query):
 
      results = await searcher.search_movie(query, results=10)
      Product = []

@@ -18,13 +18,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
 
     results = await all_imdb(text)
 
-    if not results:
-        await update.answer(results=[],
-                        cache_time=0,
-                        switch_pm_text=f'No Results Were Found For {text}',
-                        switch_pm_parameter='idk')
-            
-    else :
+    if results:
 
         await update.answer(
             results=results,
@@ -33,6 +27,14 @@ async def inline_imdb(bot:Client, update:InlineQuery):
             switch_pm_parameter="start",
             next_offset=""
         )
+        
+            
+    else :
+
+        await update.answer(results=[],
+                        cache_time=0,
+                        switch_pm_text=f'No Results Were Found For {text}',
+                        switch_pm_parameter='idk')
 
 async def all_imdb(query):
 

@@ -41,7 +41,7 @@ async def all_imdb(query):
      query = query.strip()
      print(query)
 
-     results = searcher.search_movie(query, results=10)
+     results = searcher.search_movie(query, results=5)
      Product = []
      try:
           if len(results)<1: return False

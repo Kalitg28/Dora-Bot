@@ -44,7 +44,7 @@ async def all_imdb(query):
           if len(results)<1: return False
           for result in results:
 
-                movie = searcher.get_movie(result.movieID, info=Movie.Movie.default_info)
+                movie = searcher.get_movie(result.movieID, info=Movie.default_info)
                 if len(movie)<1: return False
 
                 url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))

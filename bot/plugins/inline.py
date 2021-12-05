@@ -96,6 +96,7 @@ async def all_imdb(query):
                     caption=caption,
                     reply_markup=InlineKeyboardMarkup(buttons)
                 ))
+          return Product
 
      except Exception as e:
          print(e)

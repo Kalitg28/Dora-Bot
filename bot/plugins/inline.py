@@ -25,7 +25,8 @@ async def inline_imdb(bot:Client, update:InlineQuery):
             cache_time=0,
             switch_pm_text=f"Heres What I Found For {text}",
             switch_pm_parameter="start",
-            next_offset=""
+            next_offset="",
+            is_gallery=True
         )
         
             
@@ -51,7 +52,7 @@ async def all_imdb(query):
                 if len(movie)<1: return False
 
                 url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))
-                caption = f"<b><u>{movie.get('localized title', ' ')}</b></u>\n"
+                caption = f"        <b><u>{movie.get('localized title', ' ')}</b></u>\n"
 
                 rating = movie.get("rating", None)
                 if rating :
@@ -87,7 +88,7 @@ async def all_imdb(query):
 
                 plot = movie.get("plot", None)
                 if plot:
-                    caption+=f"\n🗺️ <b>Storyline :</b> <code>{plot[0]}</code>"
+                    caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{plot[0]}</code>"
                 
                 year = movie.get("year", "")
                 

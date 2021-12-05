@@ -3,6 +3,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQue
 from bot.helpers import Helpers
 import imdb
 from imdb.Movie import Movie
+from imdb.Person import Person
 import random
 from bot.translation import Translation
 
@@ -17,7 +18,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
 
     results = await all_imdb(text)
 
-    if len(results)<1:
+    if not results:
         await update.answer(results=[],
                         cache_time=0,
                         switch_pm_text=f'No Results Were Found For {text}',
@@ -48,27 +49,27 @@ async def all_imdb(query):
                 if len(movie)<1: return False
 
                 url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))
-                caption = ""
+                caption = f"<b><u>{movie.get('localized title', ' ')}</b></u>\n"
 
                 rating = movie.get("rating", None)
                 if rating :
-                  caption+=f"\n🌟 <b>Rating</b> : {rating}\n"
+                  caption+=f"\n🌟 <b>Rating</b> : {rating}"
                
                 votes = movie.get("votes", None)
                 if votes:
-                   caption+=f"\n🗳️ <b>Votes</b> : {votes}\n"
+                   caption+=f"\n🗳️ <b>Votes</b> : {votes}"
 
                 genres = movie.get("genres", None)
                 if genres:
-                   caption+=f"""\n🧬 <b>Genres</b> : {str(genres).replace('[','').replace(']','').replace("'",'')}\n"""
+                   caption+=f"""\n🧬 <b>Genres</b> : {str(genres).replace('[','').replace(']','').replace("'",'')}"""
 
                 released = movie.get("original air date", None)
                 if released:
-                    caption+=f"\n📅 <b>Released</b> : {released}\n"
+                    caption+=f"\n📅 <b>Released</b> : {released}"
                 else:
                     released = movie.get("year", None)
                     if released:
-                        caption+=f"\n📅 <b>Released</b> : {released}\n"
+                        caption+=f"\n📅 <b>Released</b> : {released}"
 
                 duration = movie.get("runtimes", None)
                 if duration :
@@ -76,7 +77,7 @@ async def all_imdb(query):
                         duration = duration[0]
                         runtime = int(duration)
                         if runtime<60:
-                            caption+=f"\n⏱️ <b>Duration</b> : {duration}mins\n"
+                            caption+=f"\n⏱️ <b>Duration</b> : {duration}mins"
                         else:
                             caption+=f"\n⏱️ <b>Duration</b> : {int(runtime/60)}hr {runtime%60}mins"
                     except Exception as e:
@@ -84,7 +85,7 @@ async def all_imdb(query):
 
                 plot = movie.get("plot", None)
                 if plot:
-                    caption+=f"\n🗺️ Storyline : <code>{plot[0]}</code>\n"
+                    caption+=f"\n🗺️ <b>Storyline :</b> <code>{plot[0]}</code>"
                 
                 year = movie.get("year", "")
                 

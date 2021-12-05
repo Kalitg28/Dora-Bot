@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQuery, Message, Photo, InlineQueryResultPhoto
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQuery, Message, Photo, InlineQueryResultPhoto, InlineQueryResult
 from bot.helpers import Helpers
 import imdb
 from imdb.Movie import Movie
@@ -13,6 +13,7 @@ searcher = imdb.IMDb()
 async def inline_imdb(bot:Client, update:InlineQuery):
 
     text = update.query
+    print(update)
 
     results = await all_imdb(text)
 
@@ -34,7 +35,8 @@ async def inline_imdb(bot:Client, update:InlineQuery):
 
 async def all_imdb(query):
 
-    async def all_imdb(query):
+     query = query.strip()
+     print(query)
 
      results = searcher.search_movie(query, results=10)
      Product = []

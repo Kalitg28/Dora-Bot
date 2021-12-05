@@ -52,23 +52,23 @@ async def all_imdb(query):
 
                 rating = movie.get("rating", None)
                 if rating :
-                  caption+=f"🌟 <b>Rating</b> : {rating}"
+                  caption+=f"\n🌟 <b>Rating</b> : {rating}\n"
                
                 votes = movie.get("votes", None)
                 if votes:
-                   caption+=f"🗳️ <b>Votes</b> : {votes}"
+                   caption+=f"\n🗳️ <b>Votes</b> : {votes}\n"
 
                 genres = movie.get("genres", None)
                 if genres:
-                   caption+=f"🧬 <b>Genres</b> : {genres}"
+                   caption+=f"""\n🧬 <b>Genres</b> : {str(genres).replace('[','').replace(']','').replace("'",'')}\n"""
 
                 released = movie.get("original air date", None)
                 if released:
-                    caption+=f"📅 <b>Released</b> : {released}"
+                    caption+=f"\n📅 <b>Released</b> : {released}\n"
                 else:
                     released = movie.get("year", None)
                     if released:
-                        caption+=f"📅 <b>Released</b> : {released}"
+                        caption+=f"\n📅 <b>Released</b> : {released}\n"
 
                 duration = movie.get("runtimes", None)
                 if duration :
@@ -76,15 +76,15 @@ async def all_imdb(query):
                         duration = duration[0]
                         runtime = int(duration)
                         if runtime<60:
-                            caption+=f"⏱️ <b>Duration</b> : {duration}mins"
+                            caption+=f"\n⏱️ <b>Duration</b> : {duration}mins\n"
                         else:
-                            caption+=f"⏱️ <b>Duration</b> : {runtime/60}hr {runtime%60}mins"
+                            caption+=f"\n⏱️ <b>Duration</b> : {int(runtime/60)}hr {runtime%60}mins"
                     except Exception as e:
                         print(e)
 
                 plot = movie.get("plot", None)
                 if plot:
-                    caption+=f"🗺️ Storyline : {plot[0]}"
+                    caption+=f"\n🗺️ Storyline : <code>{plot[0]}</code>\n"
                 
                 year = movie.get("year", "")
                 
@@ -94,7 +94,8 @@ async def all_imdb(query):
                     thumb_url=url,
                     title=movie.get("localized title","") + f" {year}",
                     caption=caption,
-                    reply_markup=InlineKeyboardMarkup(buttons)
+                    reply_markup=InlineKeyboardMarkup(buttons),
+                    parse_mode='html'
                 ))
           return Product
 

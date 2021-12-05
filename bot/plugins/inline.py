@@ -25,8 +25,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
             cache_time=0,
             switch_pm_text=f"Heres What I Found For {text}",
             switch_pm_parameter="start",
-            next_offset="",
-            is_gallery=True
+            next_offset=""
         )
         
             

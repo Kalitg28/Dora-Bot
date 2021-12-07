@@ -87,6 +87,7 @@ class Helpers() :
 
  async def all_imdb(query):
 
+     print(query)
      results = searcher.search_movie(query, results=10)
      Product = []
      try:

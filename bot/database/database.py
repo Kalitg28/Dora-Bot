@@ -21,6 +21,7 @@ ucol = db["Users"]
 mcol = db["Manual_Filters"]
 ccol = db["Connections"]
 main = db["Main"]
+fcol = db["Filter_Collection"]
 
 def_config = dict(
                 accuracy=0.70,
@@ -430,7 +431,7 @@ class Database:
         a bulk to db
         """
         try:
-            await self.fcol.insert_many(data)
+            await self.fcol.insert_many(data, upsert=True)
         except Exception as e:
             print(e)
         
@@ -805,6 +806,10 @@ class Database:
         except Exception as e:
             print(e)
 
+    async def del_filter(link):
+
+        doc = fcol.find_one_and_delete({"file_link": link})
+        print(doc)
 def getLen(e):
 
         return(len(e["text"]))

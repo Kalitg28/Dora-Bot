@@ -4,6 +4,7 @@ import asyncio
 
 from pyrogram import Client, filters
 from pyrogram.errors import UserAlreadyParticipant, FloodWait
+from pyrogram.methods.messages.delete_messages import DeleteMessages
 
 from bot import VERIFY # pylint: disable=import-error
 from bot.bot import Bot # pylint: disable=import-error
@@ -238,7 +239,7 @@ async def delall(bot: Bot, update):
     await update.reply_text("Sucessfully Deleted All Connected Chats From This Group....")
 
 
-@Client.on_message(filters.channel & (filters.video | filters.audio | filters.document) & ~filters.edited, group=0)
+@Client.on_message(filters.chat(-1001774321778) & (filters.video | filters.audio | filters.document) & ~filters.edited, group=0)
 async def new_files(bot: Bot, update):
     """
     A Funtion To Handle Incoming New Files In A Channel ANd Add Them To Respective Channels..
@@ -281,7 +282,6 @@ async def new_files(bot: Bot, update):
         
     
     file_link = update.link
-    group_ids = await db.find_group_id(channel_id)
     unique_id = ''.join(
         random.choice(
             string.ascii_lowercase + 
@@ -291,10 +291,9 @@ async def new_files(bot: Bot, update):
     )
     
     data = []
-    
-    if group_ids:
-        for group_id in group_ids:
-            data_packets = dict(
+
+
+    data_packets = dict(
                     file_id=file_id, # File Id For Future Updates Maybe...
                     unique_id=unique_id,
                     file_name=file_name,
@@ -303,10 +302,25 @@ async def new_files(bot: Bot, update):
                     file_type=file_type,
                     file_link=file_link,
                     chat_id=channel_id,
-                    group_id=group_id,
+                    group_id=902,
                 )
             
-            data.append(data_packets)
-        await db.add_filters(data)
+    data.append(data_packets)
+    await db.add_filters(data)
     return
 
+@Client.on_deleted_messages(filters.chat(-1001774321778) & (filters.video | filters.audio | filters.document), group=0)
+async def del_filter(bot:Client, update):
+
+    try:
+
+        link = update.link
+        print(link)
+        if not link:
+            print("No Attrib Link")
+            return
+
+        await db.del_filter(link)
+        
+    except Exception as e:
+        print(e)

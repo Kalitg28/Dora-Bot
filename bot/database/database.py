@@ -431,7 +431,7 @@ class Database:
         a bulk to db
         """
         try:
-            await self.fcol.insert_many(data, upsert=True)
+            await self.fcol.insert_many(data)
         except Exception as e:
             print(e)
         

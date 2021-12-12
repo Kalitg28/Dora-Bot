@@ -24,7 +24,7 @@ db = Database()
 @Client.on_callback_query(filters.regex(r"all\((.+)\)"), group=3)
 async def cb_all(bot:Client, update:CallbackQuery):
 
-    chat_id = update.chat.id
+    chat_id = update.message.chat.id
     try:
         query = re.findall(r"all\((.+)\)")[0]
         all_files = FIND.get(query).get("all_files")

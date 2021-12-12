@@ -15,6 +15,9 @@ db = Database()
 async def fsub(bot:Client, update:CallbackQuery):
 
     action, group_id = re.findall(r'fsub\((.+)\)', update.data)[0].split('|',1)
+    member = await bot.get_chat_member(update.message.chat.id, update.from_user.id)
+    if not member.status in ("administrator", "creator"):
+        return await update.answer("Nice Try Kid xD", show_alert=True)
     buttons = [[
             InlineKeyboardButton
                 (

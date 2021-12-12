@@ -117,7 +117,8 @@ async def settings(bot, update: Message):
     mf_count = settings["configs"]["max_results"]
     mr_count = settings["configs"]["max_per_page"]
     accuracy_point = settings["configs"].get("accuracy", 0.70)
-    caption = settings.get("caption")
+    caption = settings.get("caption", None)
+    fsub = settings.get("fsub", None)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -131,12 +132,12 @@ async def settings(bot, update: Message):
 
     text+=f"\n - Accuracy Percentage: <code>{accuracy_point}</code>\n"
 
-    if not settings['fsub']:
+    if not fsub:
         text+=f"\n - Force Subscribe: Inactive ❌\n"
     else:
-        text+=f"\n- Force Subscribe: {settings['fsub']['title']} ✅\n"
+        text+=f"\n- Force Subscribe: {fsub['title']} ✅\n"
 
-    text+=f"\nCustom Caption {'Activated ✅' if caption else 'Inactive ❌'}"
+    text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -161,7 +162,7 @@ async def settings(bot, update: Message):
                 )
         ]
     )
-    if settings['fsub']:
+    if fsub:
 
         buttons.append(
             [
@@ -198,6 +199,35 @@ async def settings(bot, update: Message):
                 )
         ]
     )
+
+    if caption:
+
+        buttons.append(
+            [
+                InlineKeyboardButton
+            (
+                "🦾 Caption 🦾", callback_data='ignore'
+            ),
+            InlineKeyboardButton(
+                'Disable ❌', callback_data=f'capt(off|{chat_id})'
+            ),
+            InlineKeyboardButton(
+                "Change 💱", callback_data=f'capt(toggle|{chat_id})'
+            )
+            ]
+        )
+    else :
+        buttons.append(
+            [
+                InlineKeyboardButton
+            (
+                "🦾 Caption 🦾", callback_data='ignore'
+            ),
+            InlineKeyboardButton(
+                "Set New ✅", callback_data=f'capt(toggle|{chat_id})'
+            )
+            ]
+        )
 
 
     buttons.append(

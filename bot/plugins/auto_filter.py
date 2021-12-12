@@ -67,6 +67,7 @@ async def auto_filter(bot, update:Message):
     filters = await db.get_filters(902, query)
     
     if filters:
+        all_files = []
         group_text = Batch.encode(str(chat_id))
         for filter in filters: # iterating through each files
             file_name = filter.get("file_name")
@@ -132,6 +133,7 @@ async def auto_filter(bot, update:Message):
                     InlineKeyboardButton(button_text, url=file_link)
                 ]
             )
+            all_files.append(unique_id)
         
     else:
         return # return if no files found for that query
@@ -149,13 +151,14 @@ async def auto_filter(bot, update:Message):
         len_results = len(results)
         results = None # Free Up Memory
         
-        FIND[query] = {"results": result, "total_len": len_results, "max_pages": max_pages} # TrojanzHex's Idea Of Dicts😅
+        FIND[query] = {"results": result, "total_len": len_results, "max_pages": max_pages, "all_files": all_files} # TrojanzHex's Idea Of Dicts😅
 
         # Add next buttin if page count is not equal to 1
         if len_result != 1:
             result[0].append(
                 [
                     InlineKeyboardButton(f"📃 Page 1/{len_result if len_result < max_pages else max_pages} 📃", callback_data="ignore"),
+                    InlineKeyboardButton(f"All", callback_data=f"all({query})"),
                     InlineKeyboardButton("Next ⇛", callback_data=f"navigate(0|next|{query})")
                 ]
             )
@@ -186,12 +189,12 @@ async def auto_filter(bot, update:Message):
             return
 
         text = f'''<b>📽️ Movie/Series</b> : <code>{query}</code>
-🌟 <b>Rating</b> : {movie_info["rating"]}
-🗳️ <b>Votes</b> : {movie_info["votes"]}
-🧬 <b>Genres</b> : {str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}
-📅 <b>Released</b> : {movie_info["original air date"]}
-⏱️ <b>Duration</b> : {movie_info["runtimes"]}
-📁 <b>Results</b> : {(len_results)}
+🌟 <b>Rating</b> : <i>{movie_info["rating"]}</i>
+🗳️ <b>Votes</b> : <i>{movie_info["votes"]}</i>
+🧬 <b>Genres</b> : <i>{str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}</i>
+📅 <b>Released</b> : <i>{movie_info["original air date"]}</i>
+⏱️ <b>Duration</b> : <i>{movie_info["runtimes"]}</i>
+📁 <b>Results</b> : <i>{(len_results)}</i>
 
 <b>🅒 Uploaded By  {update.chat.title} </b>
         '''

@@ -2,7 +2,7 @@ import re
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
 
 from pyrogram.types.bots_and_keyboards.callback_query import CallbackQuery
-from pyrogram.types import Message
+from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram import Client, filters
 
 from bot.database import Database 
@@ -75,3 +75,38 @@ async def delcaption(bot:Client, update:Message):
 
     await db.del_main(int(chat_id), "caption")
     await update.reply("Your Request Was Updated Successfully", quote=True)
+
+@Client.on_callback_query(filters.regex(r'capt\((.+)\)'), group=3)
+async def custom_cap(bot:Client, update:CallbackQuery):
+
+    action, group_id = re.findall(r'capt\((.+)\)', update.data)[0].split('|',1)
+    member = await bot.get_chat_member(group_id, update.from_user.id)
+    if not member.status in ("administrator", "creator"):
+        return await update.answer("Nice Try Kid xD", show_alert=True)
+    buttons = [[
+            InlineKeyboardButton
+                (
+                    "🔙 Back", callback_data="settings"
+                ),
+            
+            InlineKeyboardButton
+                (
+                    "Close 🔐", callback_data="close"
+                )
+        ]]
+
+    if action=='off':
+        await db.del_main(int(group_id), "caption")
+        await update.message.edit("Existing Custom Caption Was Deleted ✅")
+        return
+
+    response:Message = await bot.ask(update.message.chat.id, "<b>Now Send Me The New Caption You Want Users To See Under The File</b>\n\nTo Abort The Process Send /cancel", filters.user(update.from_user.id), timeout=300)
+    if not response : return await update.message.reply("Request Timed Out !!",  reply_markup=InlineKeyboardMarkup(buttons))
+    if response.text.startswith('/cancel'):
+        await update.message.edit('Process SuccessFully Aborted...!!', reply_markup=InlineKeyboardMarkup(buttons))
+        return
+
+    await db.set_main(update.message.chat.id, "caption", response.text)
+    await update.message.edit("Your New Custom Caption Was Set Successfully... ✅")
+
+    

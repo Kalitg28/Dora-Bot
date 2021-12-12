@@ -21,6 +21,35 @@ from bot.database import Database # pylint: disable=import-error
 
 db = Database()
 
+@Client.on_callback_query(filters.regex(r"all\((.+)\)"), group=3)
+async def cb_all(bot:Client, update:CallbackQuery):
+
+    chat_id = update.chat.id
+    try:
+        query = re.findall(r"all\((.+)\)")[0]
+        all_files = FIND.get(query).get("all_files")
+        settings = db.find_chat(chat_id)
+
+        for file in all_files:
+
+            file_id, file_name, file_caption, file_type = await db.get_file(file)
+            file_caption = "<b>" + file_name + "</b>\n\n" + settings.get("caption", "")
+        try:
+            await bot.send_cached_media(
+                update.from_user.id,
+                file_id,
+                quote=True,
+                caption = file_caption,
+                parse_mode="html",
+            )
+        except Exception as e:
+            await update.answer(f"<b>Error:</b>\n<code>{e}</code>", show_alert=True)
+            print(e)
+        return
+
+    except Exception as e:
+        print(e)
+
 
 @Client.on_callback_query(filters.regex(r"navigate\((.+)\)"), group=3)
 async def cb_navg(bot, update: CallbackQuery):
@@ -81,7 +110,8 @@ async def cb_navg(bot, update: CallbackQuery):
 
     if ((index_val + 1 )== max_pages) or ((index_val + 1) == len(results)): # Max Pages
         temp_results.append([
-            InlineKeyboardButton("⇚ Back", callback_data=f"navigate({index_val}|back|{query})")
+            InlineKeyboardButton("⇚ Back", callback_data=f"navigate({index_val}|back|{query})"),
+            InlineKeyboardButton(f"All", callback_data=f"all({query})")
         ])
 
     elif int(index_val) == 0:
@@ -90,6 +120,7 @@ async def cb_navg(bot, update: CallbackQuery):
     else:
         temp_results.append([
             InlineKeyboardButton("⇚ Back", callback_data=f"navigate({index_val}|back|{query})"),
+            InlineKeyboardButton(f"All", callback_data=f"all({query})"),
             InlineKeyboardButton("Next ⇛", callback_data=f"navigate({index_val}|next|{query})")
         ])
 
@@ -192,6 +223,8 @@ async def cb_settings(bot, update: CallbackQuery):
     mf_count = settings["configs"]["max_results"]
     mr_count = settings["configs"]["max_per_page"]
     accuracy_point = settings["configs"].get("accuracy", 0.70)
+    caption = settings.get("caption", None)
+    fsub = settings.get("fsub", None)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -205,10 +238,12 @@ async def cb_settings(bot, update: CallbackQuery):
 
     text+=f"\n - Accuracy Percentage: <code>{accuracy_point}</code>\n"
 
-    if not settings['fsub']:
+    if not fsub:
         text+=f"\n - Force Subscribe: Inactive ❌\n"
     else:
-        text+=f"\n - Force Subscribe: {settings['fsub']['title']} ✅\n"
+        text+=f"\n - Force Subscribe: {fsub['title']} ✅\n"
+
+    text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -234,7 +269,7 @@ async def cb_settings(bot, update: CallbackQuery):
         ]
     )
 
-    if settings['fsub']:
+    if fsub:
 
         buttons.append(
             [
@@ -271,6 +306,35 @@ async def cb_settings(bot, update: CallbackQuery):
                 )
         ]
     )
+
+    if caption:
+
+        buttons.append(
+            [
+                InlineKeyboardButton
+            (
+                "🦾 Caption 🦾", callback_data='ignore'
+            ),
+            InlineKeyboardButton(
+                'Disable ❌', callback_data=f'capt(off|{chat_id})'
+            ),
+            InlineKeyboardButton(
+                "Change 💱", callback_data=f'capt(toggle|{chat_id})'
+            )
+            ]
+        )
+    else :
+        buttons.append(
+            [
+                InlineKeyboardButton
+            (
+                "🦾 Caption 🦾", callback_data='ignore'
+            ),
+            InlineKeyboardButton(
+                "Set New ✅", callback_data=f'capt(toggle|{chat_id})'
+            )
+            ]
+        )
 
 
     buttons.append(

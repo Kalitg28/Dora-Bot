@@ -810,6 +810,8 @@ class Database:
 
         doc = fcol.find_one_and_delete({"file_link": link})
         print(doc)
+
+
 def getLen(e):
 
         return(len(e["text"]))

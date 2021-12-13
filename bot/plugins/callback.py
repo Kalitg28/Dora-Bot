@@ -38,7 +38,6 @@ async def cb_all(bot:Client, update:CallbackQuery):
             await bot.send_cached_media(
                 update.from_user.id,
                 file_id,
-                quote=True,
                 caption = file_caption,
                 parse_mode="html",
             )

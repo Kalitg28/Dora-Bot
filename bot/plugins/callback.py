@@ -26,7 +26,7 @@ async def cb_all(bot:Client, update:CallbackQuery):
 
     chat_id = update.message.chat.id
     try:
-        query = re.findall(r"all\((.+)\)")[0]
+        query = re.findall(r"all\((.+)\)", update.data)[0]
         all_files = FIND.get(query).get("all_files")
         settings = db.find_chat(chat_id)
 

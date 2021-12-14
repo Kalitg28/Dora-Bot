@@ -1944,7 +1944,7 @@ async def edit_caption(bot:Client, update: CallbackQuery):
 
     await bot.send_chat_action(update.message.chat.id, "typing")
 
-    loading = await bot.send_message(update.chat.id, "◌ ◌ ◌")
+    loading = await bot.send_message(update.message.chat.id, "◌ ◌ ◌")
     await loading.edit("● ◌ ◌")
     await loading.edit("● ● ◌")
     await loading.edit("● ● ●")

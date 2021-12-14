@@ -1945,13 +1945,13 @@ async def edit_caption(bot:Client, update: CallbackQuery):
     await bot.send_chat_action(update.message.chat.id, "typing")
 
     loading = await bot.send_message(update.message.chat.id, "◌ ◌ ◌")
-    await asyncio.sleep(0.5)
+    await asyncio.sleep(0.25)
     await loading.edit("● ◌ ◌")
-    await asyncio.sleep(0.5)
+    await asyncio.sleep(0.25)
     await loading.edit("● ● ◌")
-    await asyncio.sleep(0.5)
+    await asyncio.sleep(0.25)
     await loading.edit("● ● ●")
-    await asyncio.sleep(0.5)
+    await asyncio.sleep(0.25)
     await loading.delete()
 
     if STRING=="FORMAT":

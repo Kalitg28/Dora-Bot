@@ -5,8 +5,8 @@ class Buttons():
 
     EN = {
         "START" : [
-            [InlineKeyboardButton("🅘 About 🅘", callback_data="about"),
-            InlineKeyboardButton("🗺️ Map 🗺️", callback_data="help")],
+            [InlineKeyboardButton("🅘 About 🅘", callback_data="edit_c(ABOUT)"),
+            InlineKeyboardButton("🗺️ Map 🗺️", callback_data="edit_c(HELP)")],
             [InlineKeyboardButton("⚒️ Support Team ⚒️", url="https://t.me/DoraSupportTeam"),InlineKeyboardButton("✘ Close ✘", callback_data="close")],
             [InlineKeyboardButton("➕ Add Me To Your Group ➕", url="https://t.me/DoraFilterBot?startgroup=true")]
         ],
@@ -18,9 +18,9 @@ class Buttons():
 
         "HELP": [
             [InlineKeyboardButton("FILTERS ⇝", callback_data="ignore"),InlineKeyboardButton("Auto 🤖", callback_data="edit_c(AF)"),InlineKeyboardButton("Manual 👨‍💻", callback_data="edit_c(MF)")],
-            [InlineKeyboardButton("Connections 🔗", callback_data="edit_c(CONN)"),InlineKeyboardButton("Broadcast 📣", callback_data="edit_c(CAST)"),InlineKeyboardButton("Caption", callback_data="edit_c(CAPTION)")],
+            [InlineKeyboardButton("Connections 🔗", callback_data="edit_c(CONN)"),InlineKeyboardButton("Broadcast 📣", callback_data="edit_c(CAST)"),InlineKeyboardButton("Caption ➰", callback_data="edit_c(CAPTION)")],
             [InlineKeyboardButton("Batch 🗂️", callback_data="edit_c(BATCH)"),InlineKeyboardButton("Others ⭕", callback_data="edit_c(OTHER)")],
-            [InlineKeyboardButton("🏡 Home 🏡", callback_data="start")]
+            [InlineKeyboardButton("🏡 Home 🏡", callback_data="edit_c(START)")]
         ],
         "AF": [
             [InlineKeyboardButton("Connections 🔗", callback_data="edit_c(CONN)")],

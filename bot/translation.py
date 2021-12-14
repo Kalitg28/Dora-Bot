@@ -58,8 +58,9 @@ class Translation(object):
  "BTN" : """
  <i><b>Here Are The Basic Button Formats And Uses</b></i> :
 
- <i>URL Button</i> -> <code>[Button Text](url:https://example.com)</code>
- <i>Alert Button</i> -> <code>[Button Text](alert:Your Alert Text)</code>
+ <i>URL Button</i> -> <code>[Button Text](url://https://example.com)</code>
+ <i>Alert Button</i> -> <code>[Button Text](alert://Your Alert Text)</code>
+ <i>Search Button</i> -> <code>[Button Text](search://Your Search Query)</code>
 
  <b>Layout Of Buttons :</b>
 

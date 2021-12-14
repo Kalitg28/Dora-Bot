@@ -1891,7 +1891,7 @@ async def cb_about(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"^(start|help|about|close)$"), group=3)
+@Client.on_callback_query(filters.regex(r"^(start|help|about|close|instruct)$"), group=3)
 async def callback_data(bot, update: CallbackQuery):
     await bot.send_chat_action(update.message.chat.id, "typing")
 
@@ -1935,6 +1935,9 @@ async def callback_data(bot, update: CallbackQuery):
 
     elif query_data == "close":
         await update.message.delete()
+
+    elif query_data == "instruct":
+        await update.answer("Please Check The Spelling Of The Movie\n\nMake Sure It Is Released\n\nAvoid Unnecessary Words", show_alert=True)
     await bot.send_chat_action(update.message.chat.id, "cancel")
 
 @Client.on_callback_query(filters.regex(r"edit_c\((.+)\)"), group=3)
@@ -1943,6 +1946,7 @@ async def edit_caption(bot:Client, update: CallbackQuery):
     STRING = re.findall(r"edit_c\((.+)\)", update.data)[0]
 
     await bot.send_chat_action(update.message.chat.id, "typing")
+    await update.answer()
 
     loading = await bot.send_message(update.message.chat.id, "◌ ◌ ◌")
     await asyncio.sleep(0.25)

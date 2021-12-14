@@ -136,6 +136,18 @@ async def auto_filter(bot, update:Message):
             all_files.append(unique_id)
         
     else:
+
+        text = configs.get("noresult", None)
+        if not text:
+            return
+
+        if text=='def':
+            text = f"<b>Sorry I Couldnt Get Any Results For Your Query : {update.text} 😐\n\nClick on The Instructions Below 🙃</b>"
+
+        await update.reply_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📄 Instructions 📄", callback_data="instruct"), InlineKeyboardButton("🔍 Search 🔎", url=f"https://google.com/search?q={update.text.replace(' ','+')}")]]))
+
+        
+
         return # return if no files found for that query
     
 

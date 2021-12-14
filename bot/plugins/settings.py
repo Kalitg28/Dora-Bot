@@ -119,6 +119,7 @@ async def settings(bot, update: Message):
     accuracy_point = settings["configs"].get("accuracy", 0.70)
     caption = settings.get("caption", None)
     fsub = settings.get("fsub", None)
+    spell = settings.get("noresult", None)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -138,6 +139,8 @@ async def settings(bot, update: Message):
         text+=f"\n- Force Subscribe: {fsub['title']} ✅\n"
 
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
+
+    text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -154,11 +157,44 @@ async def settings(bot, update: Message):
         ]
     ]
 
+    if spell:
+
+        buttons.append(
+            [
+                InlineKeyboardButton
+            (
+                "🖋️ Spell Check 🖋️", callback_data='ignore'
+            ),
+            InlineKeyboardButton(
+                'Disable ❌', callback_data=f'spell(off|{chat_id})'
+            ),
+            InlineKeyboardButton(
+                "Change 💱", callback_data=f'spell(toggle|{chat_id})'
+            )
+            ]
+        )
+    else :
+        buttons.append(
+            [
+                InlineKeyboardButton
+            (
+                "🖋️ Spell Check 🖋️", callback_data='ignore'
+            ),
+            InlineKeyboardButton
+            (
+                "Default 🔃", callback_data=f'spell(on|{chat_id})'
+            ),
+            InlineKeyboardButton(
+                "Set New ✅", callback_data=f'spell(toggle|{chat_id})'
+            )
+            ]
+        )
+
     buttons.append(
         [
             InlineKeyboardButton
                 (
-                    "🔢 Total Filter Count 🔢", callback_data=f"mf_count({mf_count}|{chat_id})"
+                    "🔢 Total Results Count 🔢", callback_data=f"mf_count({mf_count}|{chat_id})"
                 )
         ]
     )

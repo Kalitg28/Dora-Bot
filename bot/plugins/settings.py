@@ -206,7 +206,7 @@ async def settings(bot, update: Message):
             [
                 InlineKeyboardButton
             (
-                "🦾 Caption 🦾", callback_data='ignore'
+                "⛱ Caption ⛱", callback_data='ignore'
             ),
             InlineKeyboardButton(
                 'Disable ❌', callback_data=f'capt(off|{chat_id})'
@@ -221,7 +221,7 @@ async def settings(bot, update: Message):
             [
                 InlineKeyboardButton
             (
-                "🦾 Caption 🦾", callback_data='ignore'
+                "⛱ Caption ⛱", callback_data='ignore'
             ),
             InlineKeyboardButton(
                 "Set New ✅", callback_data=f'capt(toggle|{chat_id})'

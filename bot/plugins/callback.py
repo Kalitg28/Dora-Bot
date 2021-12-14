@@ -313,7 +313,7 @@ async def cb_settings(bot, update: CallbackQuery):
             [
                 InlineKeyboardButton
             (
-                "🦾 Caption 🦾", callback_data='ignore'
+                "⛱ Caption ⛱", callback_data='ignore'
             ),
             InlineKeyboardButton(
                 'Disable ❌', callback_data=f'capt(off|{chat_id})'
@@ -328,7 +328,7 @@ async def cb_settings(bot, update: CallbackQuery):
             [
                 InlineKeyboardButton
             (
-                "🦾 Caption 🦾", callback_data='ignore'
+                "⛱ Caption ⛱", callback_data='ignore'
             ),
             InlineKeyboardButton(
                 "Set New ✅", callback_data=f'capt(toggle|{chat_id})'
@@ -1943,6 +1943,12 @@ async def edit_caption(bot:Client, update: CallbackQuery):
     STRING = re.findall(r"edit_c\((.+)\)", update.data)[0]
 
     await bot.send_chat_action(update.message.chat.id, "typing")
+
+    loading = await bot.send_message(update.chat.id, "◌ ◌ ◌")
+    await loading.edit("● ◌ ◌")
+    await loading.edit("● ● ◌")
+    await loading.edit("● ● ●")
+    await loading.delete()
 
     if STRING=="FORMAT":
         await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))

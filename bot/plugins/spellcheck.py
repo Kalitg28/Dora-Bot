@@ -101,6 +101,8 @@ async def spell_check(bot:Client, update:CallbackQuery):
         return
     elif action=='on':
         await db.set_main(int(group_id), "noresult", 'def')
+        await update.message.edit("Spell Check Was Set To Defaukt Text ... ✅")
+        return
 
     response:Message = await bot.ask(update.message.chat.id, "<b>Now Send Me The New Message You Want Users To See When There's No Results</b>\n\nTo Abort The Process Send /cancel", filters.user(update.from_user.id), timeout=300)
     if not response : return await update.message.reply("Request Timed Out !!",  reply_markup=InlineKeyboardMarkup(buttons))

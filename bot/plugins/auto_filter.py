@@ -142,7 +142,13 @@ async def auto_filter(bot, update:Message):
             return
 
         if text=='def':
-            text = f"<b>Sorry I Couldnt Get Any Results For Your Query : {update.text} 😐\n\nClick on The Instructions Below 🙃</b>"
+            text = f"<b>Sorry I Couldnt Get Any Results For Your Query : <code>{update.text}</code> 😐\n\nClick on The Instructions Below 🙃</b>"
+        else :
+            text = text.format(mention=(update.from_user.mention if update.from_user else 'User'),
+            name=(update.from_user.first_name if update.from_user else 'User'),
+            id=(update.from_user.id if update.from_user else 'ID'),
+            query=update.text
+            )
 
         await update.reply_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📄 Instructions 📄", callback_data="instruct"), InlineKeyboardButton("🔍 Search 🔎", url=f"https://google.com/search?q={update.text.replace(' ','+')}")]]))
 

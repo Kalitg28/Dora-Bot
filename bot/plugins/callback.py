@@ -1960,6 +1960,8 @@ async def edit_caption(bot:Client, update: CallbackQuery):
 
     if STRING=="FORMAT":
         await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+    elif STRING=="SPELL":
+        await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     else :
         await update.message.edit_caption(caption=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     await bot.send_chat_action(update.message.chat.id, "cancel")

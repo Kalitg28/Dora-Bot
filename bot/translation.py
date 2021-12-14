@@ -102,6 +102,24 @@ The Command Will Work Just The Same In PM Too After Connection</i>
 
  Set Caption ->  <code>/setcaption Join And Support Us</code>
  Delete Caption  ->  <code>/delcaption</code>
+
+  <i>You Can Also Modify It From Settings Panel</i>
+ """,
+
+ "SPELL": """
+ <i><b>Everything Related To The Spell Check Module When No AutoFilter Results Are Found</b></i>
+
+ Set A New Message -> <code>/setspell YourText</code>
+ Delete Existing Message -> <code>/delspell</code>
+
+ <i>Formatting Options Are Also Available To Customize Your Message</i> :-
+
+ {query} : The query/movie Asked By The User
+ {mention} : Mention The Requester
+ {name} : Name Of The User
+ {id} : ID of The User
+
+ <i>You Can Also Modify It From Settings Panel</i>
  """
  }
 

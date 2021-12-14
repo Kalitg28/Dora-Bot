@@ -19,7 +19,7 @@ class Buttons():
         "HELP": [
             [InlineKeyboardButton("FILTERS ⇝", callback_data="ignore"),InlineKeyboardButton("Auto 🤖", callback_data="edit_c(AF)"),InlineKeyboardButton("Manual 👨‍💻", callback_data="edit_c(MF)")],
             [InlineKeyboardButton("Connections 🔗", callback_data="edit_c(CONN)"),InlineKeyboardButton("Broadcast 📣", callback_data="edit_c(CAST)"),InlineKeyboardButton("Caption ➰", callback_data="edit_c(CAPTION)")],
-            [InlineKeyboardButton("Batch 🗂️", callback_data="edit_c(BATCH)"),InlineKeyboardButton("Others ⭕", callback_data="edit_c(OTHER)")],
+            [InlineKeyboardButton("SpellCheck 🖋️", callback_data='edit_c(SPELL)'),InlineKeyboardButton("Batch 🗂️", callback_data="edit_c(BATCH)"),InlineKeyboardButton("Others ⭕", callback_data="edit_c(OTHER)")],
             [InlineKeyboardButton("🏡 Home 🏡", callback_data="edit_c(START)")]
         ],
         "AF": [
@@ -52,6 +52,8 @@ class Buttons():
             [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
         ],
         "CAPTION": [
+            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]],
+        "SPELL": [
             [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
         ]
     }

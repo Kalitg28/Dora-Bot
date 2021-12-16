@@ -225,6 +225,7 @@ async def cb_settings(bot, update: CallbackQuery):
     accuracy_point = settings["configs"].get("accuracy", 0.70)
     caption = settings.get("caption", None)
     fsub = settings.get("fsub", None)
+    spell = settings.get("noresult", None)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -260,14 +261,17 @@ async def cb_settings(bot, update: CallbackQuery):
         ]
     ]
 
-    buttons.append(
-        [
-            InlineKeyboardButton
-                (
-                    "🔢 Total Filter Count 🔢", callback_data=f"mf_count({mf_count}|{chat_id})"
-                )
-        ]
-    )
+    if spell:
+        spell_button = InlineKeyboardButton('🖋️ Spell Check 🖋️', callback_data=f'spell(on|{chat_id})')
+    else :
+        spell_button = InlineKeyboardButton('🖋️ Spell Check 🖋️', callback_data=f'spell(off|{chat_id})')
+
+    if caption:
+        capt_button = InlineKeyboardButton('⛱ Caption ⛱', callback_data=f'capt(on|{chat_id})')
+    else:
+        capt_button = InlineKeyboardButton('⛱ Caption ⛱', callback_data=f'capt(off|{chat_id})')
+
+    buttons.append([spell_button, capt_button])
 
     if fsub:
 
@@ -275,14 +279,13 @@ async def cb_settings(bot, update: CallbackQuery):
             [
                 InlineKeyboardButton
             (
-                "🦾 Force Sub 🦾", callback_data='ignore'
+                "🦾 Force Sub 🦾", callback_data=f'fsub(on|{chat_id})'
             ),
-            InlineKeyboardButton(
-                'Disable ❌', callback_data=f'fsub(off|{chat_id})'
-            ),
-            InlineKeyboardButton(
-                "Change 💱", callback_data=f'fsub(toggle|{chat_id})'
-            )
+            InlineKeyboardButton
+                (
+                    "🔢 Total Results Count 🔢", callback_data=f"mf_count({mf_count}|{chat_id})"
+                )
+        
             ]
         )
     else :
@@ -290,11 +293,13 @@ async def cb_settings(bot, update: CallbackQuery):
             [
                 InlineKeyboardButton
             (
-                "🦾 Force Sub 🦾", callback_data='ignore'
+                "🦾 Force Sub 🦾", callback_data=f'fsub(off|{chat_id})'
             ),
-            InlineKeyboardButton(
-                "Set New ✅", callback_data=f'fsub(toggle|{chat_id})'
-            )
+            InlineKeyboardButton
+                (
+                    "🔢 Total Results Count 🔢", callback_data=f"mf_count({mf_count}|{chat_id})"
+                )
+        
             ]
         )
 
@@ -306,35 +311,6 @@ async def cb_settings(bot, update: CallbackQuery):
                 )
         ]
     )
-
-    if caption:
-
-        buttons.append(
-            [
-                InlineKeyboardButton
-            (
-                "⛱ Caption ⛱", callback_data='ignore'
-            ),
-            InlineKeyboardButton(
-                'Disable ❌', callback_data=f'capt(off|{chat_id})'
-            ),
-            InlineKeyboardButton(
-                "Change 💱", callback_data=f'capt(toggle|{chat_id})'
-            )
-            ]
-        )
-    else :
-        buttons.append(
-            [
-                InlineKeyboardButton
-            (
-                "⛱ Caption ⛱", callback_data='ignore'
-            ),
-            InlineKeyboardButton(
-                "Set New ✅", callback_data=f'capt(toggle|{chat_id})'
-            )
-            ]
-        )
 
 
     buttons.append(

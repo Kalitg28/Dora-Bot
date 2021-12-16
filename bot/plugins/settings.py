@@ -170,9 +170,6 @@ async def settings(bot, update: Message):
 
     buttons.append([spell_button, capt_button])
 
-    buttons.append(
-        
-    )
     if fsub:
 
         buttons.append(

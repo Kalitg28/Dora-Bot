@@ -41,7 +41,7 @@ async def fix_value(bot:Client, update:CallbackQuery):
 
     else :
 
-        ask = await bot.send_message(update.message.chat.id, "**Ok Now Send Me The New Value...\n\nTo Abort This Process Send /cancel**", parse_mode='md', reply_to_message_id=update.message.id)
+        ask = await bot.send_message(update.message.chat.id, "**Ok Now Send Me The New Value...\n\nTo Abort This Process Send /cancel**", parse_mode='md')
         response:Message = await bot.listen(update.message.chat.id, filters.user(update.from_user.id), timeout=300)
 
         if not response:

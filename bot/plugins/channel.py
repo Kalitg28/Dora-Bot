@@ -1,10 +1,13 @@
 import random
 import string
 import asyncio
+import re
 
 from pyrogram import Client, filters
-from pyrogram.errors import UserAlreadyParticipant, FloodWait
+from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.errors import UserAlreadyParticipant, FloodWait, UserNotParticipant, PeerIdInvalid
 from pyrogram.methods.messages.delete_messages import DeleteMessages
+from pyrogram.types.messages_and_media.message import Message
 
 from bot import VERIFY # pylint: disable=import-error
 from bot.bot import Bot # pylint: disable=import-error
@@ -13,6 +16,77 @@ from bot.plugins.auto_filter import recacher # pylint: disable=import-error
 from bot import Translation
 
 db = Database()
+
+@Client.on_callback_query(filters.regex(r'fix\((.+)\)'))
+async def fix_value(bot:Client, update:CallbackQuery):
+
+    key, action, group_id = re.findall(r'fix\((.+)\)', update.data)[0].split('|',2)
+    group_id = int(group_id)
+
+    member = await bot.get_chat_member(group_id, update.from_user.id)
+    if not member.status in ("administrator", "creator"):
+        return await update.answer("Nice Try Kid xD", show_alert=True)
+
+    if action=='on':
+
+        await db.set_main(group_id, key, True)
+
+    elif action=='off':
+
+        await db.del_main(group_id, key)
+
+    elif action=='def':
+
+        await db.set_main(group_id, key, 'def')
+
+    else :
+
+        ask = await bot.send_message(update.chat.id, "**Ok Now Send Me The New Value...\n\nTo Abort This Process Send /cancel**", parse_mode='md', reply_to_message_id=update.message.id)
+        response:Message = await bot.listen(update.chat.id, filters.user(update.from_user.id), timeout=300)
+
+        if not response:
+            return
+        if response.text.startswith('/cancel'):
+            await ask.edit_text("`Aborting Process...`", parse_mode='md')
+            await asyncio.sleep(3)
+            await ask.delete()
+            return
+
+        if key=='fsub':
+
+            try:
+                chat_id = int(response)
+                chat = await bot.get_chat(chat_id)
+                title = chat.title
+                id = chat.id
+                result = dict(
+                    id=id,
+                    title=title
+                )
+            except TypeError:
+                return await response.reply_text("That Doesnt Look Like A Valid ChatID...")
+            except PeerIdInvalid:
+                return await response.reply_text("Oh no looks Like I'm Not A Member Of This Channel Please Add Me There First...")
+
+        else :
+
+            result = response.text
+
+        await db.set_main(group_id, key, result)
+        await update.message.edit_text("Your Request Was Updated Successfully...", reply_markup=InlineKeyboardMarkup([[
+            InlineKeyboardButton
+                (
+                    "🔙 Back", callback_data="settings"
+                ),
+            
+            InlineKeyboardButton
+                (
+                    "Close 🔐", callback_data="close"
+                )
+        ]]))
+        await ask.delete()
+
+
 
 @Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=2)
 async def connect(bot: Bot, update):

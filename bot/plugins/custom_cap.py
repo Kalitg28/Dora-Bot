@@ -79,11 +79,18 @@ async def delcaption(bot:Client, update:Message):
 @Client.on_callback_query(filters.regex(r'capt\((.+)\)'), group=3)
 async def custom_cap(bot:Client, update:CallbackQuery):
 
-    action, group_id = re.findall(r'capt\((.+)\)', update.data)[0].split('|',1)
+    status, group_id = re.findall(r'capt\((.+)\)', update.data)[0].split('|',1)
+    group_id = int(group_id)
     member = await bot.get_chat_member(group_id, update.from_user.id)
     if not member.status in ("administrator", "creator"):
         return await update.answer("Nice Try Kid xD", show_alert=True)
-    buttons = [[
+    buttons = []
+
+    if status=='on':
+        buttons = [[InlineKeyboardButton('❌ Disable ❌', callback_data=f'fix(caption|off|{group_id})'), InlineKeyboardButton('Change', callback_data=f'fix(caption|set|{group_id})')]]
+    elif status=='off':
+        buttons = [[InlineKeyboardButton('Add New',  callback_data=f'fix(caption|set|{group_id})')]]
+    buttons.append([
             InlineKeyboardButton
                 (
                     "🔙 Back", callback_data="settings"
@@ -93,20 +100,6 @@ async def custom_cap(bot:Client, update:CallbackQuery):
                 (
                     "Close 🔐", callback_data="close"
                 )
-        ]]
+        ])
 
-    if action=='off':
-        await db.del_main(int(group_id), "caption")
-        await update.message.edit("Existing Custom Caption Was Deleted ✅")
-        return
-
-    response:Message = await bot.ask(update.message.chat.id, "<b>Now Send Me The New Caption You Want Users To See Under The File</b>\n\nTo Abort The Process Send /cancel", filters.user(update.from_user.id), timeout=300)
-    if not response : return await update.message.reply("Request Timed Out !!",  reply_markup=InlineKeyboardMarkup(buttons))
-    if response.text.startswith('/cancel'):
-        await update.message.edit('Process SuccessFully Aborted...!!', reply_markup=InlineKeyboardMarkup(buttons))
-        return
-
-    await db.set_main(update.message.chat.id, "caption", response.text)
-    await update.message.edit("Your New Custom Caption Was Set Successfully... ✅")
-
-    
+    await update.message.edit_text("Use The Buttons Below To Change Or Add A Custom Caption...", reply_markup=InlineKeyboardMarkup(buttons))

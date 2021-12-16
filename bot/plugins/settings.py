@@ -157,46 +157,21 @@ async def settings(bot, update: Message):
         ]
     ]
 
+    
     if spell:
-
-        buttons.append(
-            [
-                InlineKeyboardButton
-            (
-                "🖋️ Spell Check 🖋️", callback_data='ignore'
-            ),
-            InlineKeyboardButton(
-                'Disable ❌', callback_data=f'spell(off|{chat_id})'
-            ),
-            InlineKeyboardButton(
-                "Change 💱", callback_data=f'spell(toggle|{chat_id})'
-            )
-            ]
-        )
+        spell_button = InlineKeyboardButton('🖋️ Spell Check 🖋️', callback_data=f'spell(on|{chat_id})')
     else :
-        buttons.append(
-            [
-                InlineKeyboardButton
-            (
-                "🖋️ Spell Check 🖋️", callback_data='ignore'
-            ),
-            InlineKeyboardButton
-            (
-                "Default 🔃", callback_data=f'spell(on|{chat_id})'
-            ),
-            InlineKeyboardButton(
-                "Set New ✅", callback_data=f'spell(toggle|{chat_id})'
-            )
-            ]
-        )
+        spell_button = InlineKeyboardButton('🖋️ Spell Check 🖋️', callback_data=f'spell(off|{chat_id})')
+
+    if caption:
+        capt_button = InlineKeyboardButton('⛱ Caption ⛱', callback_data=f'capt(on|{chat_id})')
+    else:
+        capt_button = InlineKeyboardButton('⛱ Caption ⛱', callback_data=f'capt(off|{chat_id})')
+
+    buttons.append([spell_button, capt_button])
 
     buttons.append(
-        [
-            InlineKeyboardButton
-                (
-                    "🔢 Total Results Count 🔢", callback_data=f"mf_count({mf_count}|{chat_id})"
-                )
-        ]
+        
     )
     if fsub:
 
@@ -204,14 +179,13 @@ async def settings(bot, update: Message):
             [
                 InlineKeyboardButton
             (
-                "🦾 Force Sub 🦾", callback_data='ignore'
+                "🦾 Force Sub 🦾", callback_data=f'fsub(on|{chat_id})'
             ),
-            InlineKeyboardButton(
-                'Disable ❌', callback_data=f'fsub(off|{chat_id})'
-            ),
-            InlineKeyboardButton(
-                "Change 💱", callback_data=f'fsub(toggle|{chat_id})'
-            )
+            InlineKeyboardButton
+                (
+                    "🔢 Total Results Count 🔢", callback_data=f"mf_count({mf_count}|{chat_id})"
+                )
+        
             ]
         )
     else :
@@ -219,11 +193,13 @@ async def settings(bot, update: Message):
             [
                 InlineKeyboardButton
             (
-                "🦾 Force Sub 🦾", callback_data='ignore'
+                "🦾 Force Sub 🦾", callback_data=f'fsub(off|{chat_id})'
             ),
-            InlineKeyboardButton(
-                "Set New ✅", callback_data=f'fsub(toggle|{chat_id})'
-            )
+            InlineKeyboardButton
+                (
+                    "🔢 Total Results Count 🔢", callback_data=f"mf_count({mf_count}|{chat_id})"
+                )
+        
             ]
         )
 
@@ -235,35 +211,6 @@ async def settings(bot, update: Message):
                 )
         ]
     )
-
-    if caption:
-
-        buttons.append(
-            [
-                InlineKeyboardButton
-            (
-                "⛱ Caption ⛱", callback_data='ignore'
-            ),
-            InlineKeyboardButton(
-                'Disable ❌', callback_data=f'capt(off|{chat_id})'
-            ),
-            InlineKeyboardButton(
-                "Change 💱", callback_data=f'capt(toggle|{chat_id})'
-            )
-            ]
-        )
-    else :
-        buttons.append(
-            [
-                InlineKeyboardButton
-            (
-                "⛱ Caption ⛱", callback_data='ignore'
-            ),
-            InlineKeyboardButton(
-                "Set New ✅", callback_data=f'capt(toggle|{chat_id})'
-            )
-            ]
-        )
 
 
     buttons.append(

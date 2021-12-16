@@ -14,11 +14,18 @@ db = Database()
 @Client.on_callback_query(filters.regex(r'fsub\((.+)\)'), group=3)
 async def fsub(bot:Client, update:CallbackQuery):
 
-    action, group_id = re.findall(r'fsub\((.+)\)', update.data)[0].split('|',1)
-    member = await bot.get_chat_member(update.message.chat.id, update.from_user.id)
+    status, group_id = re.findall(r'fsub\((.+)\)', update.data)[0].split('|',1)
+    group_id = int(group_id)
+    member = await bot.get_chat_member(group_id, update.from_user.id)
     if not member.status in ("administrator", "creator"):
         return await update.answer("Nice Try Kid xD", show_alert=True)
-    buttons = [[
+    buttons = []
+
+    if status=='on':
+        buttons = [[InlineKeyboardButton('❌ Disable ❌', callback_data=f'fix(fsub|off|{group_id})'), InlineKeyboardButton('Change', callback_data=f'fix(fsub|set|{group_id})')]]
+    elif status=='off':
+        buttons = [[InlineKeyboardButton('Add New',  callback_data=f'fix(fsub|set|{group_id})')]]
+    buttons.append([
             InlineKeyboardButton
                 (
                     "🔙 Back", callback_data="settings"
@@ -28,35 +35,6 @@ async def fsub(bot:Client, update:CallbackQuery):
                 (
                     "Close 🔐", callback_data="close"
                 )
-        ]]
+        ])
 
-    if action=='off':
-        await db.del_fsub(int(group_id))
-        await update.message.edit("Existing Fsub Channel Was Deleted ✅")
-        return
-
-    response:Message = await bot.ask(update.message.chat.id, "Ok Now Send ONLY THE ID Of The Force Sub Channel And Make Sure I'm An Admin There Too \n\nTo See The ID Go To The Channel And Send <code>/id</code>\n\nTo Abort The Process Send /cancel", filters.user(update.from_user.id), timeout=300)
-    if not response : return await update.message.reply("Request Timed Out !!",  reply_markup=InlineKeyboardMarkup(buttons))
-    if response.text.startswith('/cancel'):
-        await update.message.edit('Process SuccessFully Aborted...!!', reply_markup=InlineKeyboardMarkup(buttons))
-        return
-
-    try :
-        group_id = int(group_id)
-        id = int(response.text)
-        channel:Chat = await bot.get_chat(id)
-        if not channel.invite_link : return await update.message.edit("I Dont Have Enough Permissions In The Fsub Channel", reply_markup=InlineKeyboardMarkup(buttons))
-
-        await db.set_fsub(group_id, id, channel.title)
-        await update.message.edit("Fsub Channel Was Set Successfully...!!", reply_markup=InlineKeyboardMarkup(buttons))
-
-    except PeerIdInvalid:
-        await update.message.edit("Looks Like Im Not Member Of A Channel with This ID", reply_markup=InlineKeyboardMarkup(buttons))
-        return
-    except TypeError:
-        await update.message.edit("Thats Not A Valid Chat ID...", reply_markup=InlineKeyboardMarkup(buttons))
-        return
-    except Exception as e :
-        print(e)
-        await update.message.edit("Something Went Terribly Wrong....!!", reply_markup=InlineKeyboardMarkup(buttons))
-        return
+    await update.message.edit_text("Use The Buttons Below To Change Or Add A Fsub Channel...", reply_markup=InlineKeyboardMarkup(buttons))

@@ -79,11 +79,18 @@ async def delspell(bot:Client, update:Message):
 @Client.on_callback_query(filters.regex(r'spell\((.+)\)'), group=3)
 async def spell_check(bot:Client, update:CallbackQuery):
 
-    action, group_id = re.findall(r'spell\((.+)\)', update.data)[0].split('|',1)
+    status, group_id = re.findall(r'spell\((.+)\)', update.data)[0].split('|',1)
+    group_id = int(group_id)
     member = await bot.get_chat_member(group_id, update.from_user.id)
     if not member.status in ("administrator", "creator"):
         return await update.answer("Nice Try Kid xD", show_alert=True)
-    buttons = [[
+    buttons = []
+
+    if status=='on':
+        buttons = [[InlineKeyboardButton('❌ Disable ❌', callback_data=f'fix(noresult|off|{group_id})'), InlineKeyboardButton('Change', callback_data=f'fix(noresult|set|{group_id})'), InlineKeyboardButton('Default', callback_data=f'fix(noresult|def|{group_id})')]]
+    elif status=='off':
+        buttons = [[InlineKeyboardButton('Default', callback_data=f'fix(noresult|def|{group_id})'), InlineKeyboardButton('Add New',  callback_data=f'fix(noresult|set|{group_id})')]]
+    buttons.append([
             InlineKeyboardButton
                 (
                     "🔙 Back", callback_data="settings"
@@ -93,22 +100,6 @@ async def spell_check(bot:Client, update:CallbackQuery):
                 (
                     "Close 🔐", callback_data="close"
                 )
-        ]]
+        ])
 
-    if action=='off':
-        await db.del_main(int(group_id), "noresult")
-        await update.message.edit("Existing Spelling Message Was Deleted ✅")
-        return
-    elif action=='on':
-        await db.set_main(int(group_id), "noresult", 'def')
-        await update.message.edit("Spell Check Was Set To Defaukt Text ... ✅")
-        return
-
-    response:Message = await bot.ask(update.message.chat.id, "<b>Now Send Me The New Message You Want Users To See When There's No Results</b>\n\nTo Abort The Process Send /cancel", filters.user(update.from_user.id), timeout=300)
-    if not response : return await update.message.reply("Request Timed Out !!",  reply_markup=InlineKeyboardMarkup(buttons))
-    if response.text.startswith('/cancel'):
-        await update.message.edit('Process SuccessFully Aborted...!!', reply_markup=InlineKeyboardMarkup(buttons))
-        return
-
-    await db.set_main(update.message.chat.id, "noresult", response.text)
-    await update.message.edit("Your New Spell Check Was Set Successfully... ✅")
+    await update.message.edit_text("Use The Buttons Below To Change Or Add A Spell Check Message...", reply_markup=InlineKeyboardMarkup(buttons))

@@ -41,8 +41,8 @@ async def fix_value(bot:Client, update:CallbackQuery):
 
     else :
 
-        ask = await bot.send_message(update.chat.id, "**Ok Now Send Me The New Value...\n\nTo Abort This Process Send /cancel**", parse_mode='md', reply_to_message_id=update.message.id)
-        response:Message = await bot.listen(update.chat.id, filters.user(update.from_user.id), timeout=300)
+        ask = await bot.send_message(update.message.chat.id, "**Ok Now Send Me The New Value...\n\nTo Abort This Process Send /cancel**", parse_mode='md', reply_to_message_id=update.message.id)
+        response:Message = await bot.listen(update.message.chat.id, filters.user(update.from_user.id), timeout=300)
 
         if not response:
             return
@@ -73,7 +73,9 @@ async def fix_value(bot:Client, update:CallbackQuery):
             result = response.text
 
         await db.set_main(group_id, key, result)
-        await update.message.edit_text("Your Request Was Updated Successfully...", reply_markup=InlineKeyboardMarkup([[
+        await ask.delete()
+    
+    await update.message.edit_text("Your Request Was Updated Successfully...", reply_markup=InlineKeyboardMarkup([[
             InlineKeyboardButton
                 (
                     "🔙 Back", callback_data="settings"
@@ -84,7 +86,6 @@ async def fix_value(bot:Client, update:CallbackQuery):
                     "Close 🔐", callback_data="close"
                 )
         ]]))
-        await ask.delete()
 
 
 

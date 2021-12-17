@@ -818,7 +818,9 @@ class Database:
 
         results = fcol.find({'file_name': regex}, limit=max_results)
 
-        print(results)
+        for result in results:
+
+            print(result.get('file_name', 'Hmm'))
 
 
 def getLen(e):

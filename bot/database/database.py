@@ -811,6 +811,15 @@ class Database:
         doc = fcol.find_one_and_delete({"file_link": link})
         print(doc)
 
+    async def search_media(query, max_results):
+
+        pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
+        regex = re.compile(pattern)
+
+        results = fcol.find({'file_name': regex}, limit=max_results)
+
+        print(results)
+
 
 def getLen(e):
 

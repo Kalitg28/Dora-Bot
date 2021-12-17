@@ -244,7 +244,11 @@ async def auto_filter(bot, update:Message):
 
         return
 
+@Client.on_message(filters.command('search'), group=3)
+async def media_search(bot:Client, update:Message):
 
+    query = update.text.split(None, 1)[1]
+    await db.search_media(query, 10)
 
 async def gen_invite_links(db, group_id, bot, update):
     """

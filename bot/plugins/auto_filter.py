@@ -15,6 +15,8 @@ from bot.helpers import(# pylint: disable=import-error
 Helpers, IMDB
 )
 
+from pymongo.cursor import Cursor, CursorType
+
 from .batch import Batch
 
 FIND = {}
@@ -64,7 +66,7 @@ async def auto_filter(bot, update:Message):
     max_results = configs["configs"]["max_results"] # maximum total result of a query
     max_per_page = configs["configs"]["max_per_page"] # maximum buttom per page 
     
-    filters = await db.get_filters(902, query)
+    filters = await db.search_media(query, max_results+5)
     
     if filters:
         all_files = []

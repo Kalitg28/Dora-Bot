@@ -66,6 +66,7 @@ async def auto_filter(bot, update:Message):
     max_results = configs["configs"]["max_results"] # maximum total result of a query
     max_per_page = configs["configs"]["max_per_page"] # maximum buttom per page 
     auto_filter = configs.get('af', True)
+    size_button = configs.get('size', False)
     if not auto_filter:
         return
     
@@ -95,7 +96,8 @@ async def auto_filter(bot, update:Message):
             file_size = "" if file_size == ("[0 B]") else file_size
             
             # add emoji down below inside " " if you want..
-            button_text = f"{file_size} {file_name.replace(' ', '.')}"
+            file_name = file_name.replace(' ', '.')
+            
             
 
             if file_type == "video":
@@ -132,8 +134,17 @@ async def auto_filter(bot, update:Message):
                 
                 bot_ = FIND.get("bot_details")
                 file_link = f"https://t.me/{bot_.username}?start=z{unique_id}z{group_text}z"
-            
-            results.append(
+
+            if size_button :
+                results.append(
+                    [
+                        InlineKeyboardButton(file_name, url=file_link),
+                        InlineKeyboardButton(file_size, url=file_link)
+                    ]
+                )
+            else:
+                button_text = f"{file_size} {file_name}"
+                results.append(
                 [
                     InlineKeyboardButton(button_text, url=file_link)
                 ]
@@ -284,6 +295,37 @@ async def toggle_af(bot:Client, update:CallbackQuery):
         ])
 
     await update.message.edit_text("Use The Buttons Below To Toggle AutoFilter On/Off ...", reply_markup=InlineKeyboardMarkup(buttons))
+
+@Client.on_callback_query(filters.regex(r'size\((.+)\)'))
+async def size_button(bot:Client, update:CallbackQuery):
+
+    status, group_id = re.findall(r'size\((.+)\)', update.data)[0].split('|',1)
+    group_id = int(group_id)
+    user_id = update.from_user.id
+    chat_id = update.message.chat.id
+
+    member = await bot.get_chat_member(group_id, user_id)
+    if not member.status in ('administrator','creator'):
+        return await update.answer('Nice Try Kid xD', show_alert=True)
+
+    if status=='on':
+        buttons = [[InlineKeyboardButton('❌ Disable ❌', callback_data=f'fix(size|off|{group_id})')]]
+    elif status=='off':
+        buttons = [[InlineKeyboardButton('Enable',  callback_data=f'fix(size|on|{group_id})')]]
+    buttons.append([
+            InlineKeyboardButton
+                (
+                    "🔙 Back", callback_data="settings"
+                ),
+            
+            InlineKeyboardButton
+                (
+                    "Close 🔐", callback_data="close"
+                )
+        ])
+
+    await update.message.edit_text("Use The Buttons Below To Select Wether File Size Should Be Shown With Seperate Button ...", reply_markup=InlineKeyboardMarkup(buttons))
+
 
 async def gen_invite_links(db, group_id, bot, update):
     """

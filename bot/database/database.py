@@ -814,7 +814,7 @@ class Database:
     async def search_media(self, query, max_results):
 
         pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
-        regex = re.compile(pattern)
+        regex = re.compile(pattern, flags=re.IGNORECASE)
 
         results = fcol.find({'file_name': regex}, limit=max_results)
 

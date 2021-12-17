@@ -824,6 +824,8 @@ class Database:
 
             print(result.get('file_name', 'Hmm'))
 
+        print(results.to_list())
+
 
 def getLen(e):
 

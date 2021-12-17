@@ -226,6 +226,7 @@ async def cb_settings(bot, update: CallbackQuery):
     caption = settings.get("caption", None)
     fsub = settings.get("fsub", None)
     spell = settings.get("noresult", None)
+    auto_filter = settings.get('af', True)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -245,6 +246,10 @@ async def cb_settings(bot, update: CallbackQuery):
         text+=f"\n - Force Subscribe: {fsub['title']} ✅\n"
 
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
+
+    text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
+
+    text+=f"\n- Auto Filter: {'Activated ✅' if auto_filter else 'Inactive ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -270,6 +275,15 @@ async def cb_settings(bot, update: CallbackQuery):
         capt_button = InlineKeyboardButton('⛱ Caption ⛱', callback_data=f'capt(on|{chat_id})')
     else:
         capt_button = InlineKeyboardButton('⛱ Caption ⛱', callback_data=f'capt(off|{chat_id})')
+
+    if auto_filter:
+        buttons.append([
+            InlineKeyboardButton('Auto Filter', callback_data=f'af(on|{chat_id})')
+        ])
+    else:
+        buttons.append([
+            InlineKeyboardButton('Auto Filter', callback_data=f'af(off|{chat_id})')
+        ])
 
     buttons.append([spell_button, capt_button])
 

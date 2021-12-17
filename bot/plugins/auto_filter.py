@@ -65,6 +65,9 @@ async def auto_filter(bot, update:Message):
     pm_file_chat = configs["configs"]["pm_fchat"] # should file to be send from bot pm to user
     max_results = configs["configs"]["max_results"] # maximum total result of a query
     max_per_page = configs["configs"]["max_per_page"] # maximum buttom per page 
+    auto_filter = configs.get('af', True)
+    if not auto_filter:
+        return
     
     filters = await db.search_media(query, max_results+5)
     
@@ -251,6 +254,36 @@ async def media_search(bot:Client, update:Message):
 
     query = update.text.split(None, 1)[1]
     await db.search_media(query, 10)
+
+@Client.on_callback_query(filters.regex(r'af\((.+)\)'))
+async def toggle_af(bot:Client, update:CallbackQuery):
+
+    status, group_id = re.findall(r'af\((.+)\)', update.data)[0].split('|',1)
+    group_id = int(group_id)
+    user_id = update.from_user.id
+    chat_id = update.message.chat.id
+
+    member = await bot.get_chat_member(group_id, user_id)
+    if not member.status in ('administrator','creator'):
+        return await update.answer('Nice Try Kid xD', show_alert=True)
+
+    if status=='on':
+        buttons = [[InlineKeyboardButton('❌ Disable ❌', callback_data=f'fix(af|off|{group_id})')]]
+    elif status=='off':
+        buttons = [[InlineKeyboardButton('Enable',  callback_data=f'fix(af|on|{group_id})')]]
+    buttons.append([
+            InlineKeyboardButton
+                (
+                    "🔙 Back", callback_data="settings"
+                ),
+            
+            InlineKeyboardButton
+                (
+                    "Close 🔐", callback_data="close"
+                )
+        ])
+
+    await update.message.edit_text("Use The Buttons Below To Toggle AutoFilter On/Off ...", reply_markup=InlineKeyboardMarkup(buttons))
 
 async def gen_invite_links(db, group_id, bot, update):
     """

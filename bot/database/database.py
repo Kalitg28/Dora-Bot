@@ -813,6 +813,8 @@ class Database:
 
     async def search_media(self, query, max_results):
 
+        if ' ' in query:
+            query = query.replace(' ', r'.*[\s\.\+\-_]')
         pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
         regex = re.compile(pattern, flags=re.IGNORECASE)
 

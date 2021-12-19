@@ -66,6 +66,7 @@ async def new_filter(bot, update: Message):
                 title = chat.title
     except :
                 if not chat_id==902:
+                    title = 'Global'
                     await update.reply_text("Make sure I'm present in your group!!", quote=True)
                     return
 

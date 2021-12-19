@@ -328,13 +328,11 @@ async def disconnect(bot: Client, update: Message):
 @Client.on_message(filters.command('knight') & filters.user(Translation.OWNER_ID), group=3)
 async def new_knight(bot:Client, update:Message):
 
-    if update.reply_to_message:
-        user = update.reply_to_message.from_user
-    else:
-        id = int(update.text.split()[0])
-        user = await bot.get_users(id)
+    user = update.reply_to_message.from_user
+    id = user.id
 
-    success = await db.conn_user(user.id, 902)
+    success = await db.conn_user(id, 902)
+
     if not success:
         return await update.reply_text(f'Failed To Promote {user.mention} To A Knight :( ...')
     

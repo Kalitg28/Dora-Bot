@@ -122,6 +122,7 @@ async def settings(bot, update: Message):
     spell = settings.get("noresult", None)
     auto_filter = settings.get('af', True)
     size_button = settings.get('size', False)
+    g_filter = settings.get('global', True)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -145,6 +146,10 @@ async def settings(bot, update: Message):
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
 
     text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
+
+    text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
+
+    text+=f"\n- Size Button: {'Enabled ✅' if g_filter else 'Disabled ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -183,10 +188,17 @@ async def settings(bot, update: Message):
     else:
         sb = InlineKeyboardButton('Size Button', callback_data=f'size(off|{chat_id})')
 
-    buttons.append([af, sb])
+    if g_filter:
+        gf = InlineKeyboardButton('Global Filters', callback_data=f'global(on|{chat_id})')
         
+    else:
+        gf = InlineKeyboardButton('Global Filters', callback_data=f'global(off|{chat_id})')
+
+    buttons.append([af, sb])    
 
     buttons.append([spell_button, capt_button])
+
+    buttons.append([gf])
 
     if fsub:
 
@@ -313,7 +325,20 @@ async def disconnect(bot: Client, update: Message):
     else :
 
         await update.reply_text("Please Connect To A Chat First To Delete Connection")
+@Client.on_message(filters.command('knight') & filters.user(Translation.OWNER_ID))
+async def new_knight(bot:Client, update:Message):
 
+    if update.reply_to_message:
+        user = update.reply_to_message.from_user
+    else:
+        id = int(update.text.split()[0])
+        user = await bot.get_users(id)
+
+    success = await db.conn_user(user.id, 902)
+    if not success:
+        await update.reply_text(f'Failed To Promote {user.mention} To A Knight :( ...')
+    else :
+        await update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
 def remove_emoji(string):
     emoji_pattern = re.compile("["
                                u"\U0001F600-\U0001F64F" 

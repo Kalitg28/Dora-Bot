@@ -227,10 +227,14 @@ async def cb_settings(bot, update: CallbackQuery):
     fsub = settings.get("fsub", None)
     spell = settings.get("noresult", None)
     auto_filter = settings.get('af', True)
+    size_button = settings.get('size', False)
+    g_filter = settings.get('global', True)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
     text+=f"\n<i>{chat_name}</i> Current Settings:\n"
+
+    text+=f"\n- Auto Filter: {'Activated ✅' if auto_filter else 'Inactive ❌'}\n"
 
     text+=f"\n - Max Filter: <code>{mf_count}</code>\n"
     
@@ -249,7 +253,9 @@ async def cb_settings(bot, update: CallbackQuery):
 
     text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
 
-    text+=f"\n- Auto Filter: {'Activated ✅' if auto_filter else 'Inactive ❌'}\n"
+    text+=f"\n- Size Button: {'Enabled ✅' if g_filter else 'Disabled ❌'}\n"
+
+    text+=f"\n- Auto Filter: {'Activated ✅' if g_filter else 'Inactive ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -277,15 +283,28 @@ async def cb_settings(bot, update: CallbackQuery):
         capt_button = InlineKeyboardButton('⛱ Caption ⛱', callback_data=f'capt(off|{chat_id})')
 
     if auto_filter:
-        buttons.append([
-            InlineKeyboardButton('Auto Filter', callback_data=f'af(on|{chat_id})')
-        ])
+        af = InlineKeyboardButton('Auto Filter', callback_data=f'af(on|{chat_id})')
+        
     else:
-        buttons.append([
-            InlineKeyboardButton('Auto Filter', callback_data=f'af(off|{chat_id})')
-        ])
+        af = InlineKeyboardButton('Auto Filter', callback_data=f'af(off|{chat_id})')
+
+    if size_button:
+        sb = InlineKeyboardButton('Size Button', callback_data=f'size(on|{chat_id})')
+    else:
+        sb = InlineKeyboardButton('Size Button', callback_data=f'size(off|{chat_id})')
+
+    if g_filter:
+        gf = InlineKeyboardButton('Global Filters', callback_data=f'global(on|{chat_id})')
+        
+    else:
+        gf = InlineKeyboardButton('Global Filters', callback_data=f'global(off|{chat_id})')
+
+    buttons.append([af, sb])    
 
     buttons.append([spell_button, capt_button])
+
+    buttons.append([gf])
+
 
     if fsub:
 

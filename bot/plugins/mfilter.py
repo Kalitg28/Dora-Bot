@@ -223,8 +223,11 @@ async def n_filter(bot, update: Message):
         return
 
     filters = await db.all_mfilter(chat_id)
-    chat = await bot.get_chat(chat_id)
-    title = chat.title
+    try:
+        chat = await bot.get_chat(chat_id)
+        title = chat.title
+    except Exception:
+        title = 'Global'
     total_filters = ""
     if not filters :
         await update.reply_text("Looks Like You Havent Saved Any Filters In This Chat", quote=True)
@@ -249,11 +252,8 @@ async def mfilter(bot:Client, update:Message):
 
 
     query = update.text
-    print("marked 1")
     result = await db.find_mfilter(group_id=chat_id, query=query)
-    print("marked 2")
     if not result :
-        print("marked 3")
         return
     else:
         content, file_id, btn, sticker = (result["content"], result["file_id"], result["buttons"], result["sticker"])
@@ -303,6 +303,35 @@ async def mfilter(bot:Client, update:Message):
                 quote=True
             )
 
+@Client.on_callback_query(filters.regex(r'global\((.+)\)'))
+async def global_filters(bot:Client, update:Message):
+
+    status, group_id = re.findall(r'global\((.+)\)', update.data)[0].split('|',1)
+    group_id = int(group_id)
+    user_id = update.from_user.id
+    chat_id = update.message.chat.id
+
+    member = await bot.get_chat_member(group_id, user_id)
+    if not member.status in ('administrator','creator'):
+        return await update.answer('Nice Try Kid xD', show_alert=True)
+
+    if status=='on':
+        buttons = [[InlineKeyboardButton('❌ Disable ❌', callback_data=f'fix(global|off|{group_id})')]]
+    elif status=='off':
+        buttons = [[InlineKeyboardButton('Enable',  callback_data=f'fix(global|on|{group_id})')]]
+    buttons.append([
+            InlineKeyboardButton
+                (
+                    "🔙 Back", callback_data="settings"
+                ),
+            
+            InlineKeyboardButton
+                (
+                    "Close 🔐", callback_data="close"
+                )
+        ])
+
+    await update.message.edit_text("Use The Buttons Below To Toggle Global Filter On/Off ...", reply_markup=InlineKeyboardMarkup(buttons))
 
 def split_quotes(text: str):
 
@@ -324,7 +353,7 @@ def parser(unique_id, reply_text: str, text: str):
     text = reply_text + " \n" + text
     alert_count = 0
 
-    pattern = r"(\[([^\[]+?)\]\((url|alert):(?:/{0,2})(.+?)\))"
+    pattern = r"(\[([^\[]+?)\]\((url|alert|search):(?:/{0,2})(.+?)\))"
     total_buttons = []
     alert = []
 
@@ -345,6 +374,10 @@ def parser(unique_id, reply_text: str, text: str):
                 line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"alert({unique_id}|{alert_count})"))
                 alert.append(button[4])
                 alert_count+=1
+
+            elif button[3]=="search":
+
+                line_buttons.append(InlineKeyboardButton(button[2], switch_inline_query_current_chat=button[4]))
 
         if len(line_buttons)>0:
             total_buttons.append(line_buttons)

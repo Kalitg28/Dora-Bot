@@ -9,6 +9,7 @@ import string
 import pyrogram
 
 from pyrogram import Client, filters
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.errors import ButtonDataInvalid, FloodWait
 
@@ -63,9 +64,11 @@ async def new_filter(bot, update: Message):
     try:
                 chat = await bot.get_chat(chat_id)
                 title = chat.title
-    except:
-                await update.reply_text("Make sure I'm present in your group!!", quote=True)
-                return
+    except :
+                if not chat_id==902:
+                    await update.reply_text("Make sure I'm present in your group!!", quote=True)
+                    return
+
 
     unique_id = ''.join(random.choice(
             string.ascii_lowercase + 

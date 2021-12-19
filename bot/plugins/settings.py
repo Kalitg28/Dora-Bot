@@ -325,7 +325,7 @@ async def disconnect(bot: Client, update: Message):
     else :
 
         await update.reply_text("Please Connect To A Chat First To Delete Connection")
-@Client.on_message(filters.command('knight') & filters.user(Translation.OWNER_ID))
+@Client.on_message(filters.command('knight') & filters.user(Translation.OWNER_ID), group=3)
 async def new_knight(bot:Client, update:Message):
 
     if update.reply_to_message:

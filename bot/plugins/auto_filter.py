@@ -258,6 +258,8 @@ async def auto_filter(bot, update:Message):
         except Exception as e:
             print(e)
 
+        print(update.chat.title)
+
         g_filter = configs.get('global', True)
         if not g_filter: return
 

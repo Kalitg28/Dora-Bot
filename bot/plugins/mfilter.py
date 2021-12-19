@@ -69,6 +69,7 @@ async def new_filter(bot, update: Message):
                     title = 'Global'
                     await update.reply_text("Make sure I'm present in your group!!", quote=True)
                     return
+                title = 'Global'
 
 
     unique_id = ''.join(random.choice(

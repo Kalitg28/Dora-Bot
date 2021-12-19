@@ -39,11 +39,12 @@ async def new_filter(bot, update: Message):
 
             await update.reply_text("Please Connect To A Chat First To Use This Command In PM", quote=True)
             return
-    
-    st = await bot.get_chat_member(chat_id, userid)
-    print("Mark 2")
-    if not ((st.status == "administrator") or (st.status == "creator") or (userid in (Translation.OWNER_ID,))):
-        return
+    if not chat_id==902:
+        st = await bot.get_chat_member(chat_id, userid)
+
+        print("Mark 2")
+        if not ((st.status == "administrator") or (st.status == "creator") or (userid in (Translation.OWNER_ID,))):
+            return
         
 
     if len(args) < 2:

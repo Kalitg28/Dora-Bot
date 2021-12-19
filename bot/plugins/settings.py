@@ -336,9 +336,9 @@ async def new_knight(bot:Client, update:Message):
 
     success = await db.conn_user(user.id, 902)
     if not success:
-        await update.reply_text(f'Failed To Promote {user.mention} To A Knight :( ...')
-    else :
-        await update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
+        return await update.reply_text(f'Failed To Promote {user.mention} To A Knight :( ...')
+    
+    await update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
 def remove_emoji(string):
     emoji_pattern = re.compile("["
                                u"\U0001F600-\U0001F64F" 

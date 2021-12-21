@@ -24,7 +24,7 @@ class Translation(object):
 <b>🗲 Base Source Code</b> : <i><a href="https://github.com/AlbertEinsteinTG/Adv-Auto-Filter-Bot">Click Me</a></i>
 """,
 
- "AF" : "<b>To Use The AutoFilter Module Simply Add The Bot To Your Group As Admin Thats it/n/n- Use The <code>/settings</code> Command To Modify AutoFilter Settings \nTo Connect The Settings Panel To PM Read The Connections Menu</b>",
+ "AF" : "<b>To Use The AutoFilter Module Simply Add The Bot To Your Group As Admin Thats it\n\n- Use The <code>/settings</code> Command To Modify AutoFilter Settings \nTo Connect The Settings Panel To PM Read The Connections Menu</b>",
 
  "MF" : '''
  <i><b>Here Are All Of The Manual FIlter Related Commands</b></i>

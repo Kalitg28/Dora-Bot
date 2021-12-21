@@ -118,7 +118,8 @@ class Batch():
                         btn = message.reply_markup.inline_keyboard
                         if file:
                             caption = ""
-                            if message.caption : caption = "" if not message.caption.html else message.caption.html
+                            if message.caption : 
+                                caption = "" if not message.caption.html else message.caption.html
                             await bot.copy_message(
                                 chat_id=user_id,
                                 from_chat_id=int(channel_id),

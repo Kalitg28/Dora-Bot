@@ -21,7 +21,7 @@ db = Database()
 
 
 
-@Client.on_message(filters.command(["filter","filter@DoraFilterBot"]) & filters.incoming, group=2)
+@Client.on_message(filters.command(["filter","filter@DoraFilterBot"]) & filters.incoming, group=3)
 async def new_filter(bot, update: Message):
 
     chat_id = update.chat.id
@@ -187,7 +187,7 @@ async def new_filter(bot, update: Message):
         parse_mode="md"
     )
 
-@Client.on_message(filters.command(["stop","stop@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=2)
+@Client.on_message(filters.command(["stop","stop@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=3)
 async def stop_filter(bot, update: Message):
 
     chat_type = update.chat.type
@@ -212,7 +212,7 @@ async def stop_filter(bot, update: Message):
         await update.reply_text(f'Couldnt Delete Any Filter For {filter}', quote=True)
 
 
-@Client.on_message(filters.command(["filters","filters@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=2)
+@Client.on_message(filters.command(["filters","filters@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=3)
 async def n_filter(bot, update: Message):
 
     chat_type = update.chat.type
@@ -243,7 +243,7 @@ async def n_filter(bot, update: Message):
 
     await update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For {title} : {total_filters}", parse_mode="html", quote=True)
 
-@Client.on_message(filters.text & (filters.private | filters.group) & ~filters.bot & ~filters.edited, group=0)
+@Client.on_message(filters.text & (filters.private | filters.group) & ~filters.bot & ~filters.edited, group=1)
 async def mfilter(bot:Client, update:Message):
     '''A Function To Get Manual Filters Of A Chat'''
 
@@ -309,35 +309,6 @@ async def mfilter(bot:Client, update:Message):
                 quote=True
             )
 
-@Client.on_callback_query(filters.regex(r'global\((.+)\)'))
-async def global_filters(bot:Client, update:Message):
-
-    status, group_id = re.findall(r'global\((.+)\)', update.data)[0].split('|',1)
-    group_id = int(group_id)
-    user_id = update.from_user.id
-    chat_id = update.message.chat.id
-
-    member = await bot.get_chat_member(group_id, user_id)
-    if not member.status in ('administrator','creator'):
-        return await update.answer('Nice Try Kid xD', show_alert=True)
-
-    if status=='on':
-        buttons = [[InlineKeyboardButton('❌ Disable ❌', callback_data=f'fix(global|off|{group_id})')]]
-    elif status=='off':
-        buttons = [[InlineKeyboardButton('Enable',  callback_data=f'fix(global|on|{group_id})')]]
-    buttons.append([
-            InlineKeyboardButton
-                (
-                    "🔙 Back", callback_data="settings"
-                ),
-            
-            InlineKeyboardButton
-                (
-                    "Close 🔐", callback_data="close"
-                )
-        ])
-
-    await update.message.edit_text("Use The Buttons Below To Toggle Global Filter On/Off ...", reply_markup=InlineKeyboardMarkup(buttons))
 
 def split_quotes(text: str):
 

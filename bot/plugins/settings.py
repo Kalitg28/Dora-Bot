@@ -15,7 +15,7 @@ from bot import VERIFY # pylint: disable=import-error
 
 db = Database()
 
-@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=3)
+@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=4)
 async def pv_settings(bot, update):
     
     chat_id = 902
@@ -76,7 +76,7 @@ async def pv_settings(bot, update):
         )
 
 
-@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=3)
+@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=4)
 async def settings(bot, update: Message):
     
     chat_id = update.chat.id
@@ -144,8 +144,6 @@ async def settings(bot, update: Message):
         text+=f"\n- Force Subscribe: {fsub['title']} ✅\n"
 
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
-
-    text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
 
     text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
 
@@ -258,7 +256,7 @@ async def settings(bot, update: Message):
         )
 
 
-@Client.on_message(filters.command("connect") & filters.private, group=3)
+@Client.on_message(filters.command("connect") & filters.private, group=4)
 async def connect(bot: Client, update: Message):
 
     text = update.text
@@ -311,7 +309,7 @@ async def connect(bot: Client, update: Message):
 
         print(e)
 
-@Client.on_message(filters.command("disconnect") & filters.private, group=3)
+@Client.on_message(filters.command("disconnect") & filters.private, group=4)
 async def disconnect(bot: Client, update: Message):
 
     user_id = update.from_user.id
@@ -325,7 +323,7 @@ async def disconnect(bot: Client, update: Message):
     else :
 
         await update.reply_text("Please Connect To A Chat First To Delete Connection")
-@Client.on_message(filters.command('knight') & filters.group, group=3)
+@Client.on_message(filters.command('knight') & filters.group, group=4)
 async def new_knight(bot:Client, update:Message):
 
     if not update.from_user.id==Translation.OWNER_ID:
@@ -340,6 +338,24 @@ async def new_knight(bot:Client, update:Message):
         return await update.reply_text(f'Failed To Promote {user.mention} To A Knight :( ...')
     
     await update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
+
+@Client.on_message(filters.command('deknight') & filters.incoming, group=4)
+async def new_knight(bot:Client, update:Message):
+    if not update.from_user.id==Translation.OWNER_ID:
+        return await update.reply_text('Nice Try Kid...')
+
+    if update.reply_to_message:
+        user = update.reply_to_message.from_user
+        id = user.id
+    else:
+        id = int(update.text.split()[1])
+        user = await bot.get_users(id)
+
+    success = await db.del_conn(id)
+    if success:
+        await update.reply_text(f"Knight {user.mention} Was Demoted To A User :( ...")
+    else:
+        await update.reply_text(f"Demote Fialed...")
 def remove_emoji(string):
     emoji_pattern = re.compile("["
                                u"\U0001F600-\U0001F64F" 

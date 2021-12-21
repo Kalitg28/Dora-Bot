@@ -17,79 +17,8 @@ from bot import Translation
 
 db = Database()
 
-@Client.on_callback_query(filters.regex(r'fix\((.+)\)'))
-async def fix_value(bot:Client, update:CallbackQuery):
 
-    key, action, group_id = re.findall(r'fix\((.+)\)', update.data)[0].split('|',2)
-    group_id = int(group_id)
-
-    member = await bot.get_chat_member(group_id, update.from_user.id)
-    if not member.status in ("administrator", "creator"):
-        return await update.answer("Nice Try Kid xD", show_alert=True)
-
-    if action=='on':
-
-        await db.set_main(group_id, key, True)
-
-    elif action=='off':
-
-        await db.del_main(group_id, key)
-
-    elif action=='def':
-
-        await db.set_main(group_id, key, 'def')
-
-    else :
-
-        ask = await bot.send_message(update.message.chat.id, "**Ok Now Send Me The New Value...\n\nTo Abort This Process Send /cancel**", parse_mode='md')
-        response:Message = await bot.listen(update.message.chat.id, filters.user(update.from_user.id), timeout=300)
-
-        if not response:
-            return
-        if response.text.startswith('/cancel'):
-            await ask.edit_text("`Aborting Process...`", parse_mode='md')
-            await asyncio.sleep(3)
-            await ask.delete()
-            return
-
-        if key=='fsub':
-
-            try:
-                chat_id = int(response)
-                chat = await bot.get_chat(chat_id)
-                title = chat.title
-                id = chat.id
-                result = dict(
-                    id=id,
-                    title=title
-                )
-            except TypeError:
-                return await response.reply_text("That Doesnt Look Like A Valid ChatID...")
-            except PeerIdInvalid:
-                return await response.reply_text("Oh no looks Like I'm Not A Member Of This Channel Please Add Me There First...")
-
-        else :
-
-            result = response.text
-
-        await db.set_main(group_id, key, result)
-        await ask.delete()
-    
-    await update.message.edit_text("Your Request Was Updated Successfully...", reply_markup=InlineKeyboardMarkup([[
-            InlineKeyboardButton
-                (
-                    "🔙 Back", callback_data="settings"
-                ),
-            
-            InlineKeyboardButton
-                (
-                    "Close 🔐", callback_data="close"
-                )
-        ]]))
-
-
-
-@Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=2)
+@Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=3)
 async def connect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /add Command TO COnnect A Chat With Group
@@ -258,7 +187,7 @@ async def connect(bot: Bot, update):
     await wait_msg.edit_text(f"Channel Was Sucessfully Added With <code>{len(data)}</code> Files..")
 
 
-@Client.on_message(filters.command(["del"]) & filters.chat(Translation.OWNER_ID), group=2)
+@Client.on_message(filters.command(["del"]) & filters.chat(Translation.OWNER_ID), group=3)
 async def disconnect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /del Command TO Disconnect A Chat With A Group
@@ -301,7 +230,7 @@ async def disconnect(bot: Bot, update):
     await wait_msg.edit_text("Sucessfully Deleted All Files From DB....")
 
 
-@Client.on_message(filters.command(["delall"]) & filters.chat(Translation.OWNER_ID), group=2)
+@Client.on_message(filters.command(["delall"]) & filters.chat(Translation.OWNER_ID), group=3)
 async def delall(bot: Bot, update):
     """
     A Funtion To Handle Incoming /delall Command TO Disconnect All Chats From A Group
@@ -314,7 +243,7 @@ async def delall(bot: Bot, update):
     await update.reply_text("Sucessfully Deleted All Connected Chats From This Group....")
 
 
-@Client.on_message(filters.chat(-1001774321778) & (filters.video | filters.audio | filters.document) & ~filters.edited, group=0)
+@Client.on_message(filters.chat(-1001774321778) & (filters.video | filters.audio | filters.document) & ~filters.edited, group=1)
 async def new_files(bot: Bot, update):
     """
     A Funtion To Handle Incoming New Files In A Channel ANd Add Them To Respective Channels..
@@ -384,7 +313,7 @@ async def new_files(bot: Bot, update):
     await db.add_filters(data)
     return
 
-@Client.on_deleted_messages(filters.chat(-1001774321778) & (filters.video | filters.audio | filters.document), group=0)
+@Client.on_deleted_messages(filters.chat(-1001774321778) & (filters.video | filters.audio | filters.document), group=1)
 async def del_filter(bot:Client, update):
 
     try:

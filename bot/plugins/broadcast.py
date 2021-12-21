@@ -1,3 +1,5 @@
+import re
+
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.errors import PeerIdInvalid, UserIsBot
@@ -7,7 +9,7 @@ from bot.translation import Translation
 from pymongo.cursor import Cursor
 
 db = Database()
-@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & filters.chat(Translation.OWNER_ID), group=3)
+@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & filters.chat(Translation.OWNER_ID), group=4)
 async def broadcast_all(bot:Client, update:Message) :
 
     media = False
@@ -58,7 +60,7 @@ async def broadcast_all(bot:Client, update:Message) :
         except Exception as e:
             print(e)
 
-@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & ~filters.channel, group=3)
+@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & ~filters.channel, group=4)
 async def broadcast(bot:Client, update:Message) :
 
     chat_id = update.chat.id
@@ -127,3 +129,33 @@ async def broadcast(bot:Client, update:Message) :
             pass
         except Exception as e:
             print(e)
+
+        await status.edit(f"Completed Broadcast Successfully To {count} Users")
+
+def parser(text):
+
+    pattern = r"(\[([^\[]+?)\]\((url|search):(?:/{0,2})(.+?)\))"
+    total_buttons = []
+
+    for the_buttons in text.split("\n"):
+
+        line_buttons = []
+
+        for button in re.finditer(pattern, the_buttons):
+
+            text = text.replace(button[1], '')
+
+            if button[3]=="url":
+
+                line_buttons.append(InlineKeyboardButton(button[2], url=button[4]))
+                
+            elif button[3]=="search":
+
+                line_buttons.append(InlineKeyboardButton(button[2], switch_inline_query_current_chat=button[4]))
+
+        if len(line_buttons)>0:
+            total_buttons.append(line_buttons)
+
+    if len(total_buttons)<1:
+        total_buttons = False
+    return text, total_buttons

@@ -18,7 +18,7 @@ from bot import Buttons
 
 db = Database()
 
-@Client.on_message(filters.command(["start"]) & filters.private, group=3)
+@Client.on_message(filters.command(["start"]) & filters.private, group=4)
 async def start(bot:Client , update):
 
     add = threading.Thread(target=asyncio.run, args=(db.add_user(update.from_user.id),))
@@ -110,7 +110,7 @@ async def start(bot:Client , update):
     await bot.send_chat_action(update.chat.id, "cancel")
 
 
-@Client.on_message(filters.command(["map"]) & filters.private, group=3)
+@Client.on_message(filters.command(["map"]) & filters.private, group=4)
 async def help(bot, update):
     await bot.send_chat_action(update.chat.id, "typing")
     buttons = Buttons.EN["HELP"]
@@ -128,7 +128,7 @@ async def help(bot, update):
     await bot.send_chat_action(update.chat.id, "cancel")
 
 
-@Client.on_message(filters.command(["about"]) & filters.private, group=3)
+@Client.on_message(filters.command(["about"]) & filters.private, group=4)
 async def about(bot, update):
 
     await bot.send_chat_action(update.message.chat.id, "typing")
@@ -146,7 +146,7 @@ async def about(bot, update):
     )
     await bot.send_chat_action(update.chat.id, "cancel")
 
-@Client.on_message(filters.command("id") & filters.incoming, group=3)
+@Client.on_message(filters.command(["id","id@DoraFilterBot"]) & filters.incoming, group=4)
 async def get_id(bot:Client, update:Message):
 
     chat_id = update.chat.id
@@ -184,7 +184,7 @@ async def get_id(bot:Client, update:Message):
 
     await bot.send_chat_action(update.chat.id, "cancel")
 
-@Client.on_message(filters.command("json") & filters.private, group=3)
+@Client.on_message(filters.command("json","json@DoraFilterBot") & filters.incoming, group=4)
 async def show_json(bot:Client, update:Message):
 
     await bot.send_chat_action(update.chat.id, "typing")
@@ -202,7 +202,7 @@ async def show_json(bot:Client, update:Message):
 
     await bot.send_chat_action(update.chat.id, "cancel")
 
-@Client.on_message(filters.command(["stats", "stats@DoraFilterBot"]), group=3)
+@Client.on_message(filters.command(["stats", "stats@DoraFilterBot"]), group=4)
 async def cb_stats(bot:Client, update):
 
     try:

@@ -104,6 +104,7 @@ class Batch():
 
             channel_id, msg1, msg2 = re.findall(r"^a(.+)a(.+)a(.+)", batch)[0]
             channel_id, msg1, msg2 = (int("-100"+Batch.decode(channel_id)), Batch.decode(msg1), Batch.decode(msg2))
+            count = 0
             for id in range(int(msg1), int(msg2)):
                 try :
                     message = await bot.get_messages(chat_id=int(channel_id), message_ids=id)
@@ -116,7 +117,8 @@ class Batch():
                     if message.reply_markup:
                         btn = message.reply_markup.inline_keyboard
                         if file:
-                            caption = "" if not message.caption.html else message.caption.html
+                            caption = ""
+                            if message.caption : caption = "" if not message.caption.html else message.caption.html
                             await bot.copy_message(
                                 chat_id=user_id,
                                 from_chat_id=int(channel_id),
@@ -150,6 +152,8 @@ class Batch():
                                 message_id=id,
                                 parse_mode="html",
                             )
+                    count+=1
+                    if count>30: return
                 except MessageIdInvalid:
                     pass
                 except PeerIdInvalid:

@@ -330,7 +330,7 @@ def parser(unique_id, reply_text: str, text: str):
     text = reply_text + " \n" + text
     alert_count = 0
 
-    pattern = r"(\[([^\[]+?)\]\((url|alert|search|inline):(?:/{0,2})(.+?)\))"
+    pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline):(?:/{0,2})(.+?)\))"
     total_buttons = []
     alert = []
 
@@ -342,7 +342,7 @@ def parser(unique_id, reply_text: str, text: str):
 
             text = text.replace(button[1], '')
 
-            if button[3]=="url":
+            if button[3]=="url" or button[3]=="buttonurl":
 
                 line_buttons.append(InlineKeyboardButton(button[2], url=button[4]))
 

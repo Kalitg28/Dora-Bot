@@ -202,7 +202,7 @@ async def stop_filter(bot, update: Message):
         await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
         return
 
-    filter = update.text.split()[1]
+    filter = update.text.split(" ", 1)[1]
 
     success = await db.del_mfilter(chat_id, filter)
 
@@ -330,7 +330,7 @@ def parser(unique_id, reply_text: str, text: str):
     text = reply_text + " \n" + text
     alert_count = 0
 
-    pattern = r"(\[([^\[]+?)\]\((url|alert|search):(?:/{0,2})(.+?)\))"
+    pattern = r"(\[([^\[]+?)\]\((url|alert|search|inline):(?:/{0,2})(.+?)\))"
     total_buttons = []
     alert = []
 
@@ -355,6 +355,10 @@ def parser(unique_id, reply_text: str, text: str):
             elif button[3]=="search":
 
                 line_buttons.append(InlineKeyboardButton(button[2], switch_inline_query_current_chat=button[4]))
+
+            elif button[3]=="inline":
+
+                line_buttons.append(InlineKeyboardButton(button[2], switch_inline_query=button[4]))
 
         if len(line_buttons)>0:
             total_buttons.append(line_buttons)

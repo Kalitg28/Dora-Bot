@@ -1,6 +1,7 @@
 import re
 import time
 import asyncio
+import pyrogram
 
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid

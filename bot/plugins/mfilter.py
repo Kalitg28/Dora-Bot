@@ -381,7 +381,7 @@ def parser(unique_id, reply_text: str, text: str):
                 ))
                 alert += alert2
 
-                line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"edit_t({unique_id|edit_count})"))
+                line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"edit_t({unique_id}|{edit_count})"))
                 edit_count += 1
 
                 

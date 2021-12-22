@@ -371,7 +371,7 @@ def parser(unique_id, reply_text: str, text: str):
 
                 text2, total_buttons2, alert2 = edit_parser(
                     unique_id=unique_id,
-                    text=text,
+                    text=button[4],
                     alert_count=alert_count,
                     edit_count=edit_count
                 )

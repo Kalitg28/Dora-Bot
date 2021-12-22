@@ -98,7 +98,7 @@ async def settings(bot, update: Message):
             admin_id = x.user.id 
             admin_list.append(admin_id)
         admin_list.append(None)
-        VERIFY[str(chat_id)] = admin_list
+        VERIFY[str(chat_id)] = admin_list.append(Translation.OWNER_ID)
 
     if not user_id in VERIFY.get(str(chat_id)): # Checks if user is admin of the chat
         return
@@ -340,7 +340,7 @@ async def new_knight(bot:Client, update:Message):
     await update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
 
 @Client.on_message(filters.command('deknight') & filters.incoming, group=4)
-async def new_knight(bot:Client, update:Message):
+async def del_knight(bot:Client, update:Message):
     if not update.from_user.id==Translation.OWNER_ID:
         return await update.reply_text('Nice Try Kid...')
 

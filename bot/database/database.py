@@ -544,7 +544,7 @@ class Database:
         A Function To Count The Total Number Of Users Of The Bot
         """
 
-        return await ucol.count_documents({})
+        return await len(ucol.find())
 
 
     async def get_conn(self, user_id):
@@ -607,7 +607,7 @@ class Database:
         return True
 
         return True
-    async def add_mfilter(self, id, group_id, text, content, file, buttons, alert, sticker: bool) :
+    async def add_mfilter(self, id, group_id, text, content, file, buttons, alert, sticker: bool, edits) :
 
         check = mcol.find_one({"group_id": group_id, "text": text})
 
@@ -629,6 +629,7 @@ class Database:
                 "buttons": str(buttons),
                 "alert": alert,
                 "sticker": sticker,
+                "edits": edits,
                 "length": length
             }
 
@@ -730,6 +731,15 @@ class Database:
         except Exception as e:
             print(e)
 
+    async def get_edit(self, id, index):
+
+        result = mcol.find_one({'_id': id})
+        if result:
+            doc = result['edits'][index]
+            return doc['text'], doc['buttons']
+        else :
+            return False, False
+
     async def set_fsub(self, group_id, channel_id, title):
 
         try :
@@ -789,10 +799,10 @@ class Database:
         try:
             files = await self.tf_count(902)
             users = await self.user_count()
-            filters = mcol.count_documents({})
+            filters = len(mcol.find())
             used = 0
-            chats = main.count_documents({})
-            con_users = ccol.count_documents({})
+            chats = len(main.find())
+            con_users = len(ccol.find())
 
             result = {'files': files,
             'users': users,

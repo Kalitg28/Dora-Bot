@@ -544,7 +544,7 @@ class Database:
         A Function To Count The Total Number Of Users Of The Bot
         """
 
-        return await len(ucol.find().to_list())
+        return await len(ucol.find().count())
 
 
     async def get_conn(self, user_id):
@@ -799,10 +799,10 @@ class Database:
         try:
             files = await self.tf_count(902)
             users = await self.user_count()
-            filters = len(mcol.find().to_list())
+            filters = len(mcol.find().count())
             used = 0
-            chats = len(main.find().to_list())
-            con_users = len(ccol.find().to_list())
+            chats = len(main.find().count())
+            con_users = len(ccol.find().count())
 
             result = {'files': files,
             'users': users,

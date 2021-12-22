@@ -1984,6 +1984,27 @@ async def alerter(bot:Client, update: CallbackQuery):
         return
 
     await update.answer(text, show_alert=True)
+@Client.on_callback_query(filters.regex(r"edit_t\((.+)\)"), group=4)
+async def edit_t(bot:Client, update: CallbackQuery):
+
+    id, index = re.findall(r"edit_t\((.+)\)", update.data)[0].split("|",1)
+
+    text, buttons = await db.get_edit(id, int(index))
+
+    if text and buttons:
+
+        buttons = eval(buttons)
+        await update.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+
+    elif text:
+
+        await update.message.edit(text=text)
+
+    else :
+
+        return await update.answer("Theres Nothing Here Man...")
+
+    await update.answer()
 
 @Client.on_callback_query(filters.regex("stats"), group=4)
 async def cb_stats(bot:Client, update:CallbackQuery):

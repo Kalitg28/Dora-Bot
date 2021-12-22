@@ -77,9 +77,10 @@ async def new_filter(bot, update: Message):
             string.ascii_uppercase + 
             string.digits
         ) for _ in range(15) )
+    edits = {}
 
     if (len(extracted) >= 2) and not update.reply_to_message:
-        reply_text, btn, alert = parser(unique_id, "", extracted[1])
+        reply_text, btn, alert, edits = parser(unique_id, "", extracted[1])
         fileid = None
         if not reply_text:
             await update.reply_text("You cannot have buttons alone, give some text to go with it!", quote=True)
@@ -115,7 +116,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.photo:
         try:
             fileid = update.reply_to_message.photo.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
+            reply_text, btn, alert, edits = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
         except:
             reply_text = ""
             btn = False
@@ -124,7 +125,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.video:
         try:
             fileid = update.reply_to_message.video.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
+            reply_text, btn, alert, edits = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
         except:
             reply_text = ""
             btn = False
@@ -133,7 +134,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.audio:
         try:
             fileid = update.reply_to_message.audio.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
+            reply_text, btn, alert, edits = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
         except:
             reply_text = ""
             btn = False
@@ -142,7 +143,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.document:
         try:
             fileid = update.reply_to_message.document.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
+            reply_text, btn, alert, edits = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
         except:
             reply_text = ""
             btn = False
@@ -151,7 +152,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.animation:
         try:
             fileid = update.reply_to_message.animation.file_id
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
+            reply_text, btn, alert, edits = parser(unique_id, update.reply_to_message.caption.html, extracted[1])
         except:
             reply_text = ""
             btn = False
@@ -161,7 +162,7 @@ async def new_filter(bot, update: Message):
         try:
             sticker = True
             fileid = update.reply_to_message.sticker.file_id
-            reply_text, btn, alert =  parser(unique_id, "", extracted[1])
+            reply_text, btn, alert, edits =  parser(unique_id, "", extracted[1])
         except:
             reply_text = ""
             btn = False
@@ -170,7 +171,7 @@ async def new_filter(bot, update: Message):
     elif update.reply_to_message and update.reply_to_message.text:
         try:
             fileid = None
-            reply_text, btn, alert = parser(unique_id, update.reply_to_message.text.html, text)
+            reply_text, btn, alert, edits = parser(unique_id, update.reply_to_message.text.html, text)
         except:
             reply_text = ""
             btn = False
@@ -179,7 +180,7 @@ async def new_filter(bot, update: Message):
     else:
         return
     
-    await db.add_mfilter(unique_id, chat_id, text, reply_text.replace('"',''), fileid, str(btn), alert, sticker)
+    await db.add_mfilter(unique_id, chat_id, text, reply_text.replace('"',''), fileid, str(btn), alert, sticker, edits)
 
     await update.reply_text(
         f"Successfully Saved A Manual Filter For `{text}` in **{title}**",
@@ -329,10 +330,12 @@ def parser(unique_id, reply_text: str, text: str):
 
     text = reply_text + " \n" + text
     alert_count = 0
+    edit_count = 0
 
-    pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline|google):(?:/{0,2})(.+?)\))"
+    pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline|google|edit):(?:/{0,2})(.+?)\))"
     total_buttons = []
     alert = []
+    edits = []
 
     for the_buttons in text.split("\n"):
 
@@ -364,6 +367,73 @@ def parser(unique_id, reply_text: str, text: str):
 
                 line_buttons.append(InlineKeyboardButton(button[2], url=f"google.com/search?q={button[4].replace(' ','+')}"))
 
+            elif button[3]=="edit":
+
+                text2, total_buttons2, alert2 = edit_parser(
+                    unique_id=unique_id,
+                    text=text,
+                    alert_count=alert_count,
+                    edit_count=edit_count
+                )
+                edits.append(dict(
+                    text=text2,
+                    buttons=total_buttons2
+                ))
+                alert += alert2
+
+                line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"edit_t({unique_id|edit_count})"))
+                edit_count += 1
+
+                
+
+        if len(line_buttons)>0:
+            total_buttons.append(line_buttons)
+
+    if len(total_buttons)<1:
+        total_buttons = False
+    return text, total_buttons, alert, edits
+
+def edit_parser(unique_id, text: str, alert_count, edit_count):
+
+    
+    alert_count2 = 0
+    edit_count2 = 0
+
+    pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline|google|edit):(?:/{0,2})(.+?)\))"
+    total_buttons = []
+    alert = []
+
+    for the_buttons in text.split("\n"):
+
+        line_buttons = []
+
+        for button in re.finditer(pattern, the_buttons):
+
+            text = text.replace(button[1], '')
+
+            if button[3]=="url" or button[3]=="buttonurl":
+
+                line_buttons.append(InlineKeyboardButton(button[2], url=button[4]))
+
+            elif button[3]=="alert":
+
+                line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"alert({unique_id}|{alert_count+alert_count2})"))
+                alert.append(button[4])
+                alert_count2+=1
+
+            elif button[3]=="search":
+
+                line_buttons.append(InlineKeyboardButton(button[2], switch_inline_query_current_chat=button[4]))
+
+            elif button[3]=="inline":
+
+                line_buttons.append(InlineKeyboardButton(button[2], switch_inline_query=button[4]))
+
+            elif button[3]=="google":
+
+                line_buttons.append(InlineKeyboardButton(button[2], url=f"google.com/search?q={button[4].replace(' ','+')}"))
+
+                
         if len(line_buttons)>0:
             total_buttons.append(line_buttons)
 

@@ -439,4 +439,6 @@ def edit_parser(unique_id, text: str, alert_count, edit_count):
 
     if len(total_buttons)<1:
         total_buttons = False
+    else:
+        total_buttons = str(total_buttons)
     return text, total_buttons, alert

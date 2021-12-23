@@ -215,14 +215,23 @@ async def cb_stats(bot:Client, update):
     except Exception as e:
         print(e)
 
-@Client.on_message(filters.command('autofilter') & filters.group, group=4)
+@Client.on_message(filters.command('autofilter'), group=4)
 async def toggle_af(bot:Client, update:Message):
     '''
     A Function to toggle AutoFilter Mode
     '''
-
     user_id = update.from_user.id
     chat_id = update.chat.id
+    chat_type = update.chat.type
+
+    if chat_type=="private":
+
+        chat_id = await db.get_conn(chat_id)
+
+    if not chat_id:
+
+        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
+        return
 
     member = await bot.get_chat_member(chat_id, user_id)
     if not member.status in ('administrator','creator'):

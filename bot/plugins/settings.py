@@ -98,7 +98,8 @@ async def settings(bot, update: Message):
             admin_id = x.user.id 
             admin_list.append(admin_id)
         admin_list.append(None)
-        VERIFY[str(chat_id)] = admin_list.append(Translation.OWNER_ID)
+        admin_list.append(Translation.OWNER_ID)
+        VERIFY[str(chat_id)] = admin_list
 
     if not user_id in VERIFY.get(str(chat_id)): # Checks if user is admin of the chat
         return

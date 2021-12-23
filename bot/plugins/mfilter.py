@@ -331,6 +331,32 @@ def parser(unique_id, reply_text: str, text: str):
     text = reply_text + " \n" + text
     alert_count = 0
     edit_count = 0
+    processed_list = []
+
+    if "(edit:" in text:
+        chunk = text
+        while "(edit:" in chunk:
+            index = text.index("(edit:")+6
+            chunk = text[index:]
+            bracks = 1
+            end_index = index
+
+            for chr in chunk:
+
+                if bracks<1:
+                    break
+            
+                if chr=='(':
+                    bracks+=1
+                elif chr==')':
+                    bracks-=1
+                end_index+=1
+        
+            processed = text[index:end_index]
+            text = text.replace(processed,'def')
+            processed_list.append(processed)
+
+
 
     pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline|google|edit):(?:/{0,2})(.+?)\))"
     total_buttons = []
@@ -371,7 +397,7 @@ def parser(unique_id, reply_text: str, text: str):
 
                 text2, total_buttons2, alert2 = edit_parser(
                     unique_id=unique_id,
-                    text=button[4] if not '(' in button[4] else button[4]+')',
+                    text=processed_list[edit_count],
                     alert_count=alert_count,
                     edit_count=edit_count
                 )

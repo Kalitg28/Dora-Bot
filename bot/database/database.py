@@ -797,8 +797,8 @@ class Database:
     async def get_stats(self):
 
         try:
-            files = await self.tf_count(902)
-            users = await self.user_count()
+            files = self.tf_count(902)
+            users = self.user_count()
             filters = mcol.find().count()
             used = 0
             chats = main.find().count()

@@ -30,6 +30,7 @@ async def auto_filter(bot, update:Message):
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
     """
     chat_id = update.chat.id
+    print(chat_id)
 
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):
         return

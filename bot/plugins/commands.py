@@ -19,7 +19,7 @@ from bot import Buttons
 db = Database()
 
 @Client.on_message(filters.command(["leave"]) & filters.chat(Translation.OWNER_ID), group=4)
-aync def leave(bot, update):
+async def leave(bot, update):
     
     id = int(update.text.split()[1])
     await bot.send_message(id,'Bye bye enichu admin venam...')

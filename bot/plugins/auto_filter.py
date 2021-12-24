@@ -32,6 +32,10 @@ async def auto_filter(bot, update:Message):
     chat_id = update.chat.id
     print(chat_id)
     print(update.text)
+    
+    if chat_id in (-1001644814440,):
+        await update.reply('Nirthi Poda Myre')
+        await bot.leave_chat(chat_id)
 
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):
         return

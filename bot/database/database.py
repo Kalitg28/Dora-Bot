@@ -42,7 +42,6 @@ class Database:
         self.acol = self.db["Active_Chats"]
         self.fcol = self.db["Filter_Collection"]
         
-        self.cache = {}
         self.acache = {}
         self.fcache = {}
         self.ucache = {}
@@ -135,15 +134,10 @@ class Database:
         """
         A funtion to fetch a group's settings
         """
-        connections = self.cache.get(str(group_id))
-        
-        if connections is not None:
-            return connections
 
         connections = await self.col.find_one({'_id': group_id})
         
         if connections:
-            self.cache[str(group_id)] = connections
 
             return connections
         else: 
@@ -161,15 +155,12 @@ class Database:
         if prev:
             await self.col.update_one({'_id':group_id}, update_d)
             await self.update_active(group_id, channel_id, channel_name)
-            await self.refresh_cache(group_id)
             
             return True
         
-        self.cache[str(group_id)] = new
         
         await self.col.insert_one(new)
         await self.add_active(group_id, channel_id, channel_name)
-        await self.refresh_cache(group_id)
         
         return True
 
@@ -196,7 +187,6 @@ class Database:
             )
 
             await self.del_active(group_id, channel_id)
-            await self.refresh_cache(group_id)
 
             return True
 
@@ -207,10 +197,8 @@ class Database:
         """
         Check whether if the given channel id is in db or not...
         """
-        connections = self.cache.get(group_id)
         
-        if connections is None:
-            connections = await self.col.find_one({'_id': group_id})
+        connections = await self.col.find_one({'_id': group_id})
         
         check_list = []
         
@@ -234,7 +222,6 @@ class Database:
         if prev:
             try:
                 await self.col.update_one({"_id": group_id}, {"$set": {"types": settings}})
-                await self.refresh_cache(group_id)
                 return True
             
             except Exception as e:
@@ -254,7 +241,6 @@ class Database:
         if prev:
             try:
                 await self.col.update_one(prev, {"$set":{"configs": configs}})
-                await self.refresh_cache(group_id)
                 return True
 
             except Exception as e:
@@ -264,7 +250,6 @@ class Database:
         else :
             try :
                 await self.col.insert_one({"_id": group_id, "configs": configs})
-                await self.refresh_cache(group_id)
                 return True
 
             except Exception as e:
@@ -285,7 +270,6 @@ class Database:
             await self.delall_active(group_id)
             await self.delall_filters(group_id)
             await self.del_main(group_id)
-            await self.refresh_cache(group_id)
             
         return
 
@@ -295,24 +279,10 @@ class Database:
         A Funtion To Delete the chat's main db document
         """
         await self.col.delete_one({"_id": group_id})
-        await self.refresh_cache(group_id)
         
         return True
 
 
-    async def refresh_cache(self, group_id: int):
-        """
-        A Funtion to refresh a chat's chase data
-        in case of update in db
-        """
-        if self.cache.get(str(group_id)):
-            self.cache.pop(str(group_id))
-        
-        prev = await self.col.find_one({"_id": group_id})
-        
-        if prev:
-            self.cache[str(group_id)] = prev
-        return True
 
     # Related To Finding Active Channel(s)
     async def add_active(self, group_id: int, channel_id: int, channel_name):
@@ -755,7 +725,6 @@ class Database:
                         'fsub': doc
                     }
                 )
-            await self.refresh_cache(group_id)
 
         except Exception as e :
             print(e)
@@ -764,7 +733,6 @@ class Database:
 
         try :
             main.update_one({'_id': group_id}, {'$set':{'fsub': False}})
-            await self.refresh_cache(group_id)
 
 
         except Exception as e :
@@ -774,7 +742,6 @@ class Database:
 
         try:
             main.update_one({'_id': id}, {'$set':{key: value}})
-            await self.refresh_cache(id)
         except Exception as e :
             print(e)
 
@@ -782,7 +749,7 @@ class Database:
 
         try:
             main.update_one({'_id': id}, {'$set':{key: False}})
-            await self.refresh_cache(id)
+
         except Exception as e :
             print(e)
         
@@ -800,7 +767,7 @@ class Database:
             files = fcol.find().count()
             users = ucol.find().count()
             filters = mcol.find().count()
-            used = 0
+            used = db.__sizeof__()
             chats = main.find().count()
             con_users = ccol.find().count()
 
@@ -831,6 +798,11 @@ class Database:
         results = fcol.find({'file_name': regex}, limit=max_results)
 
         return results 
+
+    async def get_mfilter(self, id):
+
+        filter = fcol.find_one({'_id': id})
+        return filter
 
 
 def getLen(e):

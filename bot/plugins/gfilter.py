@@ -113,7 +113,8 @@ async def stopglobal(bot, update: Message):
     keyword = splitted[1] 
 
     globals = await db.all_mfilter(902)
-    prev = await db.find_chat(chat_id).get('stopped',[])
+    settings = await db.find_chat(chat_id)
+    prev = settings.get('stopped',[])
 
     if keyword in prev:
         return await update.reply_text("You've Already Stopped This Filter In This Chat...")
@@ -154,7 +155,8 @@ async def startglobal(bot, update: Message):
     keyword = splitted[1] 
 
     globals = await db.all_mfilter(902)
-    prev:list = await db.find_chat(chat_id).get('stopped',[])
+    settings = await db.find_chat(chat_id)
+    prev = settings.get('stopped',[])
 
     if not keyword in prev:
         return await update.reply_text("You've Already Started This Filter In This Chat...")

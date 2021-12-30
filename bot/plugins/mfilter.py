@@ -335,9 +335,11 @@ def parser(unique_id, reply_text: str, text: str):
 
     if "(edit:" in text:
         chunk = text
+        new_text = text
         while "(edit:" in chunk:
-            index = text.index("(edit:")+6
-            chunk = text[index:]
+            index = new_text.index("(edit:")+6
+            chunk = new_text[index:]
+            new_text = chunk
             bracks = 1
             end_index = index
 
@@ -356,6 +358,9 @@ def parser(unique_id, reply_text: str, text: str):
             text = text.replace(processed,'def')
             processed_list.append(processed)
             chunk = chunk.replace(processed, '')
+            print('looping')
+
+        print('exited loop')
 
 
 

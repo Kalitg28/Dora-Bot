@@ -1956,14 +1956,14 @@ async def edit_caption(bot:Client, update: CallbackQuery):
     await bot.send_chat_action(update.message.chat.id, "typing")
     await update.answer()
 
-    loading = await bot.send_message(update.message.chat.id, "◌ ◌ ◌")
-    await asyncio.sleep(0.25)
-    await loading.edit("● ◌ ◌")
-    await asyncio.sleep(0.25)
-    await loading.edit("● ● ◌")
-    await asyncio.sleep(0.25)
-    await loading.edit("● ● ●")
-    await asyncio.sleep(0.25)
+    loading = await bot.send_message(update.message.chat.id, "⭗ ⭗ ⭗")
+    await asyncio.sleep(0.20)
+    await loading.edit("⦿ ⭗ ⭗")
+    await asyncio.sleep(0.20)
+    await loading.edit("⦿ ⦿ ⭗")
+    await asyncio.sleep(0.20)
+    await loading.edit("⦿ ⦿ ⦿")
+    await asyncio.sleep(0.20)
     await loading.delete()
 
     if STRING=="FORMAT":
@@ -2007,6 +2007,30 @@ async def edit_t(bot:Client, update: CallbackQuery):
 
     await update.answer()
 
+@Client.on_callback_query(filters.regex(r"edit_m\((.+)\)"), group=4)
+async def edit_m(bot:Client, update: CallbackQuery):
+
+    id = re.findall(r"edit_m\((.+)\)", update.data)[0]
+
+    filter = await db.get_mfilter(id)
+    text = filter.get('text', 'null')
+    buttons = filter.get('buttons', None)
+
+    if text and buttons:
+
+        buttons = eval(buttons)
+        await update.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+
+    elif text:
+
+        await update.message.edit(text=text)
+
+    else :
+
+        return await update.answer("Theres Nothing Here Man...")
+
+    await update.answer()
+
 @Client.on_callback_query(filters.regex("stats"), group=4)
 async def cb_stats(bot:Client, update:CallbackQuery):
 
@@ -2019,6 +2043,11 @@ async def cb_stats(bot:Client, update:CallbackQuery):
         )
     except Exception as e:
         print(e)
+    
+@Client.on_callback_query(filters.regex("ignore"), group=4)
+async def ignore(bot:Client, update:CallbackQuery):
+
+    await update.answer("You Have Hit A Wall 💥🧱🚗", show_alert=True)
 
 def time_formatter(seconds: float) -> str:
     """ 

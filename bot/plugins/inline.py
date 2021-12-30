@@ -51,7 +51,7 @@ async def all_imdb(query):
                 if len(movie)<1: return False
 
                 url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))
-                caption = f"        <b><u>{movie.get('localized title', ' ')}</b></u>\n"
+                caption = f"        <b><u>{movie.get('title', ' ')}</b></u>\n"
 
                 rating = movie.get("rating", None)
                 if rating :
@@ -88,6 +88,10 @@ async def all_imdb(query):
                 plot = movie.get("plot", None)
                 if plot:
                     caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{plot[0]}</code>"
+
+                directors = movie.get("directors", None)
+                if directors:
+                    caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{directors}</code>"
                 
                 year = movie.get("year", "")
                 
@@ -95,7 +99,7 @@ async def all_imdb(query):
                 Product.append(InlineQueryResultPhoto(
                     photo_url=url,
                     thumb_url=url,
-                    title=movie.get("localized title","") + f" {year}",
+                    title=movie.get("title","") + f" {year}",
                     caption=caption,
                     reply_markup=InlineKeyboardMarkup(buttons),
                     parse_mode='html'

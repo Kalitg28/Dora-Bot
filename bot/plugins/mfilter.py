@@ -355,10 +355,11 @@ def parser(unique_id, reply_text: str, text: str):
             processed = text[index:end_index-1]
             text = text.replace(processed,'def')
             processed_list.append(processed)
+            chunk = chunk.replace(processed, '')
 
 
 
-    pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline|google|edit):(?:/{0,2})(.+?)\))"
+    pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline|google|edit|home):(?:/{0,2})(.+?)\))"
     total_buttons = []
     alert = []
     edits = []
@@ -410,6 +411,10 @@ def parser(unique_id, reply_text: str, text: str):
                 line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"edit_t({unique_id}|{edit_count})"))
                 edit_count += 1
 
+            elif button[3]=='home':
+
+                line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"edit_m({unique_id})"))
+
                 
 
         if len(line_buttons)>0:
@@ -458,6 +463,10 @@ def edit_parser(unique_id, text: str, alert_count, edit_count):
             elif button[3]=="google":
 
                 line_buttons.append(InlineKeyboardButton(button[2], url=f"google.com/search?q={button[4].replace(' ','+')}"))
+
+            elif button[3]=='home':
+
+                line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"edit_m({unique_id})"))
 
                 
         if len(line_buttons)>0:

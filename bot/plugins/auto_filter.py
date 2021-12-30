@@ -25,17 +25,11 @@ ACTIVE_CHATS = {}
 db = Database()
 
 @Bot.on_message(filters.text & filters.group & ~filters.bot, group=0)
-async def auto_filter(bot, update:Message):
+async def auto_filter(bot:Client, update:Message):
     """
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
     """
     chat_id = update.chat.id
-    print(chat_id)
-    print(update.text)
-    
-    if chat_id in (-1001644814440,):
-        await update.reply('Nirthi Poda Myre')
-        await bot.leave_chat(chat_id)
 
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):
         return
@@ -213,14 +207,14 @@ async def auto_filter(bot, update:Message):
         if not movie_info :
 
             await update.reply_text(
-                text=f"<b>Heres What I Found In My Database For <code>{update.text}</code></b>",
+                text=f"<b>I've Found {len_results} Results For Your Query <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
             return
         elif movie_info["full-size cover url"]=="Unknown":
             await update.reply_text(
-                text=f"<b>Heres What I Found In My Database For <code>{update.text}</code></b>",
+                text=f"<b>I've Found {len_results} Results For Your Query <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
@@ -263,7 +257,7 @@ async def auto_filter(bot, update:Message):
 
         print(update.chat.title)
 
-        
+
 
 @Client.on_message(filters.command('search'), group=4)
 async def media_search(bot:Client, update:Message):

@@ -49,7 +49,7 @@ async def fix_value(bot:Client, update:CallbackQuery):
         if key=='fsub':
 
             try:
-                chat_id = int(response)
+                chat_id = int(response.text)
                 chat = await bot.get_chat(chat_id)
                 title = chat.title
                 id = chat.id

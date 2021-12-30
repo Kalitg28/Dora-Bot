@@ -90,8 +90,8 @@ async def all_imdb(query):
                     caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{plot[0]}</code>"
 
                 directors = movie.get("directors", None)
-                if directors:
-                    caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{directors}</code>"
+                #if directors:
+                 #   caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{directors}</code>"
                 
                 year = movie.get("year", "")
                 

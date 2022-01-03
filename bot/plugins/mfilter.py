@@ -334,12 +334,12 @@ def parser(unique_id, reply_text: str, text: str):
     processed_list = []
 
     if "(edit:" in text:
-        chunk = text
-        new_text = text
+        control = text
+        
         while "(edit:" in chunk:
-            index = new_text.index("(edit:")+6
-            chunk = new_text[index:]
-            new_text = chunk
+            index = control.index("(edit:")+6
+            control = control[index:]
+            chunk = control
             bracks = 1
             end_index = index
 
@@ -354,13 +354,10 @@ def parser(unique_id, reply_text: str, text: str):
                     bracks-=1
                 end_index+=1
         
-            processed = text[index:end_index-1]
+            processed = chunk[index:end_index-1]
             text = text.replace(processed,'def')
             processed_list.append(processed)
             chunk = chunk.replace(processed, '')
-            print('looping')
-
-        print('exited loop')
 
 
 
@@ -435,7 +432,7 @@ def edit_parser(unique_id, text: str, alert_count, edit_count):
     alert_count2 = 0
     edit_count2 = 0
 
-    pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline|google|edit):(?:/{0,2})(.+?)\))"
+    pattern = r"(\[([^\[]+?)\]\((buttonurl|url|alert|search|inline|google|edit|home):(?:/{0,2})(.+?)\))"
     total_buttons = []
     alert = []
 
@@ -443,7 +440,7 @@ def edit_parser(unique_id, text: str, alert_count, edit_count):
 
         line_buttons = []
 
-        for button in re.finditer(pattern, the_buttons):
+        for button in re.finditer(pattern, the_buttons, flags=re.IGNORECASE):
 
             text = text.replace(button[1], '')
 
@@ -473,6 +470,9 @@ def edit_parser(unique_id, text: str, alert_count, edit_count):
 
                 line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"edit_m({unique_id})"))
 
+            elif button[3]=='home':
+
+                line_buttons.append(InlineKeyboardButton(button[2], callback_data=f"edit_m({unique_id})"))
                 
         if len(line_buttons)>0:
             total_buttons.append(line_buttons)

@@ -6,3 +6,4 @@ Requests
 TgCrypto
 IMDbPY
 Pyromod
+https://github.com/MrPurple902/tpb-lite/archive/master.zip

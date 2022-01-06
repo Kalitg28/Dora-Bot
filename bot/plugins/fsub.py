@@ -1,4 +1,6 @@
 import re
+from tpblite import TPB
+from tpblite.models.constants import CATEGORIES 
 
 from pyrogram.types.bots_and_keyboards.callback_query import CallbackQuery
 from pyromod import listen
@@ -10,6 +12,7 @@ from bot.database import Database
 from bot import VERIFY
 
 db = Database()
+hmm = TPB()
 
 @Client.on_callback_query(filters.regex(r'fsub\((.+)\)'), group=3)
 async def fsub(bot:Client, update:CallbackQuery):
@@ -38,3 +41,11 @@ async def fsub(bot:Client, update:CallbackQuery):
         ])
 
     await update.message.edit_text("Use The Buttons Below To Change Or Add A Fsub Channel...", reply_markup=InlineKeyboardMarkup(buttons))
+    
+    @Client.on_message(filters.command('leech'))
+    async def leecher(bot, update):
+        
+        top = hmm.top(category=CATEGORIES.VIDEO.HD_MOVIES)
+        await update.reply(str(top))
+        prof = hmm.profile('sotnikam')
+        await update.reply(str(prof))

@@ -43,8 +43,7 @@ async def fsub(bot:Client, update:CallbackQuery):
     await update.message.edit_text("Use The Buttons Below To Change Or Add A Fsub Channel...", reply_markup=InlineKeyboardMarkup(buttons))
     
 @Client.on_message(filters.command('leech'), group=3)
-async def leecher(bot, update):
-        
+async def leecher(bot, update):        
         top = hmm.top(category=CATEGORIES.VIDEO.HD_MOVIES)
         await update.reply(str(top))
         prof = hmm.profile('sotnikam')

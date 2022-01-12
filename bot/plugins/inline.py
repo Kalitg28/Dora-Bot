@@ -40,6 +40,11 @@ async def all_imdb(query):
 
      query = query.strip()
      print(query)
+     post = False
+
+     if "post:" in query:
+         query = query.replace("post:",'')
+         post = True
 
      results = searcher.search_movie(query, results=5)
      Product = []
@@ -85,17 +90,21 @@ async def all_imdb(query):
                     except Exception as e:
                         print(e)
 
+                directors = movie.get("director", None)
+                if directors:
+                    caption+=f"\n\n🎩 <b>Directors :</b> <code>{directors}</code>"
+
                 plot = movie.get("plot", None)
                 if plot:
-                    caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{plot[0]}</code>"
+                    caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{plot[0]}</code>..." 
 
-                directors = movie.get("directors", None)
-                #if directors:
-                 #   caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{directors}</code>"
+                caption+=f"<a href='https://imdb.com/title/tt/{movie.movieID}'>Read More...</a>"
+
+                if post : caption+="\n\nBy @DM_Linkz"
                 
                 year = movie.get("year", "")
                 
-                buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]]
+                buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]] if not post else [[InlineKeyboardButton("Join For More..", url="https://t.me/DM_Linkz")]]
                 Product.append(InlineQueryResultPhoto(
                     photo_url=url,
                     thumb_url=url,

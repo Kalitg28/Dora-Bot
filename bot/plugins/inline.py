@@ -60,7 +60,7 @@ async def all_imdb(query):
 
                 rating = movie.get("rating", None)
                 if rating :
-                  caption+=f"\n🌟 <b>Rating</b> : {rating}"
+                  caption+=f"\n🌟 <b>Rating</b> : {rating} / 10.0"
                
                 votes = movie.get("votes", None)
                 if votes:
@@ -92,7 +92,7 @@ async def all_imdb(query):
 
                 directors = movie.get("director", None)
                 if directors:
-                    caption+=f"\n\n🎩 <b>Directors :</b> <code>{directors[0]}</code>"
+                    caption+=f""""\n🎩 <b>Directors :</b> {str(directors).replace('[','').replace(']','').replace("'",'')}"""
 
                 plot = movie.get("plot", None)
                 if plot:

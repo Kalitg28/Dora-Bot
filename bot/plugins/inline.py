@@ -92,15 +92,15 @@ async def all_imdb(query):
 
                 directors = movie.get("director", None)
                 if directors:
-                    caption+=f"\n\n🎩 <b>Directors :</b> <code>{directors}</code>"
+                    caption+=f"\n\n🎩 <b>Directors :</b> <code>{directors[0]}</code>"
 
                 plot = movie.get("plot", None)
                 if plot:
-                    caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{plot[0]}</code>..." 
+                    caption+=f"\n\n🗺️ <b>Storyline :</b> <code>{plot[0]}...</code>" 
 
-                caption+=f"<a href='https://imdb.com/title/tt/{movie.movieID}'>Read More...</a>"
+                caption+=f"\n<a href='https://imdb.com/title/tt/{movie.movieID}'>Read More...</a>"
 
-                if post : caption+="\n\nBy @DM_Linkz"
+                if post : caption+="\n\n<b>🅒 Powered By @DM_Linkz</b>"
                 
                 year = movie.get("year", "")
                 

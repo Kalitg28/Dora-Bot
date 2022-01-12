@@ -22,7 +22,7 @@ class Helpers() :
     info = ["localized title", "rating", "votes", "genres", "runtimes", "original air date", "full-size cover url", "kind"]
 
     global IMDB
-    movies = searcher.search_movie(my_movie, results=2)
+    movies = searcher.search_movie(my_movie, results=1)
     if len(movies)<1:
         IMDB[my_movie] = False
         return
@@ -88,7 +88,12 @@ class Helpers() :
  async def all_imdb(query):
 
      print(query)
-     results = searcher.search_movie(query, results=10)
+     post = False
+     query2 = query
+     if query.startswith("post:"): 
+         query2 = query.replace("post:",'') 
+         post = True
+     results = searcher.search_movie(query2, results=5)
      Product = []
      try:
           if len(results)<1: return False
@@ -134,15 +139,19 @@ class Helpers() :
 
                 plot = movie.get("plot", None)
                 if plot:
-                    caption+=f"🗺️ Storyline : {plot[0]}"
+                    caption+=f"🗺️ <b>Storyline</b> : <code>{plot[0]}</code>..."
+
+                caption+=f"<a href='https://imdb.com/title/tt/{movie.movieID}'>Read More...</a>"
+
+                if post : caption+="\n\nBy @DM_Linkz"
                 
                 year = movie.get("year", "")
                 
-                buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]]
+                buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]] if not post else [[InlineKeyboardButton("Join For More..", url="https://t.me/DM_Linkz")]]
                 Product.append(InlineQueryResultPhoto(
                     photo_url=url,
                     thumb_url=url,
-                    title=movie.get("localized title","") + f" {year}",
+                    title=movie.get("title","") + f" {year}",
                     caption=caption,
                     reply_markup=InlineKeyboardMarkup(buttons)
                 ))

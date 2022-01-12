@@ -89,9 +89,9 @@ class Helpers() :
 
      print(query)
      post = False
-     query2 = query
-     if query.startswith("post:"): 
-         query2 = query.replace("post:",'') 
+     query2 = query.query
+     if query.query.startswith("post:"): 
+         query2 = query.query.replace("post:",'') 
          post = True
      results = searcher.search_movie(query2, results=5)
      Product = []

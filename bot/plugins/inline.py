@@ -92,7 +92,7 @@ async def all_imdb(query):
 
                 directors = movie.get("director", None)
                 if directors:
-                    caption+=f""""\n🎩 <b>Directors :</b> {str(directors).replace('[','').replace(']','').replace("'",'')}"""
+                    caption+=f"\n🎩 <b>Director :</b> <code>{directors[0]}</code>"
 
                 plot = movie.get("plot", None)
                 if plot:

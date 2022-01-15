@@ -76,7 +76,7 @@ async def pv_settings(bot, update):
         )
 
 
-@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=4)
+@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming,prefixes=['!','/'], group=4)
 async def settings(bot, update: Message):
     
     chat_id = update.chat.id

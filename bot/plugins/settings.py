@@ -15,7 +15,7 @@ from bot import VERIFY # pylint: disable=import-error
 
 db = Database()
 
-@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=4)
+@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID),prefixes=['!','/'], group=4)
 async def pv_settings(bot, update):
     
     chat_id = 902

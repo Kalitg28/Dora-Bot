@@ -569,7 +569,6 @@ class Database:
              ccol.delete_one({"_id": user_id})
         except Exception as e :
             return False
-            print(e)
 
         if self.ucache.get(str(user_id)):
 
@@ -577,6 +576,10 @@ class Database:
         return True
 
         return True
+
+    async def all_connected():
+        return ccol.find()
+
     async def add_mfilter(self, id, group_id, text, content, file, buttons, alert, sticker: bool, edits) :
 
         check = mcol.find_one({"group_id": group_id, "text": text})
@@ -741,7 +744,14 @@ class Database:
     async def set_main(self, id, key, value):
 
         try:
-            main.update_one({'_id': id}, {'$set':{key: value}})
+            if main.find_one({'_id': id}):
+                main.update_one({'_id': id}, {'$set':{key: value}})
+            else :
+                main.insert_one(
+                   { '_id': id,
+                    'configs': def_config,
+                    key: value}
+                )
         except Exception as e :
             print(e)
 
@@ -795,7 +805,7 @@ class Database:
         pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
         regex = re.compile(pattern, flags=re.IGNORECASE)
 
-        results = fcol.find({'file_name': regex}, limit=max_results)
+        results = fcol.find({'file_name': regex}, limit=max_results, reverse=True)
 
         return results 
 

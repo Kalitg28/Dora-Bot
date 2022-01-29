@@ -805,7 +805,7 @@ class Database:
         pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
         regex = re.compile(pattern, flags=re.IGNORECASE)
 
-        results = fcol.find({'file_name': regex}, limit=max_results, reverse=True)
+        results = fcol.find({'file_name': regex}, limit=max_results)
 
         return results 
 

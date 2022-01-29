@@ -15,6 +15,7 @@ db = Database()
 async def fix_value(bot:Client, update:CallbackQuery):
 
     key, action, group_id = re.findall(r'fix\((.+)\)', update.data)[0].split('|',2)
+    await update.answer()
     group_id = int(group_id)
 
     member = await bot.get_chat_member(group_id, update.from_user.id)
@@ -256,3 +257,32 @@ async def spell_check(bot:Client, update:CallbackQuery):
         ])
 
     await update.message.edit_text("Use The Buttons Below To Change Or Add A Spell Check Message...", reply_markup=InlineKeyboardMarkup(buttons))
+
+@Client.on_callback_query(filters.regex(r'gen_link\((.+)\)'), group=4)
+async def privat_link_gen(bot:Client, update:CallbackQuery):
+
+    try:
+
+        group_id = re.findall(r'gen_link\((.+)\)', update.data)[0]
+        group_id = int(group_id)
+        member = await bot.get_chat_member(group_id, update.from_user.id)
+        if not member.status in ("administrator", "creator"):
+            return await update.answer("Nice Try Kid xD", show_alert=True)
+
+        try :
+            count = await bot.get_chat_members_count(group_id)
+        except :
+            count = 0
+        if count < 50:
+            return await update.answer(f"You Have To Adminsitrate A Group With Atleast 50 Memebers To Use This Feature :(") 
+        else:
+            link = await bot.create_chat_invite_link(-1001547869793)
+            try:
+                await bot.send_message(update.from_user.id, f"Use This Link To Join The Channel : {link.invite_link}\n\nIt Will Be Revoked Soon So Hurry")
+                await update.answer("I've PM The Link To Channel In PM :)")
+            except :
+                return await update.answer("Please Start Or Unblock Me First :(")
+
+    except Exception as e:
+
+        await update.answer(str(e), show_alert=True)

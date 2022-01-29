@@ -254,7 +254,7 @@ async def cb_settings(bot, update: CallbackQuery):
 
     text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
 
-    text+=f"\n- Size Button: {'Enabled ✅' if g_filter else 'Disabled ❌'}\n"
+    text+=f"\n- Size Button: {'Enabled ✅' if size_button else 'Disabled ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -341,6 +341,15 @@ async def cb_settings(bot, update: CallbackQuery):
                 (
                     "🎯 Result's Accuracy 🎯", callback_data=f"accuracy({accuracy_point}|{chat_id})"
                 )
+        ]
+    )
+
+    buttons.append(
+        [
+            InlineKeyboardButton
+            (
+                "Add Your Own Files", callback_data=f"gen_link({chat_id})"
+            )
         ]
     )
 

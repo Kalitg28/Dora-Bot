@@ -143,3 +143,62 @@ async def delspell(bot:Client, update:Message):
 
     await db.del_main(int(chat_id), "noresult")
     await update.reply("Your Request Was Updated Successfully", quote=True)
+
+@Client.on_message(filters.command('autofilter'), group=4)
+async def toggle_af(bot:Client, update:Message):
+    '''
+    A Function to toggle AutoFilter Mode
+    '''
+    user_id = update.from_user.id
+    chat_id = update.chat.id
+    chat_type = update.chat.type
+
+    if chat_type=="private":
+
+        chat_id = await db.get_conn(chat_id)
+
+    if not chat_id:
+
+        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
+        return
+
+    member = await bot.get_chat_member(chat_id, user_id)
+    if not member.status in ('administrator','creator'):
+        return #Return if User Isnt Admin
+
+    prev = await db.find_chat(chat_id)
+
+    accuracy = float(prev["configs"].get("accuracy", 0.70))
+    max_pages = int(prev["configs"].get("max_pages"))
+    max_results = int(prev["configs"].get("max_results"))
+    max_per_page = int(prev["configs"].get("max_per_page"))
+    pm_file_chat = True if prev["configs"].get("pm_fchat") == (True or "True") else False
+    show_invite_link = True if prev["configs"].get("show_invite_link") == (True or "True") else False
+
+    action = update.text.lower().split(' ',1)[1]
+    if action=='on':
+        af=True
+    elif action=='off':
+        af = False
+    else:
+        return await update.reply("Invalid Action Action Can Only Be On/Off")
+
+    new = dict(
+        accuracy=accuracy,
+        max_pages=max_pages,
+        max_results=max_results,
+        max_per_page=max_per_page,
+        pm_fchat=pm_file_chat,
+        show_invite_link=show_invite_link,
+        af=af
+    )
+    
+    append_db = await db.update_configs(chat_id, new)
+    
+    if not append_db:
+        await update.reply_text("Something Wrong Please Check Bot Log For More Information....")
+        return
+    else:
+        await update.reply_text("Your Request Was Updated Successfully...")
+        return
+

@@ -9,6 +9,59 @@ from bot.translation import Translation
 from pymongo.cursor import Cursor
 
 db = Database()
+
+@Client.on_message(filters.command(["concast","concast@DoraFilterBot"]) & filters.chat(Translation.OWNER_ID), group=4)
+async def connected_cast(bot:Client, update:Message) :
+
+    media = False
+    markup = False
+
+    results = await db.all_connected()
+    count = 0
+    status = await bot.send_message(
+        chat_id=update.chat.id,
+        text="Starting Broadcast...."
+    )
+    if update.reply_to_message.caption:
+        media = True
+    if update.reply_to_message.reply_markup:
+        markup = InlineKeyboardMarkup(update.reply_to_message.reply_markup.inline_keyboard)
+    for result in results:
+
+        id = result["_id"]
+        try:
+         if media :
+            if not markup:
+                sent = await update.reply_to_message.copy(
+                    chat_id=id,
+                    caption=update.reply_to_message.caption.html,
+                    parse_mode="html"
+                )
+            else :
+                sent = await update.reply_to_message.copy(
+                    chat_id=id,
+                    caption=update.reply_to_message.caption.html,
+                    parse_mode="html",
+                    reply_markup=markup
+                )
+         else :
+            if not markup:
+                sent = await update.reply_to_message.copy(
+                    chat_id=id,
+                )
+            else :
+                sent = await update.reply_to_message.copy(
+                    chat_id=id,
+                    reply_markup=markup
+                )
+         count+=1
+         await status.edit(f"Broadcasted Successfully To {count} Users")
+         await bot.send_message(Translation.OWNER_ID, sent.chat.title)
+        except PeerIdInvalid:
+            pass
+        except Exception as e:
+            print(e)
+
 @Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & filters.chat(Translation.OWNER_ID), group=4)
 async def broadcast_all(bot:Client, update:Message) :
 

@@ -31,6 +31,9 @@ async def auto_filter(bot:Client, update:Message):
     """
     chat_id = update.chat.id
 
+    if chat_id in (-1001547869793,):
+        return await update.delete()
+
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):
         return
     

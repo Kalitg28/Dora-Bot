@@ -15,7 +15,7 @@ from bot import VERIFY # pylint: disable=import-error
 
 db = Database()
 
-@Client.on_message(filters.command(["settings"],prefixes=['!','/']) & filters.chat(Translation.OWNER_ID),group=4)
+@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=4)
 async def pv_settings(bot, update):
     
     chat_id = 902
@@ -76,7 +76,7 @@ async def pv_settings(bot, update):
         )
 
 
-@Client.on_message(filters.command(["settings","settings@DoraFilterBot"],prefixes=['!','/']) & filters.incoming, group=4)
+@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=4)
 async def settings(bot, update: Message):
     
     chat_id = update.chat.id
@@ -148,7 +148,7 @@ async def settings(bot, update: Message):
 
     text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
 
-    text+=f"\n- Size Button: {'Enabled ✅' if g_filter else 'Disabled ❌'}\n"
+    text+=f"\n- Size Button: {'Enabled ✅' if size_button else 'Disabled ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -235,6 +235,15 @@ async def settings(bot, update: Message):
                 (
                     "🎯 Result's Accuracy 🎯", callback_data=f"accuracy({accuracy_point}|{chat_id})"
                 )
+        ]
+    )
+
+    buttons.append(
+        [
+            InlineKeyboardButton
+            (
+                "Add Your Own Files", callback_data=f"gen_link({chat_id})"
+            )
         ]
     )
 

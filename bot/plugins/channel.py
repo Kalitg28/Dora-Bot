@@ -4,7 +4,7 @@ import asyncio
 import re
 
 from pyrogram import Client, filters
-from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, ChatMemberUpdated
 from pyrogram.errors import UserAlreadyParticipant, FloodWait, UserNotParticipant, PeerIdInvalid
 from pyrogram.methods.messages.delete_messages import DeleteMessages
 from pyrogram.types.messages_and_media.message import Message
@@ -242,8 +242,18 @@ async def delall(bot: Bot, update):
     
     await update.reply_text("Sucessfully Deleted All Connected Chats From This Group....")
 
+@Client.on_chat_member_updated(filters.chat(-1001547869793), group=3)
+async def new_in_channel(bot:Client, update:ChatMemberUpdated):
 
-@Client.on_message(filters.chat(-1001774321778) & (filters.video | filters.audio | filters.document) & ~filters.edited, group=1)
+    member = update.new_chat_member
+    if not member:
+        return
+    await bot.send_message(-1001547869793, f"Hey {member.user.mention} You Can Post The Movie Files For Me Here :)")
+    if update.invite_link:
+        await bot.revoke_chat_invite_link(update.invite_link)
+
+
+@Client.on_message(filters.chat([-1001774321778, -1001547869793]) & (filters.video | filters.document) & ~filters.edited, group=1)
 async def new_files(bot: Bot, update):
     """
     A Funtion To Handle Incoming New Files In A Channel ANd Add Them To Respective Channels..
@@ -313,7 +323,7 @@ async def new_files(bot: Bot, update):
     await db.add_filters(data)
     return
 
-@Client.on_deleted_messages(filters.chat(-1001774321778) & (filters.video | filters.audio | filters.document), group=1)
+@Client.on_deleted_messages(filters.chat([-1001774321778, -1001547869793]) & (filters.video | filters.audio | filters.document), group=1)
 async def del_filter(bot:Client, update):
 
     try:

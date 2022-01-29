@@ -357,7 +357,7 @@ def parser(unique_id, reply_text: str, text: str):
             processed = chunk[index:end_index-1]
             text = text.replace(processed,'def')
             processed_list.append(processed)
-            chunk = chunk.replace(processed, '')
+            control = control.replace(processed, '')
 
 
 

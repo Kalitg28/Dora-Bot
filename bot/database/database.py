@@ -577,7 +577,7 @@ class Database:
 
         return True
 
-    async def all_connected():
+    async def all_connected(self):
         return ccol.find()
 
     async def add_mfilter(self, id, group_id, text, content, file, buttons, alert, sticker: bool, edits) :

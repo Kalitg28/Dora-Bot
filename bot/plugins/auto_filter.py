@@ -244,8 +244,9 @@ async def auto_filter(bot:Client, update:Message):
                 reply_to_message_id=update.message_id
             )
 
-        except PhotoIdInvalid or MediaEmpty:
+        except MediaEmpty:
 
+            text+=f"<a href='{movie_info['link']}'> </a>"
             await update.reply_text(
                 text=text,
                 reply_markup=reply_markup,

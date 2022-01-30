@@ -24,13 +24,31 @@ async def start(bot:Client , update):
     add = threading.Thread(target=asyncio.run, args=(db.add_user(update.from_user.id),))
     add.start()
     try:
-        file_uid = update.command[1]
+        file_uid:str = update.command[1]
     except IndexError:
         file_uid = False
 
     await bot.send_chat_action(update.chat.id, "typing")
     
     if file_uid:
+
+        if file_uid.startswith('connect'):
+            try:
+                chat_id = int(file_uid.strip('connect '))
+                try:
+                    member = await bot.get_chat_member(chat_id, update.chat.id)
+                    if not member.status in ('creator','administrator'):
+                        return update.reply_text("You Dont Have Permission For That Bro :(")
+                    result = await db.conn_user(update.from_user.id, chat_id)
+                    if result :
+                        return await update.reply_text("I've Successfully Connected You With And Can Do Any CHanges From Here :)") 
+                    else:
+                        return await update.reply_text("Connection Failed Try Contacting Support :(")
+                except PeerIdInvalid:
+                    return await update.reply_text("Looks Like Im Not Member Of That Chat Or The URl Is Invalid :(")
+            except:
+                return await update.reply_text("Thats An Invalid URL")
+            return
 
         if re.findall(r"^a(.+)a(.+)a(.+)", file_uid):
             await Batch.get_batch(file_uid, bot, update)
@@ -131,7 +149,7 @@ async def help(bot, update):
 @Client.on_message(filters.command(["about"]) & filters.private, group=4)
 async def about(bot, update):
 
-    await bot.send_chat_action(update.message.chat.id, "typing")
+    await bot.send_chat_action(update.chat.id, "typing")
     
     buttons = Buttons.EN["ABOUT"]
     reply_markup = InlineKeyboardMarkup(buttons)

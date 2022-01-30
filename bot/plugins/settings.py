@@ -266,7 +266,7 @@ async def settings(bot, update: Message):
         )
 
 
-@Client.on_message(filters.command("connect") & filters.incoming, group=4)
+@Client.on_message(filters.command("connect") & (filters.private | filters.group), group=4)
 async def connect(bot: Client, update: Message):
 
     text = update.text

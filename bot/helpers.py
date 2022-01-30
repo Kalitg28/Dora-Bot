@@ -67,7 +67,7 @@ class Helpers() :
             movie_info.pop("runtimes")
             movie_info["runtimes"] = f"{runtime} mins"
         link = f"https://imdb.com/title/tt{movie.movieID}"
-        movie['link'] = link
+        movie_info['link'] = link
 
     except Exception:
 

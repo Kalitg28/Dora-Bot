@@ -66,6 +66,8 @@ class Helpers() :
 
             movie_info.pop("runtimes")
             movie_info["runtimes"] = f"{runtime} mins"
+        link = f"https://imdb.com/title/tt{movie.movieID}"
+        movie['link'] = link
 
     except Exception:
 
@@ -146,6 +148,7 @@ class Helpers() :
                 if post : caption+="\n\nBy @DM_Linkz"
                 
                 year = movie.get("year", "")
+                
                 
                 buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]] if not post else [[InlineKeyboardButton("Join For More..", url="https://t.me/DM_Linkz")]]
                 Product.append(InlineQueryResultPhoto(

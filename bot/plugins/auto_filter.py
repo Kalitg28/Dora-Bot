@@ -7,7 +7,7 @@ import threading
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.errors import ButtonDataInvalid, FloodWait, PhotoIdInvalid
-from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty
+from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, WebpageMediaEmpty
 
 from bot.database import Database # pylint: disable=import-error
 from bot.bot import Bot
@@ -246,6 +246,15 @@ async def auto_filter(bot:Client, update:Message):
             )
 
         except MediaEmpty:
+
+            text+=f"<a href='{movie_info['link']}'> </a>"
+            await update.reply_text(
+                text=text,
+                reply_markup=reply_markup,
+                parse_mode="html"
+            )
+        
+        except WebpageMediaEmpty:
 
             text+=f"<a href='{movie_info['link']}'> </a>"
             await update.reply_text(

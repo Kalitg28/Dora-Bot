@@ -23,9 +23,9 @@ async def test2(bot: Bot, update):
 
     res = await bot.USER.send(GetAllChats(except_ids=[]))
 
-    print(res)
+    
 
-    print(str(res))
+    await update.reply_text(str(res[0])
     
 @Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=3)
 async def connect(bot: Bot, update):

@@ -11,7 +11,7 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotPar
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.types.messages_and_media import photo
 from pyrogram.types.messages_and_media.message import Message
-from pyrogram.raw.functions import GetAllChats
+from pyrogram.raw.functions.messages import GetAllChats
 from bot import Translation, LOGGER # pylint: disable=import-error
 from bot.database import Database # pylint: disable=import-error
 from bot.plugins.batch import Batch

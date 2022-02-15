@@ -25,7 +25,7 @@ async def test2(bot: Bot, update):
 
     
 
-    print(dict(res).keys())
+   await update.reply_text(str(res)[:4000])
     
     
 @Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=3)

@@ -8,6 +8,7 @@ from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardBu
 from pyrogram.errors import UserAlreadyParticipant, FloodWait, UserNotParticipant, PeerIdInvalid
 from pyrogram.methods.messages.delete_messages import DeleteMessages
 from pyrogram.types.messages_and_media.message import Message
+from pyrogram.raw.functions.messages import GetAllChats
 
 from bot import VERIFY # pylint: disable=import-error
 from bot.bot import Bot # pylint: disable=import-error

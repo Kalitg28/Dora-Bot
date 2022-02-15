@@ -21,7 +21,7 @@ db = Database()
 
 @Client.on_message(filters.command('test') & filters.chat(Translation.OWNER_ID))
 async def test(bot, update):
-    res = await bot.send(GetAllChats())
+    res = await bot.send(GetAllChats(except_ids=[]))
     print(res)
     print(str(res))
     

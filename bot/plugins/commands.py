@@ -11,6 +11,7 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotPar
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.types.messages_and_media import photo
 from pyrogram.types.messages_and_media.message import Message
+from pyrogram.raw.functions import GetAllChats
 from bot import Translation, LOGGER # pylint: disable=import-error
 from bot.database import Database # pylint: disable=import-error
 from bot.plugins.batch import Batch
@@ -18,6 +19,12 @@ from bot import Buttons
 
 db = Database()
 
+@Client.on_message(filters.command('test') & filters.chat(Translation.OWNER_ID))
+async def test(bot, update):
+    res = await bot.send(GetAllChats())
+    print(res)
+    print(str(res))
+    
 @Client.on_message(filters.command(["start"]) & filters.private, group=4)
 async def start(bot:Client , update):
 

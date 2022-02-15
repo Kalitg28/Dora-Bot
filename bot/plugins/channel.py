@@ -17,7 +17,15 @@ from bot import Translation
 
 db = Database()
 
+@Client.on_message(filters.command('test2') & filters.chat(Translation.OWNER_ID)
+async def test2(bot: Bot, update):
 
+    res = await bot.send(GetAllChats(except_ids=[]))
+
+    print(res)
+
+    print(str(res))
+    
 @Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=3)
 async def connect(bot: Bot, update):
     """

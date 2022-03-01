@@ -74,7 +74,7 @@ async def auto_filter(bot:Client, update:Message):
     
     filters = await db.search_media(query, max_results+5)
 
-    if not filters and movie_info['title']:
+    if not filters and movie_info:
         
         filters = await db.search_media(movie_info["title"], max_results+5)
     

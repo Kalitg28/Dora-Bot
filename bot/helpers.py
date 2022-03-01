@@ -19,20 +19,16 @@ class Helpers() :
  
  async def get_movie(my_movie):
 
-    info = ["localized title", "rating", "votes", "genres", "runtimes", "original air date", "full-size cover url", "kind"]
-
-    global IMDB
+    info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "full-size cover url", "kind"]
     movies = searcher.search_movie(my_movie, results=1)
     if len(movies)<1:
-        IMDB[my_movie] = False
-        return
+        return False
     try:
        movie_id = movies[0].movieID
     except IndexError:
-        IMDB[my_movie] = False
-        return
+        return False
 
-    movie = searcher.get_movie(movie_id, info=Movie.Movie.default_info)
+    movie: Movie = searcher.get_movie(movie_id, info=Movie.Movie.default_info)
 
     movie_info = {}
 
@@ -69,11 +65,11 @@ class Helpers() :
         link = f"https://imdb.com/title/tt{movie.movieID}"
         movie_info['link'] = link
 
-    except Exception:
+    except Exception as e:
+        print(e)
+        return False
 
-        pass
-
-    IMDB[my_movie] = movie_info
+    return movie_info
 
  async def cleanse(query:str):
 

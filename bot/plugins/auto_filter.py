@@ -57,7 +57,7 @@ async def auto_filter(bot:Client, update:Message):
     if not configs:
         return
     movie = await Helpers.cleanse(update.text)
-    movie_info = Helpers.get_movie(movie)
+    movie_info = await Helpers.get_movie(movie)
     
     allow_video = True
     allow_audio = False

@@ -124,6 +124,7 @@ async def settings(bot, update: Message):
     auto_filter = settings.get('af', True)
     size_button = settings.get('size', False)
     g_filter = settings.get('global', True)
+    fsub_msg = settings.get('fsub_msg', False)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -143,6 +144,8 @@ async def settings(bot, update: Message):
         text+=f"\n - Force Subscribe: Inactive ❌\n"
     else:
         text+=f"\n- Force Subscribe: {fsub['title']} ✅\n"
+
+    text+=f"Fsub Message : {'Custom ✅' if fsub_msg else 'Default'}"
 
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
 
@@ -193,11 +196,13 @@ async def settings(bot, update: Message):
     else:
         gf = InlineKeyboardButton('Global Filters', callback_data=f'global(off|{chat_id})')
 
+    fmb = InlineKeyboardButton('Fsub Message', callback_data=f"fsub_msg({chat_id})")
+
     buttons.append([af, sb])    
 
     buttons.append([spell_button, capt_button])
 
-    buttons.append([gf])
+    buttons.append([gf, fmb])
 
     if fsub:
 

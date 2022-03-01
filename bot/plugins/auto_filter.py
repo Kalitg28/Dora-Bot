@@ -2,11 +2,10 @@ import re
 import logging
 import asyncio
 import random
-import threading
 
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from pyrogram.errors import ButtonDataInvalid, FloodWait, PhotoIdInvalid
+from pyrogram.errors import ButtonDataInvalid, FloodWait, PhotoIdInvalid, ChatSendMediaForbidden
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, WebpageMediaEmpty
 
 from bot.database import Database # pylint: disable=import-error
@@ -58,8 +57,7 @@ async def auto_filter(bot:Client, update:Message):
     if not configs:
         return
     movie = await Helpers.cleanse(update.text)
-    imdb = threading.Thread(target=asyncio.run, args=(Helpers.get_movie(movie),))
-    imdb.start()
+    movie_info = Helpers.get_movie(movie)
     
     allow_video = True
     allow_audio = False
@@ -75,6 +73,10 @@ async def auto_filter(bot:Client, update:Message):
         return
     
     filters = await db.search_media(query, max_results+5)
+
+    if not filters and movie_info['title']:
+        
+        filters = await db.search_media(movie_info["title"], max_results+5)
     
     if filters:
         all_files = []
@@ -100,7 +102,6 @@ async def auto_filter(bot:Client, update:Message):
             file_size = "" if file_size == ("[0 B]") else file_size
             
             # add emoji down below inside " " if you want..
-            file_name = file_name.replace(' ', '.')
             
             
 
@@ -121,9 +122,6 @@ async def auto_filter(bot:Client, update:Message):
                     pass
                 else:
                     continue
-            
-            if len(results) >= max_results:
-                break
             
             if pm_file_chat: 
                 unique_id = filter.get("unique_id")
@@ -204,10 +202,6 @@ async def auto_filter(bot:Client, update:Message):
             
         reply_markup = InlineKeyboardMarkup(result[0])
 
-        imdb.join()
-
-        movie_info = IMDB.get(movie)
-
         if not movie_info :
 
             await update.reply_text(
@@ -224,7 +218,7 @@ async def auto_filter(bot:Client, update:Message):
             )
             return
 
-        text = f'''<b>📽️ Movie/Series</b> : <code>{query}</code>
+        text = f'''<b>📽️ Movie/Series</b> : <code>{movie_info['title']}</code>
 🌟 <b>Rating</b> : <i>{movie_info["rating"]}</i>
 🗳️ <b>Votes</b> : <i>{movie_info["votes"]}</i>
 🧬 <b>Genres</b> : <i>{str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}</i>
@@ -256,6 +250,14 @@ async def auto_filter(bot:Client, update:Message):
         
         except WebpageMediaEmpty:
 
+            text+=f"<a href='{movie_info['link']}'> </a>"
+            await update.reply_text(
+                text=text,
+                reply_markup=reply_markup,
+                parse_mode="html"
+            )
+
+        except ChatSendMediaForbidden:
             text+=f"<a href='{movie_info['link']}'> </a>"
             await update.reply_text(
                 text=text,

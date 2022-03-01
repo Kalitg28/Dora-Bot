@@ -74,6 +74,7 @@ async def start(bot:Client , update):
 
         if fsub:
                     fsub = fsub["id"]
+                    fsub_msg = settings.get('fsub_msg')
                     try:
                         member = await bot.get_chat_member(int(fsub), update.from_user.id)
                         if member.status=='kicked':
@@ -88,10 +89,17 @@ async def start(bot:Client , update):
                     except UserNotParticipant:
                         chat = await bot.get_chat(int(fsub))
                         link = chat.invite_link
-                        if link:
+                        if not fsub_msg:
                             buttons = [[InlineKeyboardButton("Join 🤓", url=link),InlineKeyboardButton("Retry ♻️", url=f"https://t.me/DoraFilterBot?start={file_uid}")]]
                             await update.reply(
                             text="<b>Sorry Man You'll Have To Join My Channel First To Use Me 🙂🙂\n\nJust Click On The Join Button Below And Come Back And Click On Retry......</b>",
+                            quote=True,
+                            reply_markup=InlineKeyboardMarkup(buttons)
+                        )
+                        else:
+                            buttons = [[InlineKeyboardButton("Join 🤓", url=link),InlineKeyboardButton("Retry ♻️", url=f"https://t.me/DoraFilterBot?start={file_uid}")]]
+                            await update.reply(
+                            text=fsub_msg,
                             quote=True,
                             reply_markup=InlineKeyboardMarkup(buttons)
                         )

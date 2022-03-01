@@ -14,7 +14,6 @@ class Translation(object):
 """,
  
  "ABOUT" : """<b>🗲 Bot Type</b> : <i> Auto + Manual Filter + FileShare</i>
-<b>🗲 Developers</b> : <b><i><a href="https://t.me/AlbertEinstein_TG">AlbertEinstein_TG</a>, <a href="https://t.me/J_I_S_I_N">MrPurple902</a></i></b>
 <b>🗲 Language</b> : <i><a href="https://python.org">Python 3.9.2</a></i>
 <b>🗲 Library</b> : <i><a href="https://docs.pyrogram.org">Pyrogram Asyncio 1.13.0 </a></i>
 <b>🗲 Server</b> : <i><a href="https://heroku.com">Heroku</a></i>
@@ -120,32 +119,32 @@ The Command Will Work Just The Same In PM Too After Connection</i>
  {id} : ID of The User
 
  <i>You Can Also Modify It From Settings Panel</i>
- """
+ """,
+
+"CREDITS": """
+<i><b>Heres Every Project And Person Behind This Masterpiece</i></b>
+
+Thanks To ❤️:
+• <a href='github.com/delivrance'>Dan</a> for his Beautiful <a href='docs.pyrogram.org'>Pyrogram</a> Library
+• <a href='https://github.com/alberanid'>Albernaid</a> for the <a href='pypi.org/project/IMDbPY'>IMDbPY</a> library
+• <a href='github.com/AlbertEinsteinTg'>AlbertEinsteinTG</a> for the <a href='github.com/AlbertEinsteinTg/Adv-auto-filter-bot-v2'>Base Repo</a>
+• <a href='github.com/Arun017s'>Arun</a> for his Awesome Ideas
+• <a href='github.com/S9YD3R'>S9YD3R</a> for his imdb Results template
+
+Tnx <a href='github.com/Jisin0'>Jisin0</a> For Putting Everything Together"""
  }
 
-    START_PHOTOS = ["https://telegra.ph/file/ffe4162578924f7583d6a.jpg",
-
-"https://telegra.ph/file/888eb5675668f59aba9e6.jpg",
-
-"https://telegra.ph/file/d79b681ce71e6d749bd03.jpg",
-
-"https://telegra.ph/file/ea99ee6f82be0b9582d4d.jpg",
-
-"https://telegra.ph/file/564178c3770cd264a9ad3.jpg",
-
-"https://telegra.ph/file/24735799583ce411fc698.jpg",
-
-"https://telegra.ph/file/a50a1f52db516449fe672.jpg",
-
-"https://telegra.ph/file/f4ca759b7abaafa74e86d.jpg",
-
-"https://telegra.ph/file/94de07b2713f94be57702.jpg",
-
-"https://telegra.ph/file/ff35287f729d667efa2c7.jpg",
-
-"https://telegra.ph/file/d0c5347f93247bcc7e214.jpg",
-
-"https://telegra.ph/file/bcb06af3806e64ffeebbf.jpg",
-
-"https://telegra.ph/file/98fb833c7b7ae1c65f198.jpg"]
+    START_PHOTOS = [
+"https://telegra.ph/file/519441afc5bf65dae75db.jpg",
+"https://telegra.ph/file/d3b342fff878ce7ca52e1.jpg",
+"https://telegra.ph/file/32588838b794901decb4e.jpg",
+"https://telegra.ph/file/f99cc60a64a6b90812329.jpg",
+" https://telegra.ph/file/d3b342fff878ce7ca52e1.jpg",
+"https://telegra.ph/file/e20a11858086041780540.jpg",
+"https://telegra.ph/file/31d202c0fe21f9e7a5aaf.jpg",
+"https://telegra.ph/file/763283331f5359edc6d1b.jpg",
+"https://telegra.ph/file/5c303c8c486f64c00626e.jpg",
+"https://telegra.ph/file/0f22e6dad787ce6bde9b6.jpg",
+"https://telegra.ph/file/ad5a51f55c26073917a6d.jpg"
+]
     OWNER_ID = 1093541873

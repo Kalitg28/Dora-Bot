@@ -36,7 +36,7 @@ async def fix_value(bot:Client, update:CallbackQuery):
 
     else :
 
-        ask = await bot.send_message(update.message.chat.id, "**Ok Now Send Me The New Value...\n\nTo Abort This Process Send /cancel**", parse_mode='md')
+        ask = await bot.send_message(update.message.chat.id, "``Ok Now Send Me The New Value...\n\nTo Abort This Process Send /cancel``", parse_mode='md')
         response:Message = await bot.listen(update.message.chat.id, filters.user(update.from_user.id), timeout=300)
 
         if not response:
@@ -83,6 +83,23 @@ async def fix_value(bot:Client, update:CallbackQuery):
         ]]))
 
 
+@Client.on_callback_query(filters.regex(r"fsub_msg\((.+)\)"), group=4)
+async def toggle_fsubmsg(bot: Client, update:CallbackQuery):
+
+    group_id = re.findall(r'fsub_msg\((.+)\)', update.data)[0]
+    user_id = update.from_user.id
+
+    member = await bot.get_chat_member(group_id, user_id)
+    if not member.status in ('administrator','creator'):
+        return await update.answer('Nice Try Kid xD', show_alert=True)
+
+    buttons = [
+        [InlineKeyboardButton("Default", callback_data=f"fix(fsub_msg|off|{group_id})"),
+        InlineKeyboardButton("Set New", callback_data=f"fix(fsub_msg|idk|{group_id})")
+        ]
+    ]
+
+    await update.message.edit_text("Use The Buttons Below To Set A Custom Message To Show Someone Who Hasn't Joined The Fsub Channel...", reply_markup=InlineKeyboardMarkup(buttons))
 
 @Client.on_callback_query(filters.regex(r'af\((.+)\)'), group=4)
 async def toggle_af(bot:Client, update:CallbackQuery):

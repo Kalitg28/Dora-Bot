@@ -805,9 +805,14 @@ class Database:
         pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
         regex = re.compile(pattern, flags=re.IGNORECASE)
 
-        results = fcol.find({'file_name': regex}, limit=max_results)
+        results: list = fcol.find({'file_name': regex})
 
-        return results 
+        if not results or len(results)<1:
+            return False
+            
+        results.reverse()
+
+        return results[:max_results]
 
     async def get_mfilter(self, id):
 

@@ -39,8 +39,14 @@ async def auto_filter(bot:Client, update:Message):
     
     if ("https://" or "http://") in update.text:
         return
-    
-    query = re.sub(r"[1-2]\d{3}", "", update.text) # Targetting Only 1000 - 2999 😁
+
+    year = re.findall(r"[1-2]\d{3}", update.text) # Targetting Only 1000 - 2999 😁
+    if year:
+        year = year[0]
+    else:
+        year = '2022'
+
+    query = update.text.replace(year, '')
     
     if len(query) < 2:
         return
@@ -57,7 +63,7 @@ async def auto_filter(bot:Client, update:Message):
     if not configs:
         return
     movie = await Helpers.cleanse(update.text)
-    movie_info = await Helpers.get_movie(movie)
+    movie_info = Helpers.get_movie(movie)
     
     allow_video = True
     allow_audio = False
@@ -137,16 +143,32 @@ async def auto_filter(bot:Client, update:Message):
                 bot_ = FIND.get("bot_details")
                 file_link = f"https://t.me/{bot_.username}?start=z{unique_id}z{group_text}z"
 
-            if size_button :
-                results.append(
+            if year in file_name:
+
+                if size_button :
+                    results+=[[
+                        InlineKeyboardButton(file_name, url=file_link),
+                        InlineKeyboardButton(file_size, url=file_link)
+                    ]]
+                
+                else:
+                    button_text = f"{file_size} {file_name}"
+                    results+=[[
+                    InlineKeyboardButton(button_text, url=file_link)
+                ]]
+            
+            else:
+
+                if size_button :
+                    results.append(
                     [
                         InlineKeyboardButton(file_name, url=file_link),
                         InlineKeyboardButton(file_size, url=file_link)
                     ]
                 )
-            else:
-                button_text = f"{file_size} {file_name}"
-                results.append(
+                else:
+                    button_text = f"{file_size} {file_name}"
+                    results.append(
                 [
                     InlineKeyboardButton(button_text, url=file_link)
                 ]
@@ -218,16 +240,18 @@ async def auto_filter(bot:Client, update:Message):
             )
             return
 
-        text = f'''<b>📽️ Movie/Series</b> : <code>{movie_info['title']}</code>
-🌟 <b>Rating</b> : <i>{movie_info["rating"]}</i>
-🗳️ <b>Votes</b> : <i>{movie_info["votes"]}</i>
-🧬 <b>Genres</b> : <i>{str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}</i>
-📅 <b>Released</b> : <i>{movie_info["original air date"]}</i>
-⏱️ <b>Duration</b> : <i>{movie_info["runtimes"]}</i>
-📁 <b>Results</b> : <i>{(len_results)}</i>
+        text = f"""
+<b>⍞ ᴛɪᴛɪʟᴇ </b>: <code>{movie_info['title']}</code>
+<b>⌗ ɢᴇɴʀᴇ </b>: <code>{str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}</code>
+<b>★ ʀᴀᴛɪɴɢ </b>: <code>{movie_info["rating"]} / 10</code>
+<b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} / 10</code>
+<b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
+<b>⌬ ʟᴀɴɢᴜᴀɢᴇs <b>: <code>{movie_info['languages']}</code>
+<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <code>{movie_info["original air date"]}</code>
+<b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
 
-<b>🅒 Uploaded By  {update.chat.title} </b>
-        '''
+<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
+        """
 
         try:
             await bot.send_photo(

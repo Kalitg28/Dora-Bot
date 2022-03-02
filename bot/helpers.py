@@ -19,7 +19,7 @@ class Helpers() :
  
  async def get_movie(my_movie):
 
-    info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "full-size cover url", "kind"]
+    info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "languages", "full-size cover url", "kind"]
     movies = searcher.search_movie(my_movie, results=1)
     if len(movies)<1:
         return False
@@ -28,7 +28,7 @@ class Helpers() :
     except IndexError:
         return False
 
-    movie: Movie = searcher.get_movie(movie_id, info=Movie.Movie.default_info)
+    movie: Movie = searcher.get_movie(movie_id, info=info)
 
     movie_info = {}
 

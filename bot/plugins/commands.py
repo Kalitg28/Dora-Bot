@@ -68,9 +68,7 @@ async def start(bot:Client , update):
         group_id = Batch.decode(results[1])
         settings = await db.find_chat(int(group_id))
         fsub = settings.get("fsub", None)
-        caption = settings.get("caption", None)
-        if not caption : 
-            caption=''
+        
 
         if fsub:
                     fsub = fsub["id"]
@@ -107,6 +105,7 @@ async def start(bot:Client , update):
                     except Exception as e:
                         print(e)
 
+        caption = settings.get("caption", '')
         file_id, file_name, file_caption, file_type = await db.get_file(new_uid)
         
         if (file_id or file_type) == None:

@@ -63,7 +63,7 @@ async def auto_filter(bot:Client, update:Message):
     if not configs:
         return
     movie = await Helpers.cleanse(update.text)
-    movie_info = Helpers.get_movie(movie)
+    movie_info = await Helpers.get_movie(movie)
     
     allow_video = True
     allow_audio = False
@@ -209,7 +209,7 @@ async def auto_filter(bot:Client, update:Message):
         len_results = len(results)
         results = None # Free Up Memory
         
-        FIND[query] = {"results": result, "total_len": len_results, "max_pages": max_pages, "all_files": all_files} # TrojanzHex's Idea Of Dicts😅
+        FIND[query] = {"results": result, "total_len": len_results, "max_pages": max_pages, "all_files": all_files, "per_page": max_per_page} # TrojanzHex's Idea Of Dicts😅
 
         # Add next buttin if page count is not equal to 1
         if len_result != 1:

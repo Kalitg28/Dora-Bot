@@ -28,7 +28,7 @@ class Helpers() :
     except IndexError:
         return False
 
-    movie: Movie = searcher.get_movie(movie_id, info=info)
+    movie: Movie = searcher.get_movie(movie_id, info=Movie.Movie.default_info)
 
     movie_info = {}
 

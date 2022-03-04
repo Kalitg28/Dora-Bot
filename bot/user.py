@@ -12,6 +12,7 @@ from . import API_HASH, APP_ID, LOGGER, \
 class User(Client):
     def __init__(self):
         super().__init__(
+            session_name="userbot",
             api_hash=API_HASH,
             api_id=APP_ID,
             workers=4

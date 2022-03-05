@@ -157,4 +157,10 @@ class Helpers() :
 
      except Exception as e:
          print(e)
-              
+
+ async def list_to_str(l):
+
+     if type(l)=="str":
+         return l
+     res = " ".join(l)
+     return res

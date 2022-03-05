@@ -252,8 +252,15 @@ async def cb_stats(bot:Client, update):
 
         stats = await db.get_stats()
         await update.reply_text(
-            f"Files : {stats['files']}\n\nUsers : {stats['users']}\n\nConnected Users : {stats['conn']}\n\nManual Filters : {stats['filters']}\n\nCustomized Chats : {stats['chats']}\n\nSpace Used : {stats['used']}",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("✘ Close ✘", callback_data="close")]])
+            f"Fɪʟᴇs : {stats['files']}\n\nUsᴇʀs : {stats['users']}\n\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\n\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\n\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="start"), InlineKeyboardButton("✘ Cʟᴏsᴇ ✘", callback_data="close")]])
         )
     except Exception as e:
         print(e)
+
+@Client.on_message(filters.command('cleardvd') & filters.chat(Translation.OWNER_ID))
+async def clearpredvd(bot, update):
+
+    msg = await update.reply_text("Trying To Clear Predvd Files...")
+    res = await db.clear_predvd()
+    await msg.edit_text(f"Successfully Cleared {res} Predvd Files :)")

@@ -215,14 +215,14 @@ async def auto_filter(bot:Client, update:Message):
         if len_result != 1:
             result[0].append(
                 [
-                    InlineKeyboardButton(f"📃 Page 1/{len_result if len_result < max_pages else max_pages} 📃", callback_data="ignore"),
-                    InlineKeyboardButton("Next ⇛", callback_data=f"navigate(0|next|{query})")
+                    InlineKeyboardButton(f"📃 ᴘᴀɢᴇ 1/{len_result if len_result < max_pages else max_pages} 📃", callback_data="ignore"),
+                    InlineKeyboardButton("ɴᴇxᴛ ⇛", callback_data=f"navigate(0|next|{query})")
                 ]
             )
             
         reply_markup = InlineKeyboardMarkup([[
-            InlineKeyboardButton(f"All", callback_data=f"all({query})"),
-            InlineKeyboardButton("Select", callback_data=f"multi(0|{query})")
+            InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"),
+            InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi(0|{query})")
         ]]+ result[0])
 
         if not movie_info :
@@ -245,10 +245,10 @@ async def auto_filter(bot:Client, update:Message):
 <b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
 <b>⌗ ɢᴇɴʀᴇ </b>: <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
 <b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
-<b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} / 10</code>
+<b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} </code>
 <b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
 <b>⌬ ʟᴀɴɢᴜᴀɢᴇs </b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
-<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <code>{movie_info["original air date"]}</code>
+<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
 <b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
 
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>

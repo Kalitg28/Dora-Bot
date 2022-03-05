@@ -63,7 +63,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
         total_btn.append(temp)
         index+=1
 
-    total_btn.append([InlineKeyboardButton("Back", callback_data=f"multi({int(index_val)-1}|{query})"), InlineKeyboardButton("Exit", callback_data=f"navigate({int(index_val)+1}|back|{query})"), InlineKeyboardButton("Send", callback_data=f"sensel({query})"), InlineKeyboardButton("Next", callback_data=f"multi({int(index_val)+1}|{query})")])
+    total_btn.append([InlineKeyboardButton("ʙᴀᴄᴋ", callback_data=f"multi({int(index_val)-1}|{query})"), InlineKeyboardButton("Exit", callback_data=f"navigate({int(index_val)+1}|back|{query})"), InlineKeyboardButton("Send", callback_data=f"sensel({query})"), InlineKeyboardButton("ɴᴇxᴛ", callback_data=f"multi({int(index_val)+1}|{query})")])
 
     await update.message.edit_reply_markup(InlineKeyboardMarkup(total_btn))
     await update.answer()
@@ -158,7 +158,6 @@ async def sensel(bot:Client, update:CallbackQuery):
 
     files = SELECTED[str(user_id)][query]
 
-    await update.answer("Sending Selected Files In PM :)")
     for file in files:
 
             file_id, file_name, file_caption, file_type = await db.get_file(file)
@@ -171,9 +170,11 @@ async def sensel(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                await update.answer(url=f"https://t.me/DoraFilterBot?start=retry{update.message.link}")
+                return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry{update.message.link}")
             except UserBlocked:
-                await update.answer(url=f"https://t.me/DoraFilterBot?start=retry{update.message.link}")
+                return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry{update.message.link}")
             except Exception as e:
                 print(e)
                 return await update.answer(f"<b>Error:</b>\n<code>{e}</code>", show_alert=True)
+
+    await update.answer("Files Have Been Sent To PM :)")

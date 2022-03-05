@@ -98,7 +98,6 @@ async def cb_navg(bot, update: CallbackQuery):
     show_invite = (False if pm_file_chat == True else show_invite)
     
     results = FIND.get(query).get("results")
-    leng = FIND.get(query).get("total_len")
     max_pages = FIND.get(query).get("max_pages")
     
     try:
@@ -111,8 +110,8 @@ async def cb_navg(bot, update: CallbackQuery):
 
     if ((index_val + 1 )== max_pages) or ((index_val + 1) == len(results)): # Max Pages
         temp_results.append([
-            InlineKeyboardButton("⇚ Back", callback_data=f"navigate({index_val}|back|{query})"),
-            InlineKeyboardButton(f"All", callback_data=f"all({query})")
+            InlineKeyboardButton("⇚ ʙᴀᴄᴋ", callback_data=f"navigate({index_val}|back|{query})"),
+            InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})")
         ])
 
     elif int(index_val) == 0:
@@ -120,14 +119,14 @@ async def cb_navg(bot, update: CallbackQuery):
 
     else:
         temp_results.append([
-            InlineKeyboardButton("⇚ Back", callback_data=f"navigate({index_val}|back|{query})"),
-            InlineKeyboardButton(f"All", callback_data=f"all({query})"),
-            InlineKeyboardButton("Next ⇛", callback_data=f"navigate({index_val}|next|{query})")
+            InlineKeyboardButton("⇚ ʙᴀᴄᴋ", callback_data=f"navigate({index_val}|back|{query})"),
+            InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"),
+            InlineKeyboardButton("ɴᴇxᴛ ⇛", callback_data=f"navigate({index_val}|next|{query})")
         ])
 
     if not int(index_val) == 0:    
         temp_results.append([
-            InlineKeyboardButton(f"📃 Page {index_val + 1}/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore")
+            InlineKeyboardButton(f"📃 ᴘᴀɢᴇ {index_val + 1}/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore")
         ])
     
     if show_invite and int(index_val) !=0 :
@@ -2052,8 +2051,8 @@ async def cb_stats(bot:Client, update:CallbackQuery):
 
         stats = await db.get_stats()
         await update.message.edit(
-            f"Files : {stats['files']}\n\nUsers : {stats['users']}\n\nConnected Users : {stats['conn']}\n\nManual Filters : {stats['filters']}\n\nCustomized Chats : {stats['chats']}\n\nSpace Used : {stats['used']}",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 Home 🏡", callback_data="start"), InlineKeyboardButton("✘ Close ✘", callback_data="close")]])
+            f"Fɪʟᴇs : {stats['files']}\n\nUsᴇʀs : {stats['users']}\n\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\n\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\n\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="start"), InlineKeyboardButton("✘ Cʟᴏsᴇ ✘", callback_data="close")]])
         )
     except Exception as e:
         print(e)
@@ -2062,6 +2061,14 @@ async def cb_stats(bot:Client, update:CallbackQuery):
 async def ignore(bot:Client, update:CallbackQuery):
 
     await update.answer("You Have Hit A Wall 💥🧱🚗", show_alert=True)
+
+@Client.on_callback_query(filters.regex(r'answer\((.+)\)'))
+async def answer_alert(bot:Client, update:CallbackQuery):
+
+    key = re.findall(r'answer\((.+)\)', update.data)[0]
+
+    if key=='SELECTED':
+        await update.answer("This Has Already Been Selected :)")
 
 def time_formatter(seconds: float) -> str:
     """ 

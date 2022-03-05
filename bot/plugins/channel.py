@@ -17,15 +17,6 @@ from bot.plugins.auto_filter import recacher # pylint: disable=import-error
 from bot import Translation
 
 db = Database()
-
-@Client.on_message(filters.command('test2') & filters.chat(Translation.OWNER_ID))
-async def test2(bot: Bot, update):
-
-    res = await bot.USER.send(GetAllChats(except_ids=[]))
-
-    
-
-    await update.reply_text(str(res)[10000:14000])
     
     
 @Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=3)
@@ -348,3 +339,16 @@ async def del_filter(bot:Client, update):
         
     except Exception as e:
         print(e)
+
+@Client.on_message(filters.command('rm') & filters.chat([-1001774321778, -1001547869793]) & filters.user(Translation.OWNER_ID))
+async def del_file(bot:Client, update:Message):
+
+    if not update.from_user.id==Translation.OWNER_ID:
+        return
+    else:
+        msg = update.reply_to_message
+        hm = await db.del_file(msg.document.file_id)
+        if hm:
+            await msg.delete()
+            await update.delete()
+            await update.reply_text(f"File {msg.document.file_name} was Removed From Database Successfully :)")

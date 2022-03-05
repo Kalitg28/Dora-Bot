@@ -120,7 +120,6 @@ async def cb_navg(bot, update: CallbackQuery):
     else:
         temp_results.append([
             InlineKeyboardButton("⇚ ʙᴀᴄᴋ", callback_data=f"navigate({index_val}|back|{query})"),
-            InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"),
             InlineKeyboardButton("ɴᴇxᴛ ⇛", callback_data=f"navigate({index_val}|next|{query})")
         ])
 
@@ -128,6 +127,8 @@ async def cb_navg(bot, update: CallbackQuery):
         temp_results.append([
             InlineKeyboardButton(f"📃 ᴘᴀɢᴇ {index_val + 1}/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore")
         ])
+
+    
     
     if show_invite and int(index_val) !=0 :
         
@@ -171,10 +172,8 @@ async def cb_navg(bot, update: CallbackQuery):
         ibuttons = None
         achatId = None
     
-    reply_markup = InlineKeyboardMarkup(temp_results)
+    reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"), InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"), InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi({index_val}|{query})")]]+temp_results)
     
-
-        
     try:
         await update.message.edit_reply_markup(
                 reply_markup=reply_markup
@@ -2068,7 +2067,17 @@ async def answer_alert(bot:Client, update:CallbackQuery):
     key = re.findall(r'answer\((.+)\)', update.data)[0]
 
     if key=='SELECTED':
-        await update.answer("This Has Already Been Selected :)")
+        await update.answer("Tʜɪs Hᴀs Aʟʀᴇᴀᴅʏ Bᴇᴇɴ Sᴇʟᴇᴄᴛᴇᴅ :)", show_alert=True)
+    elif key=='INFO':
+        await update.answer("""
+        Hᴏᴡ Tᴏ Dᴏᴡɴʟᴏᴀᴅ :
+
+        1. Sᴇɴᴅ ᴀ ᴍᴏᴠɪᴇ ɴᴀᴍᴇ
+        2. Cʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ᴡɪᴛʜ ᴄᴏʀʀᴇᴄᴛ ɴᴀᴍᴇ ᴀɴᴅ sɪᴢᴇ ғᴏʀ ᴜ
+        3. Pʀᴇss sᴛᴀʀᴛ
+        """, show_alert=True)
+    else:
+        await update.answer()
 
 def time_formatter(seconds: float) -> str:
     """ 

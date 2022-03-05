@@ -221,6 +221,7 @@ async def auto_filter(bot:Client, update:Message):
             )
             
         reply_markup = InlineKeyboardMarkup([[
+            InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"),
             InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"),
             InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi(0|{query})")
         ]]+ result[0])
@@ -228,14 +229,14 @@ async def auto_filter(bot:Client, update:Message):
         if not movie_info :
 
             await update.reply_text(
-                text=f"<b>I've Found {len_results} Results For Your Query <code>{update.text}</code></b>",
+                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
             return
         elif movie_info["full-size cover url"]=="Unknown":
             await update.reply_text(
-                text=f"<b>I've Found {len_results} Results For Your Query <code>{update.text}</code></b>",
+                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )

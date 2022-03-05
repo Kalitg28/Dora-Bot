@@ -216,10 +216,14 @@ async def auto_filter(bot:Client, update:Message):
             result[0].append(
                 [
                     InlineKeyboardButton(f"📃 Page 1/{len_result if len_result < max_pages else max_pages} 📃", callback_data="ignore"),
-                    InlineKeyboardButton(f"All", callback_data=f"all({query})"),
                     InlineKeyboardButton("Next ⇛", callback_data=f"navigate(0|next|{query})")
                 ]
             )
+
+        results[0]+= [
+            InlineKeyboardButton(f"All", callback_data=f"all({query})"),
+            InlineKeyboardButton("Select", callback_data=f"multi(0|{query})")
+        ]
         
             
         reply_markup = InlineKeyboardMarkup(result[0])
@@ -242,11 +246,11 @@ async def auto_filter(bot:Client, update:Message):
 
         text = f"""
 <b>⍞ ᴛɪᴛɪʟᴇ </b>: <code>{movie_info['title']}</code>
-<b>⌗ ɢᴇɴʀᴇ </b>: <code>{str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}</code>
+<b>⌗ ɢᴇɴʀᴇ </b>: <code>{Helpers.list_to_str(movie_info["genres"])}</code>
 <b>★ ʀᴀᴛɪɴɢ </b>: <code>{movie_info["rating"]} / 10</code>
 <b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} / 10</code>
 <b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
-<b>⌬ ʟᴀɴɢᴜᴀɢᴇs <b>: <code>{movie_info['languages']}</code>
+<b>⌬ ʟᴀɴɢᴜᴀɢᴇs <b>: <code>{Helpers.list_to_str(movie_info['languages'])}</code>
 <b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <code>{movie_info["original air date"]}</code>
 <b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
 

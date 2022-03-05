@@ -101,7 +101,7 @@ async def select(bot:Client, update:CallbackQuery):
 
     page_btn = update.message.reply_markup.inline_keyboard
     print(page_btn)
-    page_btn[int(index)] = [InlineKeyboardButton(f'{page_btn[int(index)][0].text}✅', callback_data="answer(SELECTED)")]
+    page_btn[int(index)] = [InlineKeyboardButton('✅', callback_data="answer(SELECTED)")]
     print(page_btn)
 
     global SELECTED

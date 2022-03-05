@@ -219,14 +219,11 @@ async def auto_filter(bot:Client, update:Message):
                     InlineKeyboardButton("Next ⇛", callback_data=f"navigate(0|next|{query})")
                 ]
             )
-
-        results[0] = [[
+            
+        reply_markup = InlineKeyboardMarkup([[
             InlineKeyboardButton(f"All", callback_data=f"all({query})"),
             InlineKeyboardButton("Select", callback_data=f"multi(0|{query})")
-        ]] + results[0]
-        
-            
-        reply_markup = InlineKeyboardMarkup(result[0])
+        ]]+ result[0])
 
         if not movie_info :
 

@@ -108,7 +108,7 @@ async def select(bot:Client, update:CallbackQuery):
         SELECTED[str(update.from_user.id)] = {}
         prev = {}
     per_page = FIND.get(query).get('per_page')
-    all_files = FIND.get(query).get('all_file')
+    all_files = FIND.get(query).get('all_files')
     file_index = per_page * int(page) + int(index)
     unique_id = all_files[file_index]
 

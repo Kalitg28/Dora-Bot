@@ -44,6 +44,10 @@ class Helpers() :
 
             print(e)
 
+    movie_info['id'] = movie_id
+    movie_info['link'] = f"https://imdb.com/title/tt{movie_id}"
+    movie_info['rating_link'] = f"https://imdb.com/title/tt{movie_id}/ratings"
+
     air_date = movie.get("original air date", None)
     if not air_date:
 

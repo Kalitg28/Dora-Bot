@@ -68,7 +68,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
     await update.message.edit_reply_markup(InlineKeyboardMarkup(total_btn))
     await update.answer()
 
-@Client.on_callback_query(filters.regex(r'sel\((.+)\)'), group=4)
+@Client.on_callback_query(filters.regex(r'^sel\((.+)\)'), group=4)
 async def select(bot:Client, update:CallbackQuery):
 
     global VERIFY

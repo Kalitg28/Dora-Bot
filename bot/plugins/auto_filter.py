@@ -247,7 +247,7 @@ async def auto_filter(bot:Client, update:Message):
 <b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
 <b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} / 10</code>
 <b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
-<b>⌬ ʟᴀɴɢᴜᴀɢᴇs <b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
+<b>⌬ ʟᴀɴɢᴜᴀɢᴇs </b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
 <b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <code>{movie_info["original air date"]}</code>
 <b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
 

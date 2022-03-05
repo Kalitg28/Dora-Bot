@@ -102,6 +102,7 @@ async def select(bot:Client, update:CallbackQuery):
     page_btn = update.message.reply_markup.inline_keyboard
     print(page_btn)
     page_btn[int(index)] = [InlineKeyboardButton('✅', callback_data="answer(SELECTED)")]
+    print(page_btn)
 
     global SELECTED
     prev = SELECTED.get(str(update.from_user.id))
@@ -120,7 +121,9 @@ async def select(bot:Client, update:CallbackQuery):
 
     SELECTED[str(update.from_user.id)] = prev
 
-    await update.message.edit_reply_markup(InlineKeyboardMarkup(page_btn.append([[InlineKeyboardButton("Send", callback_data=f"sensel({query})")]])))
+    reply_markup = page_btn.append([InlineKeyboardButton("Send", callback_data=f"sensel({query})")])
+
+    await update.message.edit_reply_markup(InlineKeyboardMarkup(reply_markup))
     await update.answer()
 
 @Client.on_callback_query(filters.regex(r'sensel\((.+)\)'), group=4)

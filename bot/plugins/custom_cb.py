@@ -291,7 +291,7 @@ async def privat_link_gen(bot:Client, update:CallbackQuery):
         except :
             count = 0
         if count < 50:
-            return await update.answer(f"You Have To Adminsitrate A Group With Atleast 50 Memebers To Use This Feature :(") 
+            return await update.answer(f"You Have To Adminsitrate A Group With Atleast 50 Memebers To Use This Feature :(", show_alert=True)
         else:
             link = await bot.create_chat_invite_link(-1001547869793)
             try:

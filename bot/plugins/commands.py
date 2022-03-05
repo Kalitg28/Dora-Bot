@@ -51,6 +51,9 @@ async def start(bot:Client , update):
             except Exception as e:
                 print(e)
                 await update.reply_text(f"Try Contacting Support Group Reason : <code>{e}</code>", parse_mode='html')
+        elif file_uid.startswith('retry'):
+            link = file_uid.strip('retry')
+            return await update.reply_text("Now Please Return And Try Again :)", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Back", url=link)]]))
         elif file_uid.startswith('connect'):
             try:
                 chat_id = int(file_uid.strip('connect '))

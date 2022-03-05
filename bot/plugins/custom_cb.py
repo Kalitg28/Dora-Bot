@@ -1,6 +1,6 @@
 import re
 import asyncio
-from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, PeerIdInvalid
+from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, PeerIdInvalid, ChannelInvalid
 
 from pyrogram.types.bots_and_keyboards.callback_query import CallbackQuery
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
@@ -61,6 +61,8 @@ async def fix_value(bot:Client, update:CallbackQuery):
             except TypeError:
                 return await response.reply_text("That Doesnt Look Like A Valid ChatID...")
             except PeerIdInvalid:
+                return await response.reply_text("Oh no looks Like I'm Not A Member Of This Channel Please Add Me There First...")
+            except ChannelInvalid:
                 return await response.reply_text("Oh no looks Like I'm Not A Member Of This Channel Please Add Me There First...")
 
         else :

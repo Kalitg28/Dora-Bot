@@ -63,7 +63,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
         total_btn.append(temp)
         index+=1
 
-    total_btn.append([InlineKeyboardButton("Back", callback_data=f"multi({int(index_val)-1}|{query})"), InlineKeyboardButton("Exit", callback_data=f"navigate({index_val+1}|back|{query})"), InlineKeyboardButton("Send", callback_data=f"sensel({query})"), InlineKeyboardButton("Next", callback_data=f"multi({int(index_val)+1}|{query})")])
+    total_btn.append([InlineKeyboardButton("Back", callback_data=f"multi({int(index_val)-1}|{query})"), InlineKeyboardButton("Exit", callback_data=f"navigate({int(index_val+1)}|back|{query})"), InlineKeyboardButton("Send", callback_data=f"sensel({query})"), InlineKeyboardButton("Next", callback_data=f"multi({int(index_val)+1}|{query})")])
 
     await update.message.edit_reply_markup(InlineKeyboardMarkup(total_btn))
     await update.answer()

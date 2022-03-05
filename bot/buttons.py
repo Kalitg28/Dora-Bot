@@ -5,8 +5,8 @@ class Buttons():
 
     EN = {
         "START" : [
-            [InlineKeyboardButton("⏦ About ⏦", callback_data="edit_c(ABOUT)"),InlineKeyboardButton("⏣ Mᴀᴘ ⏣", callback_data="edit_c(HELP)")],
-            [InlineKeyboardButton("␦ Sᴜᴘᴘᴏʀᴛ Tᴇᴀᴍ ␦", url="https://t.me/DoraSupportTeam"),InlineKeyboardButton("⨷ Cʟᴏsᴇ ⨷", callback_data="close")],
+            [InlineKeyboardButton("ꖜ About ꖜ", callback_data="edit_c(ABOUT)"),InlineKeyboardButton("⏣ Mᴀᴘ ⏣", callback_data="edit_c(HELP)")],
+            [InlineKeyboardButton("♡ Sᴜᴘᴘᴏʀᴛ Tᴇᴀᴍ ♡", url="https://t.me/DoraSupportTeam"),InlineKeyboardButton("ⓧ Cʟᴏsᴇ ⓧ", callback_data="close")],
             [InlineKeyboardButton("⨭ Aᴅᴅ ᴍᴇ ᴛᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⨮", url="https://t.me/DoraFilterBot?startgroup=true")]
         ],
 

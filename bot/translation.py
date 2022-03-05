@@ -129,7 +129,6 @@ Thanks To ❤️:
 • <a href='https://github.com/alberanid'>Albernaid</a> for the <a href='pypi.org/project/IMDbPY'>IMDbPY</a> library
 • <a href='github.com/AlbertEinsteinTg'>AlbertEinsteinTG</a> for the <a href='github.com/AlbertEinsteinTg/Adv-auto-filter-bot-v2'>Base Repo</a>
 • <a href='github.com/Arun017s'>Arun</a> for his Awesome Ideas
-• <a href='github.com/S9YD3R'>S9YD3R</a> for his imdb Results template
 
 Tnx <a href='github.com/Jisin0'>Jisin0</a> For Putting Everything Together"""
  }

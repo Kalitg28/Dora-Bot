@@ -220,10 +220,10 @@ async def auto_filter(bot:Client, update:Message):
                 ]
             )
 
-        results[0]+= [
+        results[0]+= [[
             InlineKeyboardButton(f"All", callback_data=f"all({query})"),
             InlineKeyboardButton("Select", callback_data=f"multi(0|{query})")
-        ]
+        ]]
         
             
         reply_markup = InlineKeyboardMarkup(result[0])

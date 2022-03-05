@@ -1,7 +1,7 @@
 import re
 
 from pyrogram import Client, filters
-from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid
+from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid, UserBlocked
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
 from bot import Translation, Buttons, VERIFY # pylint: disable=import-error
@@ -132,7 +132,7 @@ async def sensel(bot:Client, update:CallbackQuery):
     chat_id = update.message.chat.id
     user_id = update.from_user.id
 
-    settings = db.find_chat(chat_id)
+    settings = await db.find_chat(chat_id)
     fsub = settings.get("fsub", None)
         
 
@@ -173,7 +173,9 @@ async def sensel(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                await update.answer(url="https://t.me/DoraFilterBot?start=retry")
+                await update.answer(url=f"https://t.me/DoraFilterBot?start=retry{update.message.link}")
+            except UserBlocked:
+                await update.answer(url=f"https://t.me/DoraFilterBot?start=retry{update.message.link}")
             except Exception as e:
                 print(e)
                 return await update.answer(f"<b>Error:</b>\n<code>{e}</code>", show_alert=True)

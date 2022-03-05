@@ -145,7 +145,7 @@ async def settings(bot, update: Message):
     else:
         text+=f"\n- Force Subscribe: {fsub['title']} ✅\n"
 
-    text+=f"Fsub Message : {'Custom ✅' if fsub_msg else 'Default'}"
+    text+=f"\n- Fsub Message : {'Custom ✅' if fsub_msg else 'Default'}\n"
 
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
 

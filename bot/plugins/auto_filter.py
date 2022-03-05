@@ -242,12 +242,12 @@ async def auto_filter(bot:Client, update:Message):
             return
 
         text = f"""
-<b>⍞ ᴛɪᴛɪʟᴇ </b>: <code>{movie_info['title']}</code>
-<b>⌗ ɢᴇɴʀᴇ </b>: <code>{Helpers.list_to_str(movie_info["genres"])}</code>
-<b>★ ʀᴀᴛɪɴɢ </b>: <code>{movie_info["rating"]} / 10</code>
+<b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
+<b>⌗ ɢᴇɴʀᴇ </b>: <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
+<b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
 <b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} / 10</code>
 <b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
-<b>⌬ ʟᴀɴɢᴜᴀɢᴇs <b>: <code>{Helpers.list_to_str(movie_info['languages'])}</code>
+<b>⌬ ʟᴀɴɢᴜᴀɢᴇs <b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
 <b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <code>{movie_info["original air date"]}</code>
 <b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
 

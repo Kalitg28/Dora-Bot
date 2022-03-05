@@ -38,8 +38,20 @@ async def start(bot:Client , update):
     await bot.send_chat_action(update.chat.id, "typing")
     
     if file_uid:
-
-        if file_uid.startswith('connect'):
+        if file_uid.startswith('fsub'):
+            try:
+                id, link = re.findall(r'fsub\((.+)\)', file_uid)[0].split('|', 1)
+                chat = await bot.get_chat(int(id))
+                buttons = [[InlineKeyboardButton("Join 🤓", url=link),InlineKeyboardButton("Retry ♻️", url=f"https://t.me/DoraFilterBot?start={file_uid}")]]
+                await update.reply(
+                text="<b>Sorry Man You'll Have To Join My Channel First To Use Me 🙂🙂\n\nJust Click On The Join Button Below And Come Back And Click On Retry......</b>",
+                quote=True,
+                reply_markup=InlineKeyboardMarkup(buttons)
+                    )
+            except Exception as e:
+                print(e)
+                await update.reply_text(f"Try Contacting Support Group Reason : <code>{e}</code>", parse_mode='html')
+        elif file_uid.startswith('connect'):
             try:
                 chat_id = int(file_uid.strip('connect '))
                 try:
@@ -55,7 +67,6 @@ async def start(bot:Client , update):
                     return await update.reply_text("Looks Like Im Not Member Of That Chat Or The URl Is Invalid :(")
             except:
                 return await update.reply_text("Thats An Invalid URL")
-            return
 
         if re.findall(r"^a(.+)a(.+)a(.+)", file_uid):
             await Batch.get_batch(file_uid, bot, update)
@@ -109,7 +120,6 @@ async def start(bot:Client , update):
         file_id, file_name, file_caption, file_type = await db.get_file(new_uid)
         
         if (file_id or file_type) == None:
-            await bot.send_chat_action(update.chat.id, "cancel")
             return
         
         file_caption = "<b>" + file_name + "</b>\n\n" + caption
@@ -123,7 +133,6 @@ async def start(bot:Client , update):
         except Exception as e:
             await update.reply_text(f"<b>Error:</b>\n<code>{e}</code>", True, parse_mode="html")
             LOGGER(__name__).error(e)
-            await bot.send_chat_action(update.chat.id, "cancel")
         return
 
     buttons = Buttons.EN["START"]
@@ -139,7 +148,6 @@ async def start(bot:Client , update):
         parse_mode="html",
         reply_to_message_id=update.message_id
     )
-    await bot.send_chat_action(update.chat.id, "cancel")
 
 
 @Client.on_message(filters.command(["map"]) & filters.private, group=4)

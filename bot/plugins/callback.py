@@ -251,7 +251,7 @@ async def cb_settings(bot, update: CallbackQuery):
     else:
         text+=f"\n - Force Subscribe: {fsub['title']} ✅\n"
 
-    text+=f"Fsub Message : {'Custom ✅' if fsub_msg else 'Default'}"
+    text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
 
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
 

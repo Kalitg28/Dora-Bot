@@ -109,7 +109,7 @@ async def select(bot:Client, update:CallbackQuery):
         prev = {}
     per_page = FIND.get(query).get('per_page')
     all_files = FIND.get(query).get('all_file')
-    file_index = per_page * int(page) + index
+    file_index = per_page * int(page) + int(index)
     unique_id = all_files[file_index]
 
     if prev.get(query):
@@ -142,7 +142,7 @@ async def sensel(bot:Client, update:CallbackQuery):
                 except PeerIdInvalid:
                     pass
                 except UserNotParticipant:
-                    await update.answer(url=f"https://t.me/DoraFilterBot?start=fsub({chat_id})")
+                    await update.answer(url=f"https://t.me/DoraFilterBot?start=fsub({fsub}|{update.message.link})")
 
     global SELECTED
 

@@ -139,12 +139,13 @@ async def sensel(bot:Client, update:CallbackQuery):
                 try:
                     member = await bot.get_chat_member(int(fsub), user_id)
                     if member.status=='kicked':
-                        await update.reply("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!", quote=True)
+                        await update.answer("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!", show_alert=True)
                         return
                 except PeerIdInvalid:
                     pass
                 except UserNotParticipant:
-                    await update.answer(url=f"https://t.me/DoraFilterBot?start=fsub({fsub}|{update.message.link})")
+                    chat = str(chat_id).replace('-100','').replace('-','')
+                    return await update.answer(url=f"https://t.me/DoraFilterBot?start=fsub({fsub}|{chat}|{update.message.message_id})")
 
     global SELECTED
 
@@ -170,11 +171,13 @@ async def sensel(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry{update.message.link}")
+                chat = str(chat_id).replace('-100','').replace('-','')
+                return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry({chat}|{update.message.message_id})")
             except UserBlocked:
-                return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry{update.message.link}")
+                chat = str(chat_id).replace('-100','').replace('-','')
+                return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry({chat}|{update.message.message_id})")
             except Exception as e:
                 print(e)
-                return await update.answer(f"<b>Error:</b>\n<code>{e}</code>", show_alert=True)
+                return await update.answer(f"Error:\n{e}", show_alert=True)
 
-    await update.answer("Files Have Been Sent To PM :)")
+    await update.answer("Files Have Been Sent To PM :)", show_alert=True)

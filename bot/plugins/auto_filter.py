@@ -211,36 +211,23 @@ async def auto_filter(bot:Client, update:Message):
         
         FIND[query] = {"results": result, "total_len": len_results, "max_pages": max_pages, "all_files": all_files, "per_page": max_per_page} # TrojanzHex's Idea Of Dicts😅
 
+            
+        reply_markup = [[
+            InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"),
+            InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"),
+            InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi(0|{query})")
+        ]]+ result[0]
+
         # Add next buttin if page count is not equal to 1
         if len_result != 1:
-            result[0].append(
+            reply_markup.append(
                 [
                     InlineKeyboardButton(f"📃 ᴘᴀɢᴇ 1/{len_result if len_result < max_pages else max_pages} 📃", callback_data="ignore"),
                     InlineKeyboardButton("ɴᴇxᴛ ⇛", callback_data=f"navigate(0|next|{query})")
                 ]
             )
-            
-        reply_markup = InlineKeyboardMarkup([[
-            InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"),
-            InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"),
-            InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi(0|{query})")
-        ]]+ result[0])
 
-        if not movie_info :
-
-            await update.reply_text(
-                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
-                reply_markup=reply_markup,
-                parse_mode="html"
-            )
-            return
-        elif movie_info["full-size cover url"]=="Unknown":
-            await update.reply_text(
-                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
-                reply_markup=reply_markup,
-                parse_mode="html"
-            )
-            return
+        reply_markup = InlineKeyboardMarkup(reply_markup)
 
         text = f"""
 <b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
@@ -254,6 +241,33 @@ async def auto_filter(bot:Client, update:Message):
 
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
         """
+
+        if not movie_info :
+
+            await update.reply_text(
+                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
+                reply_markup=reply_markup,
+                parse_mode="html"
+            )
+            return
+        elif movie_info and movie_info["full-size cover url"]=="Unknown":
+            await bot.send_message(
+                chat_id = update.chat.id,
+                text=text,
+                reply_markup=reply_markup,
+                parse_mode="html",
+                reply_to_message_id=update.message_id
+            )
+            return
+        elif movie_info["full-size cover url"]=="Unknown":
+            await update.reply_text(
+                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
+                reply_markup=reply_markup,
+                parse_mode="html"
+            )
+            return
+
+        
 
         try:
             await bot.send_photo(
@@ -298,14 +312,6 @@ async def auto_filter(bot:Client, update:Message):
             print(e)
 
         print(update.chat.title)
-
-
-
-@Client.on_message(filters.command('search'), group=4)
-async def media_search(bot:Client, update:Message):
-
-    query = update.text.split(None, 1)[1]
-    await db.search_media(query, 10)
 
 
 async def gen_invite_links(db, group_id, bot, update):

@@ -115,7 +115,12 @@ async def cb_navg(bot, update: CallbackQuery):
         ])
 
     elif int(index_val) == 0:
-        pass
+        temp_results.append(
+                [
+                    InlineKeyboardButton(f"📃 ᴘᴀɢᴇ 1/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore"),
+                    InlineKeyboardButton("ɴᴇxᴛ ⇛", callback_data=f"navigate(0|next|{query})")
+                ]
+            )
 
     else:
         temp_results.append([
@@ -2051,7 +2056,7 @@ async def cb_stats(bot:Client, update:CallbackQuery):
         stats = await db.get_stats()
         await update.message.edit(
             f"Fɪʟᴇs : {stats['files']}\n\nUsᴇʀs : {stats['users']}\n\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\n\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\n\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="start"), InlineKeyboardButton("✘ Cʟᴏsᴇ ✘", callback_data="close")]])
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="edit_c(START)"), InlineKeyboardButton("Rᴇғʀᴇsʜ", callback_data="stats")]])
         )
     except Exception as e:
         print(e)

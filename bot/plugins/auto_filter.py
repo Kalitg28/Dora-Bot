@@ -229,7 +229,17 @@ async def auto_filter(bot:Bot, update:Message):
 
         reply_markup = InlineKeyboardMarkup(reply_markup)
 
-        text = f"""
+        if not movie_info :
+
+            await update.reply_text(
+                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
+                reply_markup=reply_markup,
+                parse_mode="html"
+            )
+            return
+        elif movie_info and movie_info["full-size cover url"]=="Unknown":
+
+            text = f"""
 <b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
 <b>⌗ ɢᴇɴʀᴇ </b>: <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
 <b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
@@ -242,15 +252,6 @@ async def auto_filter(bot:Bot, update:Message):
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
         """
 
-        if not movie_info :
-
-            await update.reply_text(
-                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
-                reply_markup=reply_markup,
-                parse_mode="html"
-            )
-            return
-        elif movie_info and movie_info["full-size cover url"]=="Unknown":
             await bot.send_message(
                 chat_id = update.chat.id,
                 text=text,
@@ -267,7 +268,18 @@ async def auto_filter(bot:Bot, update:Message):
             )
             return
 
-        
+        text = f"""
+<b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
+<b>⌗ ɢᴇɴʀᴇ </b>: <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
+<b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
+<b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} </code>
+<b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
+<b>⌬ ʟᴀɴɢᴜᴀɢᴇs </b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
+<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
+<b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
+
+<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
+        """        
 
         try:
             msg = await bot.send_photo(

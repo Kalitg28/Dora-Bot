@@ -197,9 +197,6 @@ class Helpers() :
     #Pasting overlas to image
     img.paste(overlay, (20,75), mask=overlay)
 
-    # Display edited image
-    img.show()
-
     path = f'/app/bot/assets/{text}.png'
     img.save(path)
 

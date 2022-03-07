@@ -8,6 +8,10 @@ from pyrogram.types import InlineQueryResultPhoto
 from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
 from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
 
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+
 from bot.translation import Translation
 
 
@@ -169,3 +173,34 @@ class Helpers() :
          return l
      res = " ".join(l)
      return res
+
+ 
+ async def gen_closed_img(text):
+
+    # Open an Image
+    W, H = (640, 640)
+    img = Image.new("RGBA",(W,H),"black")
+    overlay = Image.open('/usr/app/bot/assets/closed2.png')
+
+    # Call draw Method to add 2D graphics in an image
+    I1 = ImageDraw.Draw(img)
+
+    # Custom font style and font size
+    myFont = ImageFont.truetype('/usr/app/assets/Meteora.ttf', int((W/len(text)*2)-(300/len(text))))
+
+    w, h = I1.textsize(text, myFont)
+    print(w, h)
+
+    # Add Text to an image
+    I1.text(text=text, font=myFont, fill =(300, 1000, 1000), xy=((W/2)-(w/2) + 10, H/2-(h/2)), align='center')
+
+    #Pasting overlas to image
+    img.paste(overlay, (20,75), mask=overlay)
+
+    # Display edited image
+    img.show()
+
+    path = f'/usr/app/bot/assets/{text}.png'
+    img.save(path)
+
+    return path

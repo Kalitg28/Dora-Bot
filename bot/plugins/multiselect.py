@@ -1,7 +1,7 @@
 import re
 
 from pyrogram import Client, filters
-from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid, UserBlocked
+from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid, UserIsBlocked
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
 from bot import Translation, Buttons, VERIFY # pylint: disable=import-error
@@ -150,12 +150,12 @@ async def sensel(bot:Client, update:CallbackQuery):
     global SELECTED
 
     if not SELECTED.get(str(user_id)):
-        return await update.answer("Thats Not For You :)", show_alert=True)
+        return await update.answer("Tʜɪs Bᴜᴛᴛᴏɴ Isɴᴛ Fᴏʀ Yᴏᴜ :(", show_alert=True)
 
     query = re.findall(r"sensel\((.+)\)", update.data)[0]
 
     if not SELECTED[str(user_id)].get(query):
-        return await update.answer("This Button Isnt For You :(", show_alert=True)
+        return await update.answer("Tʜɪs Bᴜᴛᴛᴏɴ Isɴᴛ Fᴏʀ Yᴏᴜ :(", show_alert=True)
 
     files = SELECTED[str(user_id)][query]
 
@@ -173,11 +173,11 @@ async def sensel(bot:Client, update:CallbackQuery):
             except PeerIdInvalid:
                 chat = str(chat_id).replace('-100','').replace('-','')
                 return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry({chat}|{update.message.message_id})")
-            except UserBlocked:
+            except UserIsBlocked:
                 chat = str(chat_id).replace('-100','').replace('-','')
                 return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry({chat}|{update.message.message_id})")
             except Exception as e:
                 print(e)
                 return await update.answer(f"Error:\n{e}", show_alert=True)
 
-    await update.answer("Files Have Been Sent To PM :)", show_alert=True)
+    await update.answer("Fɪʟᴇs Hᴀᴠᴇ Bᴇᴇɴ Sᴇɴᴛ Tᴏ PM :)", show_alert=True)

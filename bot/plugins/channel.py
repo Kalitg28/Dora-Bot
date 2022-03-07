@@ -4,7 +4,7 @@ import asyncio
 import re
 
 from pyrogram import Client, filters
-from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, ChatMemberUpdated
+from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, ChatMemberUpdated, InputMediaPhoto
 from pyrogram.errors import UserAlreadyParticipant, FloodWait, UserNotParticipant, PeerIdInvalid
 from pyrogram.methods.messages.delete_messages import DeleteMessages
 from pyrogram.types.messages_and_media.message import Message
@@ -15,6 +15,7 @@ from bot.bot import Bot # pylint: disable=import-error
 from bot.database import Database # pylint: disable=import-error
 from bot.plugins.auto_filter import recacher # pylint: disable=import-error
 from bot import Translation
+from bot.helpers import Helpers
 
 db = Database()
     
@@ -352,3 +353,35 @@ async def del_file(bot:Client, update:Message):
             await msg.delete()
             await update.delete()
             await update.reply_text(f"File {msg.document.file_name} was Removed From Database Successfully :)")
+
+@Client.on_message(filters.outgoing & filters.command('del', prefixes=['/','.']) & filters.chat(Translation.LOG_CHANNEL))
+async def close_trigger(bot:Client, update:Message):
+
+    cmd, type, chat_id, message_id, text = update.text.split(' ', 4)
+
+    reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("Rᴇᴀᴅ ᴍᴏʀᴇ", callback_data="answer(CLOSED)")
+            ]])
+
+    if type=="photo":
+
+        path = await Helpers.gen_closed_img(text)
+        await bot.edit_message_media(
+            chat_id=int(chat_id),
+            message_id=int(message_id),
+            media=InputMediaPhoto(
+                media=path,
+                caption=f"<i>Tʜᴇ Rᴇsᴜʟᴛs Fᴏʀ {text} Wᴀs Cʟᴏsᴇᴅ Aғᴛᴇʀ Tɪᴍᴇᴏᴜᴛ</i>",
+                parse_mode='html'
+            ),
+            reply_markup=reply_markup
+        )
+    elif type=="text":
+
+        await bot.edit_message_text(
+            chat_id=int(chat_id),
+            message_id=int(message_id),
+            caption=f"<i>Tʜᴇ Rᴇsᴜʟᴛs Fᴏʀ {text} Wᴀs Cʟᴏsᴇᴅ Aғᴛᴇʀ Tɪᴍᴇᴏᴜᴛ</i>",
+            parse_mode='html',
+            reply_markup=reply_markup
+        )

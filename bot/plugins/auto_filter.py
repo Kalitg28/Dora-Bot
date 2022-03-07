@@ -270,13 +270,19 @@ async def auto_filter(bot:Client, update:Message):
         
 
         try:
-            await bot.send_photo(
+            msg = await bot.send_photo(
                 photo=movie_info["full-size cover url"],
                 chat_id = update.chat.id,
                 caption=text,
                 reply_markup=reply_markup,
                 parse_mode="html",
                 reply_to_message_id=update.message_id
+            )
+
+            await bot.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del photo {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
             )
 
         except MediaEmpty:

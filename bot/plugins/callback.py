@@ -110,8 +110,7 @@ async def cb_navg(bot, update: CallbackQuery):
 
     if ((index_val + 1 )== max_pages) or ((index_val + 1) == len(results)): # Max Pages
         temp_results.append([
-            InlineKeyboardButton("⇚ ʙᴀᴄᴋ", callback_data=f"navigate({index_val}|back|{query})"),
-            InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})")
+            InlineKeyboardButton("⇚ ʙᴀᴄᴋ", callback_data=f"navigate({index_val}|back|{query})")
         ])
 
     elif int(index_val) == 0:
@@ -1962,8 +1961,8 @@ async def callback_data(bot, update: CallbackQuery):
         await update.message.delete()
 
     elif query_data == "instruct":
-        await update.answer("Please Check The Spelling Of The Movie\n\nMake Sure It Is Released\n\nAvoid Unnecessary Words", show_alert=True)
-    await bot.send_chat_action(update.message.chat.id, "cancel")
+        await update.answer("-Pʟᴇᴀsᴇ Cʜᴇᴄᴋ Tʜᴇ Sᴘᴇʟʟɪɴɢ Oғ Tʜᴇ Mᴏᴠɪᴇ\n-Mᴀᴋᴇ Sᴜʀᴇ Iᴛ Is Rᴇʟᴇᴀsᴇᴅ\n-Aᴠᴏɪᴅ Uɴɴᴇᴄᴇssᴀʀʏ Wᴏʀᴅs", show_alert=True)
+     
 
 @Client.on_callback_query(filters.regex(r"edit_c\((.+)\)"), group=4)
 async def edit_caption(bot:Client, update: CallbackQuery):
@@ -1989,7 +1988,7 @@ async def edit_caption(bot:Client, update: CallbackQuery):
         await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     else :
         await update.message.edit_caption(caption=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
-    await bot.send_chat_action(update.message.chat.id, "cancel")
+     
 
 @Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=4)
 async def alerter(bot:Client, update: CallbackQuery):
@@ -2052,11 +2051,12 @@ async def edit_m(bot:Client, update: CallbackQuery):
 async def cb_stats(bot:Client, update:CallbackQuery):
 
     try:
-
+        await update.answer("Fᴇᴛᴄʜɪɴɢ Dᴇᴛᴀɪʟs...")
         stats = await db.get_stats()
         await update.message.edit(
-            f"Fɪʟᴇs : {stats['files']}\n\nUsᴇʀs : {stats['users']}\n\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\n\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\n\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="edit_c(START)"), InlineKeyboardButton("Rᴇғʀᴇsʜ", callback_data="stats")]])
+            f"<b>♡ Dᴀᴛᴀʙᴀsᴇ sᴛᴀᴛs ᴏғ Dᴏʀᴀ:-</b>\n\nFɪʟᴇs : {stats['files']}\nUsᴇʀs : {stats['users']}\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="edit_c(START)"), InlineKeyboardButton("Rᴇғʀᴇsʜ", callback_data="stats")]]),
+            parse_mode='html'
         )
     except Exception as e:
         print(e)
@@ -2064,7 +2064,7 @@ async def cb_stats(bot:Client, update:CallbackQuery):
 @Client.on_callback_query(filters.regex("ignore"), group=4)
 async def ignore(bot:Client, update:CallbackQuery):
 
-    await update.answer("You Have Hit A Wall 💥🧱🚗", show_alert=True)
+    await update.answer("Yᴏᴜ Hᴀᴠᴇ Hɪᴛ A Wᴀʟʟ 💥🧱🚗", show_alert=True)
 
 @Client.on_callback_query(filters.regex(r'answer\((.+)\)'))
 async def answer_alert(bot:Client, update:CallbackQuery):
@@ -2078,8 +2078,15 @@ async def answer_alert(bot:Client, update:CallbackQuery):
         Hᴏᴡ Tᴏ Dᴏᴡɴʟᴏᴀᴅ :
 
         1. Sᴇɴᴅ ᴀ ᴍᴏᴠɪᴇ ɴᴀᴍᴇ
-        2. Cʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ᴡɪᴛʜ ᴄᴏʀʀᴇᴄᴛ ɴᴀᴍᴇ ᴀɴᴅ sɪᴢᴇ ғᴏʀ ᴜ
+        2. Cʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ᴡɪᴛʜ ᴄᴏʀʀᴇᴄᴛ ɴᴀᴍᴇ ᴀɴᴅ sɪᴢᴇ ғᴏʀ ʏᴏᴜ
         3. Pʀᴇss sᴛᴀʀᴛ
+        """, show_alert=True)
+
+    elif key=="CLOSED":
+        await update.answer("""
+        Tʜᴇ Rᴇsᴜʟᴛs ғᴏʀ ᴛʜɪs ᴍᴏᴠɪᴇ ᴡᴀs ᴄʟᴏsᴇᴅ ᴀғᴛᴇʀ ᴀ ᴘʀᴇᴅᴇғɪɴᴇᴅ ᴛɪᴍᴇᴏᴜᴛ
+
+        Jᴜsᴛ Asᴋ Tʜᴇ ᴍᴏᴠɪᴇ ᴀɢᴀɪɴ ᴛᴏ ɢᴇᴛ ɪᴛ
         """, show_alert=True)
     else:
         await update.answer()

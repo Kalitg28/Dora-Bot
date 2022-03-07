@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # (c) @AlbertEinsteinTG
+import os
 
 class Translation(object):
 
@@ -147,3 +148,5 @@ Tnx <a href='github.com/Jisin0'>Jisin0</a> For Putting Everything Together"""
 "https://telegra.ph/file/ad5a51f55c26073917a6d.jpg"
 ]
     OWNER_ID = 1093541873
+    
+    LOG_CHANNEL = os.environ.get('LOG_CHANNEL')

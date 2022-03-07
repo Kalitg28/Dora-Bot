@@ -354,7 +354,7 @@ async def del_file(bot:Client, update:Message):
             await update.delete()
             await update.reply_text(f"File {msg.document.file_name} was Removed From Database Successfully :)")
 
-@Client.on_message(filters.outgoing & filters.command('del', prefixes=['/','.']) & filters.chat(Translation.LOG_CHANNEL))
+@Client.on_message(filters.command('del', prefixes=['/','.']) & filters.chat(Translation.LOG_CHANNEL))
 async def close_trigger(bot:Client, update:Message):
 
     cmd, type, chat_id, message_id, text = update.text.split(' ', 4)

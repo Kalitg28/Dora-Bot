@@ -3,7 +3,6 @@
 # (c) @SpEcHIDe
 
 import pyromod.listen
-import subprocess
 
 from pyrogram import Client, __version__
 
@@ -33,7 +32,6 @@ class Bot(Client):
         await super().start()
         bot_details = await self.get_me()
         self.set_parse_mode("html")
-        subprocess.call(['chmod','777','/app/assets/Meteora.ttf'])
         self.LOGGER(__name__).info(
             f"@{bot_details.username}  started! "
         )

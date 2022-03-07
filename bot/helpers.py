@@ -1,6 +1,6 @@
 # (c) @MrPurple902
 
-import re 
+import os
 import imdb
 import random
 from imdb import Movie
@@ -186,7 +186,7 @@ class Helpers() :
     I1 = ImageDraw.Draw(img)
 
     # Custom font style and font size
-    myFont = ImageFont.truetype('/app/assets/Meteora.ttf', int((W/len(text)*2)-(300/len(text))))
+    myFont = ImageFont.truetype('/app/bot/assets/Meteora.ttf', int((W/len(text)*2)-(300/len(text))))
 
     w, h = I1.textsize(text, myFont)
     print(w, h)

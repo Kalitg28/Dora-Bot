@@ -25,7 +25,7 @@ ACTIVE_CHATS = {}
 db = Database()
 
 @Bot.on_message(filters.text & filters.group & ~filters.bot, group=0)
-async def auto_filter(bot:Client, update:Message):
+async def auto_filter(bot:Bot, update:Message):
     """
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
     """
@@ -279,7 +279,7 @@ async def auto_filter(bot:Client, update:Message):
                 reply_to_message_id=update.message_id
             )
 
-            await bot.send_message(
+            await bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del photo {msg.chat.id} {msg.message_id} {query}",
                 schedule_date=msg.date+10

@@ -180,13 +180,13 @@ class Helpers() :
     # Open an Image
     W, H = (640, 640)
     img = Image.new("RGBA",(W,H),"black")
-    overlay = Image.open('/usr/app/bot/assets/closed2.png')
+    overlay = Image.open('/app/bot/assets/closed2.png')
 
     # Call draw Method to add 2D graphics in an image
     I1 = ImageDraw.Draw(img)
 
     # Custom font style and font size
-    myFont = ImageFont.truetype('/usr/app/assets/Meteora.ttf', int((W/len(text)*2)-(300/len(text))))
+    myFont = ImageFont.truetype('/app/assets/Meteora.ttf', int((W/len(text)*2)-(300/len(text))))
 
     w, h = I1.textsize(text, myFont)
     print(w, h)
@@ -200,7 +200,7 @@ class Helpers() :
     # Display edited image
     img.show()
 
-    path = f'/usr/app/bot/assets/{text}.png'
+    path = f'/app/bot/assets/{text}.png'
     img.save(path)
 
     return path

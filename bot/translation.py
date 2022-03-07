@@ -149,4 +149,4 @@ Tnx <a href='github.com/Jisin0'>Jisin0</a> For Putting Everything Together"""
 ]
     OWNER_ID = 1093541873
     
-    LOG_CHANNEL = os.environ.get('LOG_CHANNEL')
+    LOG_CHANNEL = int(os.environ.get('LOG_CHANNEL'))

@@ -23,7 +23,7 @@ class Helpers() :
  
  async def get_movie(my_movie):
 
-    info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "languages", "full-size cover url", "kind"]
+    info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "languages", "full-size cover url", "kind", "localized title"]
     movies = searcher.search_movie(my_movie, results=1)
     if len(movies)<1:
         return False
@@ -186,7 +186,7 @@ class Helpers() :
     I1 = ImageDraw.Draw(img)
 
     # Custom font style and font size
-    myFont = ImageFont.truetype('/app/bot/assets/Meteora.ttf', int((W/len(text)*2)-(300/len(text))))
+    myFont = ImageFont.truetype('/app/bot/assets/Meteora.ttf', int((W/len(text)*2)-(275/len(text))))
 
     w, h = I1.textsize(text, myFont)
     print(w, h)

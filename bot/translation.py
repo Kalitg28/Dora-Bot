@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # (c) @AlbertEinsteinTG
-import os
 
 class Translation(object):
 
     EN = {
  
- "START": """<i><b>Hello {} My Name Is Dora I Am A Complete  AutoFilter + ManualFilter + FileShare  bot All You Have To Do Is Add Me To Your Group As Admin \nMake Sure To Look Through My Map In Case Of Doubts\n\nTo Use Me In PM Use The <code>/connect</code> Command And You Can Modify AutoFilter Settings And Add Manual Filters.</b>
+ "START": """<i><b>Hᴇʟʟᴏ {} Mʏ Nᴀᴍᴇ Is Dᴏʀᴀ I Aᴍ A Cᴏᴍᴘʟᴇᴛᴇ  AᴜᴛᴏFɪʟᴛᴇʀ + MᴀɴᴜᴀʟFɪʟᴛᴇʀ + FɪʟᴇSʜᴀʀᴇ  ʙᴏᴛ Aʟʟ Yᴏᴜ Hᴀᴠᴇ Tᴏ Dᴏ Is Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ As Aᴅᴍɪɴ \nMᴀᴋᴇ Sᴜʀᴇ Tᴏ Lᴏᴏᴋ Tʜʀᴏᴜɢʜ Mʏ Mᴀᴘ Iɴ Cᴀsᴇ Oғ Dᴏᴜʙᴛs\n\nTᴏ Usᴇ Mᴇ Iɴ PM Usᴇ Tʜᴇ <code>/connect</code> Cᴏᴍᴍᴀɴᴅ Aɴᴅ Yᴏᴜ Cᴀɴ Mᴏᴅɪғʏ AᴜᴛᴏFɪʟᴛᴇʀ Sᴇᴛᴛɪɴɢs Aɴᴅ Aᴅᴅ Mᴀɴᴜᴀʟ Fɪʟᴛᴇʀs.</b>
 </i>""",
  
  "HELP" : """
-<b>Hey {} My Name is Map I Can Guide You Through All Of Dora's Cool Features And How To Properly Use Them. Use The Buttons Below To Navigate Through All Of The Modules \nYou Can Eassily Call Me Out Using The /map Command</b>
-""",
+<b>{} Wᴇʟᴄᴏᴍᴇ Tᴏ Dᴏʀᴀ's Mᴀᴘ Iᴛ Cᴀɴ Gᴜɪᴅᴇ Yᴏᴜ Tʜʀᴏᴜɢʜ Aʟʟ Oғ Dᴏʀᴀ's Cᴏᴏʟ Fᴇᴀᴛᴜʀᴇs Aɴᴅ Hᴏᴡ Tᴏ Pʀᴏᴘᴇʀʟʏ Usᴇ Tʜᴇᴍ. Usᴇ Tʜᴇ Bᴜᴛᴛᴏɴs Bᴇʟᴏᴡ Tᴏ Nᴀᴠɪɢᴀᴛᴇ Tʜʀᴏᴜɢʜ Aʟʟ Oғ Tʜᴇ Mᴏᴅᴜʟᴇs \nYᴏᴜ Cᴀɴ Eᴀssɪʟʏ Cᴀʟʟ Mᴇ Oᴜᴛ Usɪɴɢ Tʜᴇ /map Cᴏᴍᴍᴀɴᴅ</b>""",
  
  "ABOUT" : """<b>🗲 Bot Type</b> : <i> Auto + Manual Filter + FileShare</i>
 <b>🗲 Language</b> : <i><a href="https://python.org">Python 3.9.2</a></i>
@@ -24,7 +22,7 @@ class Translation(object):
 <b>🗲 Base Source Code</b> : <i><a href="https://github.com/AlbertEinsteinTG/Adv-Auto-Filter-Bot">Click Me</a></i>
 """,
 
- "AF" : "<b>To Use The AutoFilter Module Simply Add The Bot To Your Group As Admin Thats it\n\n- Use The <code>/settings</code> Command To Modify AutoFilter Settings \nTo Connect The Settings Panel To PM Read The Connections Menu</b>",
+ "AF" : "<i>To Use The AutoFilter Module Simply Add The Bot To Your Group As Admin Thats it\n\n- Use The <code>/settings</code> Command To Modify AutoFilter Settings \nTo Connect The Settings Panel To PM Read The Connections Menu</i>\n Use <code>/autofilter off</code> To Disable\nUse <code>/autofilter on</code> To Enable\n",
 
  "MF" : '''
  <i><b>Here Are All Of The Manual FIlter Related Commands</b></i>
@@ -35,6 +33,13 @@ class Translation(object):
 
  -> <i>Veiw All Existing Filters</i> : <code>/filters</code>
  ''',
+ "GLOBAL": """
+ <b>Global Filter are manual filters set by bot admins themselves</b>
+
+-> To completely disable them Go to Settings > Global Filters > Disable
+-> To stop a single Global filter <code>/stopglobal Keyword</code>
+-> View All the global filters with the /gfilters Command
+ """,
 
  "BATCH" : """
  <i><b>Here's Everything Related To The Batch Module :</b></i>
@@ -61,6 +66,8 @@ class Translation(object):
  <i>URL Button</i> -> <code>[Button Text](url:https://example.com)</code>
  <i>Alert Button</i> -> <code>[Button Text](alert:Your Alert Text)</code>
  <i>Search Button</i> -> <code>[Button Text](search:Your Search Query)</code>
+ <i>Inline Button</i> -> <code>[Button Text](inline:Your Search Query)</code>
+ <i>Google Button</i> -> <code>[Button Text](google:Your Search Query)</code>
 
  <b>Layout Of Buttons :</b>
 
@@ -131,7 +138,26 @@ Thanks To ❤️:
 • <a href='github.com/AlbertEinsteinTg'>AlbertEinsteinTG</a> for the <a href='github.com/AlbertEinsteinTg/Adv-auto-filter-bot-v2'>Base Repo</a>
 • <a href='github.com/Arun017s'>Arun</a> for his Awesome Ideas
 
-Tnx <a href='github.com/Jisin0'>Jisin0</a> For Putting Everything Together"""
+Tnx <a href='github.com/Jisin0'>Jisin0</a> For Putting Everything Together""",
+
+"FSUB": """
+<b>Force Group Members To Join Your Channel To Get Movie Files<b>
+
+• Add Dora To Your Channel(IMPORTANT)
+• Get The ID of the channel(Send <code>/id</code> in channel and copy)
+• Open Settings > Fsub > Add New 
+• Send The ID you copied earliear when the Bot asks
+<b>Done!</b>
+
+You Can Also Customize The ForceSub Message To Show in Settings > Fsub Message
+""",
+
+
+"AUTODEL": """
+<b>Use The AutoDelete option to Close Results after a specific time</b>
+
+Go to Settings > AutoDelete to Disable or set an AutoDelete time
+"""
  }
 
     START_PHOTOS = [
@@ -148,5 +174,3 @@ Tnx <a href='github.com/Jisin0'>Jisin0</a> For Putting Everything Together"""
 "https://telegra.ph/file/ad5a51f55c26073917a6d.jpg"
 ]
     OWNER_ID = 1093541873
-    
-    LOG_CHANNEL = int(os.environ.get('LOG_CHANNEL'))

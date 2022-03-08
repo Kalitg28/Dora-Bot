@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # (c) @AlbertEinsteinTG
+import os
 
 class Translation(object):
 
@@ -174,3 +175,4 @@ Go to Settings > AutoDelete to Disable or set an AutoDelete time
 "https://telegra.ph/file/ad5a51f55c26073917a6d.jpg"
 ]
     OWNER_ID = 1093541873
+    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))

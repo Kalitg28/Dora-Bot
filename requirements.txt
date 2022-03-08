@@ -7,4 +7,3 @@ TgCrypto
 IMDbPY
 Pyromod
 pillow
-urllib

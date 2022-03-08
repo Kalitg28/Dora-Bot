@@ -342,7 +342,7 @@ async def fixdel(bot:Client, update:CallbackQuery):
     if not member.status in ("administrator", "creator"):
         return await update.answer("Nice Try Kid xD", show_alert=True)
 
-    value = int(value)
+    value = int(value)*60
 
     await db.set_main(group_id, 'autodel', value)
 

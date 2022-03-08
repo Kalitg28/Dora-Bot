@@ -72,7 +72,7 @@ async def start(bot:Client , update):
     if file_uid:
         if file_uid.startswith('fsub'):
             try:
-                id, from_chat, message_id = re.findall(r'fsub\((.+)\)', file_uid)[0].split('|', 2)
+                id, from_chat, message_id = re.findall(r'fsubz(.+)z', file_uid)[0].split('a', 2)
                 chat = await bot.get_chat(int(id))
                 buttons = [[InlineKeyboardButton("Join 🤓", url=link),InlineKeyboardButton("Retry ♻️", url=f"https://t.me/c/{from_chat}/{message_id}")]]
                 await update.reply(
@@ -84,7 +84,7 @@ async def start(bot:Client , update):
                 print(e)
                 await update.reply_text(f"Try Contacting Support Group Reason : <code>{e}</code>", parse_mode='html')
         elif file_uid.startswith('retry'):
-            from_chat, message_id = re.findall(r'fsub\((.+)\)', file_uid)[0].split('|', 1)
+            from_chat, message_id = re.findall(r'retryz(.+)z', file_uid)[0].split('a', 1)
             return await update.reply_text("Now Please Return And Try Again :)", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Back", url=f"https://t.me/c/{from_chat}/{message_id}")]]))
         elif file_uid.startswith('connect'):
             try:

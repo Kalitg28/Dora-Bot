@@ -1,4 +1,5 @@
 import re
+from urllib.parse import urlencode
 
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid, UserIsBlocked
@@ -173,7 +174,9 @@ async def sensel(bot:Client, update:CallbackQuery):
                 return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry({chat}|{update.message.message_id})")
             except UserIsBlocked:
                 chat = str(chat_id).replace('-100','').replace('-','')
-                return await update.answer(url=f"https://t.me/DoraFilterBot?start=retry({chat}|{update.message.message_id})")
+                url=f"https://t.me/DoraFilterBot?start=retry({chat}|{update.message.message_id})"
+                url = urlencode(url)
+                return await update.answer(url)
             except Exception as e:
                 print(e)
                 return await update.answer(f"Error:\n{e}", show_alert=True)

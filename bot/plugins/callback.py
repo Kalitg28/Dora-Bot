@@ -109,11 +109,14 @@ async def cb_navg(bot, update: CallbackQuery):
         return
 
     if ((index_val + 1 )== max_pages) or ((index_val + 1) == len(results)): # Max Pages
-        temp_results.append([
+
+        if not index_val <= 0:
+            
+            temp_results.append([
             InlineKeyboardButton("⇚ ʙᴀᴄᴋ", callback_data=f"navigate({index_val}|back|{query})")
         ])
 
-    elif int(index_val) == 0:
+    elif int(index_val) <= 0:
         temp_results.append(
                 [
                     InlineKeyboardButton(f"📃 ᴘᴀɢᴇ 1/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore"),
@@ -233,6 +236,7 @@ async def cb_settings(bot, update: CallbackQuery):
     size_button = settings.get('size', False)
     g_filter = settings.get('global', True)
     fsub_msg = settings.get('fsub_msg', False)
+    autodel = settings.get('autodel', False)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -253,6 +257,8 @@ async def cb_settings(bot, update: CallbackQuery):
     else:
         text+=f"\n - Force Subscribe: {fsub['title']} ✅\n"
 
+    text+=f"\n- Fsub Message : {'Custom ✅' if fsub_msg else 'Default'}\n"
+
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
 
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
@@ -260,6 +266,8 @@ async def cb_settings(bot, update: CallbackQuery):
     text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
 
     text+=f"\n- Size Button: {'Enabled ✅' if size_button else 'Disabled ❌'}\n"
+
+    text+=f"\n- Auto Delete: {f'{autodel/60} mins' if autodel else 'Disabled ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -347,7 +355,11 @@ async def cb_settings(bot, update: CallbackQuery):
             InlineKeyboardButton
                 (
                     "🎯 Result's Accuracy 🎯", callback_data=f"accuracy({accuracy_point}|{chat_id})"
-                )
+                ),
+            InlineKeyboardButton
+            (
+                "AutoDelete", callback_data=f"autodel({chat_id})"
+            )
         ]
     )
 

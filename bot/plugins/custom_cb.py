@@ -305,3 +305,57 @@ async def privat_link_gen(bot:Client, update:CallbackQuery):
     except Exception as e:
 
         await update.answer(str(e), show_alert=True)
+
+@Client.on_callback_query(filters.regex(r'autodel\((.+)\)'), group=4)
+async def autodel(bot:Client, update:CallbackQuery):
+
+    group_id = re.findall(r'autodel\((.+)\)', update.data)[0]
+    group_id = int(group_id)
+    user_id = update.from_user.id
+
+    member = await bot.get_chat_member(group_id, user_id)
+    if not member.status in ('administrator','creator'):
+        return await update.answer('Nice Try Kid xD', show_alert=True)
+
+    buttons = [
+        [InlineKeyboardButton("Disable", callback_data=f"fix(autodel|off|{group_id})")],
+        [InlineKeyboardButton("10 Mins", callback_data=f'fixdel({group_id}|10)'),InlineKeyboardButton("15 Mins", callback_data=f'fixdel({group_id}|15)')],
+        [InlineKeyboardButton("30 Mins", callback_data=f'fixdel({group_id}|30)'),InlineKeyboardButton("45 Mins", callback_data=f'fixdel({group_id}|45)')],
+        [InlineKeyboardButton("1 Hour", callback_data=f'fixdel({group_id}|60)'),InlineKeyboardButton("2 Hours", callback_data=f'fixdel({group_id}|120)')],
+        [InlineKeyboardButton("5 Hour", callback_data=f'fixdel({group_id}|300)'),InlineKeyboardButton("10 Hours", callback_data=f'fixdel({group_id}|600)')],
+        [InlineKeyboardButton("12 Hours", callback_data=f'fixdel({group_id}|720)'),InlineKeyboardButton("1 Day", callback_data=f'fixdel({group_id}|1440)')],
+        [InlineKeyboardButton("2 Days", callback_data=f'fixdel({group_id}|2880)'),InlineKeyboardButton("4 Days", callback_data=f'fixdel({group_id}|5760)')]
+    ]
+
+    await update.message.edit(
+        text="Select The Time After Wich The Results Should Be Closed...",
+        reply_markup=InlineKeyboardMarkup(buttons)
+    )
+    await update.answer()
+
+@Client.on_callback_query(filters.regex(r'fixdel\((.+)\)'), group=4)
+async def fixdel(bot:Client, update:CallbackQuery):
+
+    group_id, value = re.findall(r'fixdel\((.+)\)', update.data)[0].split('|',1)
+    group_id = int(group_id)
+    member = await bot.get_chat_member(group_id, update.from_user.id)
+    if not member.status in ("administrator", "creator"):
+        return await update.answer("Nice Try Kid xD", show_alert=True)
+
+    value = int(value)
+
+    await db.set_main(group_id, 'autodel', value)
+
+    await update.answer("Success :)")
+
+    await update.message.edit_text("Your Request Was Updated Successfully...", reply_markup=InlineKeyboardMarkup([[
+            InlineKeyboardButton
+                (
+                    "🔙 Back", callback_data="settings"
+                ),
+            
+            InlineKeyboardButton
+                (
+                    "Close 🔐", callback_data="close"
+                )
+        ]]))

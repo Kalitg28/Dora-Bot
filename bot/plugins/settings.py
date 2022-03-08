@@ -125,6 +125,7 @@ async def settings(bot, update: Message):
     size_button = settings.get('size', False)
     g_filter = settings.get('global', True)
     fsub_msg = settings.get('fsub_msg', False)
+    autodel = settings.get('autodel', False)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -152,6 +153,8 @@ async def settings(bot, update: Message):
     text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
 
     text+=f"\n- Size Button: {'Enabled ✅' if size_button else 'Disabled ❌'}\n"
+
+    text+=f"\n- Auto Delete: {f'{autodel/60} mins' if autodel else 'Disabled ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -239,7 +242,11 @@ async def settings(bot, update: Message):
             InlineKeyboardButton
                 (
                     "🎯 Result's Accuracy 🎯", callback_data=f"accuracy({accuracy_point}|{chat_id})"
-                )
+                ),
+            InlineKeyboardButton
+            (
+                "AutoDelete", callback_data=f"autodel({chat_id})"
+            )
         ]
     )
 

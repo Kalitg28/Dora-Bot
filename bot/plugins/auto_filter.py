@@ -83,6 +83,9 @@ async def auto_filter(bot:Bot, update:Message):
     if not filters and movie_info:
         
         filters = await db.search_media(movie_info["title"], max_results+5)
+
+        if not filters:
+            filters = await db.search_media(movie_info["localized title"], max_results+5)
     
     if filters:
         all_files = []
@@ -190,7 +193,7 @@ async def auto_filter(bot:Bot, update:Message):
             query=update.text
             )
 
-        await update.reply_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📄 Instructions 📄", callback_data="instruct"), InlineKeyboardButton("🔍 Search 🔎", url=f"https://google.com/search?q={update.text.replace(' ','+')}")]]))
+        await update.reply_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📄 Instructions 📄", callback_data="instruct"), InlineKeyboardButton("🔍 Search 🔎", url=f"https://google.com/search?q={update.text.replace(' ','+')}")]]), parse_mode='html')
 
         
 
@@ -236,6 +239,13 @@ async def auto_filter(bot:Bot, update:Message):
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
+
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
+            )
+
             return
         elif movie_info and movie_info["full-size cover url"]=="Unknown":
 
@@ -259,12 +269,25 @@ async def auto_filter(bot:Bot, update:Message):
                 parse_mode="html",
                 reply_to_message_id=update.message_id
             )
+
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
+            )
+
             return
         elif movie_info["full-size cover url"]=="Unknown":
             await update.reply_text(
                 text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
+            )
+
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
             )
             return
 
@@ -305,6 +328,12 @@ async def auto_filter(bot:Bot, update:Message):
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
+
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
+            )
         
         except WebpageMediaEmpty:
 
@@ -315,12 +344,24 @@ async def auto_filter(bot:Bot, update:Message):
                 parse_mode="html"
             )
 
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
+            )
+
         except ChatSendMediaForbidden:
             text+=f"<a href='{movie_info['link']}'> </a>"
             await update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
+            )
+
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
             )
 
         except ButtonDataInvalid:

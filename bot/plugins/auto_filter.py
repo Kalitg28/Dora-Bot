@@ -204,6 +204,8 @@ async def auto_filter(bot:Bot, update:Message):
         return
     
     else:
+
+        autodel = configs.get('autodel', False)
     
         result = []
         # seperating total files into chunks to make as seperate pages
@@ -231,22 +233,16 @@ async def auto_filter(bot:Bot, update:Message):
             )
 
         reply_markup = InlineKeyboardMarkup(reply_markup)
+        msg = False
 
         if not movie_info :
 
-            await update.reply_text(
+            msg = await update.reply_text(
                 text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
 
-            await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
-            )
-
-            return
         elif movie_info and movie_info["full-size cover url"]=="Unknown":
 
             text = f"""
@@ -262,7 +258,7 @@ async def auto_filter(bot:Bot, update:Message):
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
         """
 
-            await bot.send_message(
+            msg = await bot.send_message(
                 chat_id = update.chat.id,
                 text=text,
                 reply_markup=reply_markup,
@@ -270,26 +266,12 @@ async def auto_filter(bot:Bot, update:Message):
                 reply_to_message_id=update.message_id
             )
 
-            await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
-            )
-
-            return
         elif movie_info["full-size cover url"]=="Unknown":
-            await update.reply_text(
+            msg = await update.reply_text(
                 text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
-
-            await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
-            )
-            return
 
         text = f"""
 <b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
@@ -303,6 +285,12 @@ async def auto_filter(bot:Bot, update:Message):
 
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
         """        
+        if msg and autodel:
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
+            )
 
         try:
             msg = await bot.send_photo(
@@ -314,54 +302,57 @@ async def auto_filter(bot:Bot, update:Message):
                 reply_to_message_id=update.message_id
             )
 
-            await bot.USER.send_message(
+            if autodel:
+                await bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del photo {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
+                schedule_date=msg.date+autodel
             )
 
         except MediaEmpty:
 
             text+=f"<a href='{movie_info['link']}'> </a>"
-            await update.reply_text(
+            msg = await update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
 
-            await bot.USER.send_message(
+            if autodel:
+                await bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
+                schedule_date=msg.date+autodel
             )
-        
         except WebpageMediaEmpty:
 
             text+=f"<a href='{movie_info['link']}'> </a>"
-            await update.reply_text(
+            msg = await update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
 
-            await bot.USER.send_message(
+            if autodel:
+                await bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
+                schedule_date=msg.date+autodel
             )
 
         except ChatSendMediaForbidden:
             text+=f"<a href='{movie_info['link']}'> </a>"
-            await update.reply_text(
+            msg = await update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
 
-            await bot.USER.send_message(
+            if autodel:
+                await bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
+                schedule_date=msg.date+autodel
             )
 
         except ButtonDataInvalid:

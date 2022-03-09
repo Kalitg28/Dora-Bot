@@ -16,11 +16,10 @@ class Buttons():
         ],
 
         "HELP": [
-            [InlineKeyboardButton("⎔ Aᴜᴛᴏ Fɪʟᴛᴇʀ ⎔", callback_data="edit_c(AF)"), InlineKeyboardButton("⎎ Mᴀɴᴜᴀʟ Fɪʟᴛᴇʀs ⎎", callback_data="edit_c(MF)")],
-            [InlineKeyboardButton("⌬ Cᴏɴɴᴇᴄᴛɪᴏɴ ⌬", callback_data="edit_c(CONN)"), InlineKeyboardButton("⌥ Bʀᴏᴀᴅᴄᴀsᴛ ⌥", callback_data="edit_c(CAST)")],
-            [InlineKeyboardButton("ꔮ Cᴀᴘᴛɪᴏɴ ꔮ", callback_data="edit_c(CAPTION)"), InlineKeyboardButton("✎ Sᴘᴇʟʟᴄʜᴇᴄᴋ ✎️", callback_data='edit_c(SPELL)')],
-            [InlineKeyboardButton("⎙ Bᴀᴛᴄʜ ⎙️", callback_data="edit_c(BATCH)"), InlineKeyboardButton("« AᴜᴛᴏDᴇʟᴇᴛᴇ »️", callback_data='edit_c(AUTODEL)')],
-            [InlineKeyboardButton("⏣ Oᴛʜᴇʀ ⏣", callback_data="edit_c(OTHER)"), InlineKeyboardButton("⌤ Hᴏᴍᴇ ⌤", callback_data="edit_c(START)")]
+            [InlineKeyboardButton("⎔ Aᴜᴛᴏ Fɪʟᴛᴇʀ ⎔", callback_data="edit_c(AF)"), InlineKeyboardButton("⎎ Mᴀɴᴜᴀʟ Fɪʟᴛᴇʀs ⎎", callback_data="edit_c(MF)"), InlineKeyboardButton("꩜ Gʟᴏʙᴀʟ Fɪʟᴛᴇʀs ꩜", callback_data="edit_c(MF)")],
+            [InlineKeyboardButton("⎙ Bᴀᴛᴄʜ ⎙️", callback_data="edit_c(BATCH)"), InlineKeyboardButton("⌬ Cᴏɴɴᴇᴄᴛɪᴏɴ ⌬", callback_data="edit_c(CONN)"), InlineKeyboardButton("⌥ Bʀᴏᴀᴅᴄᴀsᴛ ⌥", callback_data="edit_c(CAST)")],
+            [InlineKeyboardButton("« AᴜᴛᴏDᴇʟᴇᴛᴇ »️", callback_data='edit_c(AUTODEL)'), InlineKeyboardButton("ꔮ Cᴀᴘᴛɪᴏɴ ꔮ", callback_data="edit_c(CAPTION)"), InlineKeyboardButton("✎ Sᴘᴇʟʟᴄʜᴇᴄᴋ ✎️", callback_data='edit_c(SPELL)')],
+            [InlineKeyboardButton("⏣ Oᴛʜᴇʀ ⏣", callback_data="edit_c(OTHER)"), InlineKeyboardButton("⌤ Hᴏᴍᴇ ⌤", callback_data="edit_c(START)"]
         ],
         "AF": [
             [InlineKeyboardButton("⌬ Cᴏɴɴᴇᴄᴛɪᴏɴ ⌬", callback_data="edit_c(CONN)")],

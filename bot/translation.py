@@ -7,11 +7,10 @@ class Translation(object):
 
     EN = {
  
- "START": """<i><b>Hᴇʟʟᴏ {} Mʏ Nᴀᴍᴇ Is Dᴏʀᴀ I Aᴍ A Cᴏᴍᴘʟᴇᴛᴇ  AᴜᴛᴏFɪʟᴛᴇʀ + MᴀɴᴜᴀʟFɪʟᴛᴇʀ + FɪʟᴇSʜᴀʀᴇ  ʙᴏᴛ Aʟʟ Yᴏᴜ Hᴀᴠᴇ Tᴏ Dᴏ Is Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ As Aᴅᴍɪɴ \nMᴀᴋᴇ Sᴜʀᴇ Tᴏ Lᴏᴏᴋ Tʜʀᴏᴜɢʜ Mʏ Mᴀᴘ Iɴ Cᴀsᴇ Oғ Dᴏᴜʙᴛs\n\nTᴏ Usᴇ Mᴇ Iɴ PM Usᴇ Tʜᴇ <code>/connect</code> Cᴏᴍᴍᴀɴᴅ Aɴᴅ Yᴏᴜ Cᴀɴ Mᴏᴅɪғʏ AᴜᴛᴏFɪʟᴛᴇʀ Sᴇᴛᴛɪɴɢs Aɴᴅ Aᴅᴅ Mᴀɴᴜᴀʟ Fɪʟᴛᴇʀs.</b>
-</i>""",
+ "START": """<i>Hᴇʟʟᴏ {} Mʏ Nᴀᴍᴇ Is Dᴏʀᴀ I Aᴍ A Cᴏᴍᴘʟᴇᴛᴇ  AᴜᴛᴏFɪʟᴛᴇʀ + MᴀɴᴜᴀʟFɪʟᴛᴇʀ + FɪʟᴇSʜᴀʀᴇ  ʙᴏᴛ Aʟʟ Yᴏᴜ Hᴀᴠᴇ Tᴏ Dᴏ Is Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ As Aᴅᴍɪɴ \nMᴀᴋᴇ Sᴜʀᴇ Tᴏ Lᴏᴏᴋ Tʜʀᴏᴜɢʜ Mʏ Mᴀᴘ Iɴ Cᴀsᴇ Oғ Dᴏᴜʙᴛs\n\nTᴏ Usᴇ Mᴇ Iɴ PM Usᴇ Tʜᴇ <code>/connect</code> Cᴏᴍᴍᴀɴᴅ Aɴᴅ Yᴏᴜ Cᴀɴ Mᴏᴅɪғʏ AᴜᴛᴏFɪʟᴛᴇʀ Sᴇᴛᴛɪɴɢs Aɴᴅ Aᴅᴅ Mᴀɴᴜᴀʟ Fɪʟᴛᴇʀs</i>""",
  
  "HELP" : """
-<b>{} Wᴇʟᴄᴏᴍᴇ Tᴏ Dᴏʀᴀ's Mᴀᴘ Iᴛ Cᴀɴ Gᴜɪᴅᴇ Yᴏᴜ Tʜʀᴏᴜɢʜ Aʟʟ Oғ Dᴏʀᴀ's Cᴏᴏʟ Fᴇᴀᴛᴜʀᴇs Aɴᴅ Hᴏᴡ Tᴏ Pʀᴏᴘᴇʀʟʏ Usᴇ Tʜᴇᴍ. Usᴇ Tʜᴇ Bᴜᴛᴛᴏɴs Bᴇʟᴏᴡ Tᴏ Nᴀᴠɪɢᴀᴛᴇ Tʜʀᴏᴜɢʜ Aʟʟ Oғ Tʜᴇ Mᴏᴅᴜʟᴇs \nYᴏᴜ Cᴀɴ Eᴀssɪʟʏ Cᴀʟʟ Mᴇ Oᴜᴛ Usɪɴɢ Tʜᴇ /map Cᴏᴍᴍᴀɴᴅ</b>""",
+<i>{} Wᴇʟᴄᴏᴍᴇ Tᴏ Dᴏʀᴀ's Mᴀᴘ Iᴛ Cᴀɴ Gᴜɪᴅᴇ Yᴏᴜ Tʜʀᴏᴜɢʜ Aʟʟ Oғ Dᴏʀᴀ's Cᴏᴏʟ Fᴇᴀᴛᴜʀᴇs Aɴᴅ Hᴏᴡ Tᴏ Pʀᴏᴘᴇʀʟʏ Usᴇ Tʜᴇᴍ. Usᴇ Tʜᴇ Bᴜᴛᴛᴏɴs Bᴇʟᴏᴡ Tᴏ Nᴀᴠɪɢᴀᴛᴇ Tʜʀᴏᴜɢʜ Aʟʟ Oғ Tʜᴇ Mᴏᴅᴜʟᴇs \nYᴏᴜ Cᴀɴ Eᴀssɪʟʏ Cᴀʟʟ Mᴇ Oᴜᴛ Usɪɴɢ Tʜᴇ /map Cᴏᴍᴍᴀɴᴅ</i>""",
  
  "ABOUT" : """<b>🗲 Bot Type</b> : <i> Auto + Manual Filter + FileShare</i>
 <b>🗲 Language</b> : <i><a href="https://python.org">Python 3.9.2</a></i>
@@ -96,7 +95,8 @@ class Translation(object):
  Other Commands And Weird Modules :
  
  /id ->  Reply To A Forwarded Message To Get The Original Chats ID Or Simply Get Your ID
- /json ->  Rply To A Message To Get Its Complete Json Including File IDs and Sticker IDs
+ /json ->  Reply To A Message To Get Its Complete Json Including File IDs and Sticker IDs
+ /stats -> See the DataBase stats for Dᴏʀᴀ
  """,
  "CAST":"""
 <i>Just Reply To The Message Or Media You Would Like To Broadcast With <code>/broadcast</code> Buttons Will Also Be Copied

@@ -235,7 +235,7 @@ async def get_id(bot:Client, update:Message):
             await update.reply_text(f"<b>Your ID is : <code>{update.chat.id}</code></b>", parse_mode="html")
             return
 
-        if update.reply_to_message.forward_from_chat.id:
+        if update.reply_to_message.forward_from_chat:
 
             await update.reply_text(f"<b>This Message Was Forwarded From : <code>{update.reply_to_message.forward_from_chat.id}</code></b>", parse_mode="html")
 

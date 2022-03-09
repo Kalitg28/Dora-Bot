@@ -22,35 +22,6 @@ from bot.database import Database # pylint: disable=import-error
 
 db = Database()
 
-@Client.on_callback_query(filters.regex(r"all\((.+)\)"), group=4)
-async def cb_all(bot:Client, update:CallbackQuery):
-
-    chat_id = update.message.chat.id
-    try:
-        query = re.findall(r"all\((.+)\)", update.data)[0]
-        all_files = FIND.get(query).get("all_files")
-        settings = await db.find_chat(chat_id)
-        await update.answer("Sending files in PM...", show_alert=True)
-
-        for file in all_files:
-
-            file_id, file_name, file_caption, file_type = await db.get_file(file)
-            file_caption = "<b>" + file_name + "</b>\n\n" + settings.get("caption", "")
-            try:
-                await bot.send_cached_media(
-                update.from_user.id,
-                file_id,
-                caption = file_caption,
-                parse_mode="html",
-            )
-            except Exception as e:
-                await update.answer(f"<b>Error:</b>\n<code>{e}</code>", show_alert=True)
-                print(e)
-        return
-
-    except Exception as e:
-        print(e)
-
 
 @Client.on_callback_query(filters.regex(r"navigate\((.+)\)"), group=4)
 async def cb_navg(bot, update: CallbackQuery):

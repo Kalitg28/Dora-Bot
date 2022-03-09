@@ -170,14 +170,59 @@ async def sensel(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                chat = str(chat_id).replace('-100','').replace('-','')
-                return await update.answer(url=f"https://t.me/DoraFilterBot?start=retryz{chat}a{update.message.message_id}z")
+                url=f"https://t.me/DoraFilterBot?start=retryz{chat_id}a{update.message.message_id}z"
+                print(url)
+                return await update.answer(url=url.replace('-100',''))
             except UserIsBlocked:
-                chat = str(chat_id).replace('-100','').replace('-','')
-                url=f"https://t.me/DoraFilterBot?start=retryz{chat}a{update.message.message_id}z"
-                return await update.answer(url=url)
+                url=f"https://t.me/DoraFilterBot?start=retryz{chat_id}a{update.message.message_id}z"
+                print(url)
+                return await update.answer(url=url.replace('-100',''))
             except Exception as e:
                 print(e)
                 return await update.answer(f"Error:\n{e}", show_alert=True)
 
     await update.answer("Fɪʟᴇs Hᴀᴠᴇ Bᴇᴇɴ Sᴇɴᴛ Tᴏ PM :)", show_alert=True)
+
+@Client.on_callback_query(filters.regex(r"all\((.+)\)"), group=4)
+async def cb_all(bot:Client, update:CallbackQuery):
+
+    chat_id = update.message.chat.id
+    try:
+        query = re.findall(r"all\((.+)\)", update.data)[0]
+        all_files = FIND.get(query).get("all_files")
+        settings = await db.find_chat(chat_id)
+        fsub = settings.get("fsub", None)
+
+        if fsub:
+                fsub = fsub["id"]
+                try:
+                    member = await bot.get_chat_member(int(fsub), update.from_user.id)
+                    if member.status=='kicked':
+                        await update.answer("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!", show_alert=True)
+                        return
+                except PeerIdInvalid:
+                    pass
+                except UserNotParticipant:
+                    chat = str(chat_id).replace('-100','').replace('-','')
+                    return await update.answer(url=f"https://t.me/DoraFilterBot?start=fsubz{fsub}a{chat}a{update.message.message_id}z")
+
+        for file in all_files:
+
+            file_id, file_name, file_caption, file_type = await db.get_file(file)
+            file_caption = "<b>" + file_name + "</b>\n\n" + settings.get("caption", "")
+            try:
+                await bot.send_cached_media(
+                update.from_user.id,
+                file_id,
+                caption = file_caption,
+                parse_mode="html",
+            )
+            except Exception as e:
+                await update.answer(f"Error:\n{e}", show_alert=True)
+                print(e)
+                return
+
+        await update.answer("Fɪʟᴇs Hᴀᴠᴇ Bᴇᴇɴ Sᴇɴᴛ Tᴏ PM :)", show_alert=True)
+
+    except Exception as e:
+        print(e)

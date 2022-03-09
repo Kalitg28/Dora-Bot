@@ -175,7 +175,7 @@ async def sensel(bot:Client, update:CallbackQuery):
             except UserIsBlocked:
                 chat = str(chat_id).replace('-100','').replace('-','')
                 url=f"https://t.me/DoraFilterBot?start=retryz{chat}a{update.message.message_id}z"
-                return await update.answer(url)
+                return await update.answer(url=url)
             except Exception as e:
                 print(e)
                 return await update.answer(f"Error:\n{e}", show_alert=True)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # (c) @AlbertEinsteinTG
+from email.utils import quote
 import re
 import random
 import asyncio
@@ -58,7 +59,7 @@ async def start_grp(bot:Client , update:Message):
 
 
 @Client.on_message(filters.command(["start"]) & filters.private, group=4)
-async def start(bot:Client , update):
+async def start(bot:Client , update:Message):
 
     add = threading.Thread(target=asyncio.run, args=(db.add_user(update.from_user.id),))
     add.start()
@@ -74,6 +75,7 @@ async def start(bot:Client , update):
             try:
                 id, from_chat, message_id = re.findall(r'fsubz(.+)z', file_uid)[0].split('a', 2)
                 chat = await bot.get_chat(int(id))
+                link = chat.invite_link
                 buttons = [[InlineKeyboardButton("Join 🤓", url=link),InlineKeyboardButton("Retry ♻️", url=f"https://t.me/c/{from_chat}/{message_id}")]]
                 await update.reply(
                 text="<b>Sorry Man You'll Have To Join My Channel First To Use Me 🙂🙂\n\nJust Click On The Join Button Below And Come Back And Click On Retry......</b>",
@@ -82,10 +84,10 @@ async def start(bot:Client , update):
                     )
             except Exception as e:
                 print(e)
-                await update.reply_text(f"Try Contacting Support Group Reason : <code>{e}</code>", parse_mode='html')
+                return await update.reply_text(f"Try Contacting Support Group Reason : <code>{e}</code>", parse_mode='html')
         elif file_uid.startswith('retry'):
             from_chat, message_id = re.findall(r'retryz(.+)z', file_uid)[0].split('a', 1)
-            return await update.reply_text("Now Please Return And Try Again :)", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Back", url=f"https://t.me/c/{from_chat}/{message_id}")]]))
+            return await update.reply_text("Now Please Return And Try Again :)", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Back", url=f"https://t.me/c/{from_chat}/{message_id}")]]), quote=True)
         elif file_uid.startswith('connect'):
             try:
                 chat_id = int(file_uid.strip('connect '))

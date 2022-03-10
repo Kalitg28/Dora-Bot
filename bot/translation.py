@@ -176,3 +176,17 @@ Go to Settings > AutoDelete to Disable or set an AutoDelete time
 ]
     OWNER_ID = 1093541873
     LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))
+
+    DORA_FIGLET = """
+:::::::-.      ...    :::::::..    :::.     
+ ;;,   `';, .;;;;;;;. ;;;;``;;;;   ;;`;;    
+ `[[     [[,[[     \[[,[[[,/[[['  ,[[ '[[,  
+  $$,    $$$$$,     $$$$$$$$$c   c$$$cc$$$c 
+  888_,o8P'"888,_ _,88P888b "88bo,888   888,
+  MMMMP"`    "YMMMMMP" MMMM   "W" YMM   YYMM
+"""
+    DORA_FIGLET = r"""
+|   \ / _ \| _ \  /_\  
+| |) | (_) |   / / _ \ 
+|___/ \___/|_|_\/_/ \_\
+    """

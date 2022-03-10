@@ -35,7 +35,7 @@ class Buttons():
             [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
         ],
         "CREDITS": [
-            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(ABOUT)")]
         ],
         "AUTODEL": [
             [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]

@@ -186,6 +186,19 @@ async def start(bot:Client , update:Message):
         parse_mode="html"
     )
 
+@Client.on_message(filters.command(["map"]) & filters.group, group=4)
+async def help_grp(bot, update):
+
+    await bot.send_chat_action(update.chat.id, "typing")
+    buttons = Buttons.EN["HELP"]
+    
+    reply_markup = InlineKeyboardMarkup(buttons)
+
+    await bot.send_message(
+        chat_id=update.chat.id,
+        text=Translation.EN["HELP"].format(update.from_user.mention),
+        reply_markup=reply_markup,
+        parse_mode="html")
 
 @Client.on_message(filters.command(["map"]) & filters.private, group=4)
 async def help(bot, update):
@@ -194,13 +207,12 @@ async def help(bot, update):
     
     reply_markup = InlineKeyboardMarkup(buttons)
     
-    await bot.send_photo(
-        photo="https://telegra.ph/file/82b6cf45d478fb5fd33c0.jpg",
+    await update.reply_photo(photo="https://telegra.ph/file/7db104905e068ecf646ef.jpg")
+    await bot.send_message(
         chat_id=update.chat.id,
-        caption=Translation.EN["HELP"].format(update.from_user.mention),
+        text=Translation.EN["HELP"].format(update.from_user.mention),
         reply_markup=reply_markup,
-        parse_mode="html",
-        reply_to_message_id=update.message_id
+        parse_mode="html"
     )
      
 

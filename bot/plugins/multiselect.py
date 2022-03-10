@@ -144,7 +144,7 @@ async def sensel(bot:Client, update:CallbackQuery):
                     pass
                 except UserNotParticipant:
                     chat = str(chat_id).replace('-100','').replace('-','')
-                    return await update.answer(url=f"https://t.me/DoraFilterBot?start=fsubz{fsub}a{chat}a{update.message.message_id}z")
+                    return await update.answer(url=f"https://t.me/NoobSearchBot?start=fsubz{fsub}a{chat}a{update.message.message_id}z")
 
     global SELECTED
 
@@ -170,7 +170,7 @@ async def sensel(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                url=f"https://t.me/DoraFilterBot?start=retryz{chat_id}a{update.message.message_id}z"
+                url=f"https://t.me/NoobSearchBot?start=retryz{chat_id}a{update.message.message_id}z"
                 print(url)
                 return await update.answer(url=url.replace('-100',''))
             except UserIsBlocked:
@@ -217,6 +217,14 @@ async def cb_all(bot:Client, update:CallbackQuery):
                 caption = file_caption,
                 parse_mode="html",
             )
+            except PeerIdInvalid:
+                url=f"https://t.me/NoobSearchBot?start=retryz{chat_id}a{update.message.message_id}z"
+                print(url)
+                return await update.answer(url=url.replace('-100',''))
+            except UserIsBlocked:
+                url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                print(url)
+                return await update.answer(url=url.replace('-100',''))
             except Exception as e:
                 await update.answer(f"Error:\n{e}", show_alert=True)
                 print(e)

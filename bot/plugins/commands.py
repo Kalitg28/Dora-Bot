@@ -177,13 +177,13 @@ async def start(bot:Client , update:Message):
     
     reply_markup = InlineKeyboardMarkup(buttons)
     
+    await update.reply_photo(random.choice(Translation.START_PHOTOS))
     await bot.send_message(
         chat_id=update.chat.id,
-        text=Translation.DORA_FIGLET+'\n\n'+Translation.EN["START"].format(
+        text=Translation.EN["START"].format(
                 update.from_user.mention),
         reply_markup=reply_markup,
-        parse_mode="html",
-        reply_to_message_id=update.message_id
+        parse_mode="html"
     )
 
 

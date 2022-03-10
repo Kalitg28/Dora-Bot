@@ -1956,21 +1956,25 @@ async def edit_caption(bot:Client, update: CallbackQuery):
     await update.answer()
 
     loading = await bot.send_message(update.message.chat.id, "⭗ ⭗ ⭗")
-    await asyncio.sleep(0.20)
-    await loading.edit("⦿ ⭗ ⭗")
-    await asyncio.sleep(0.20)
-    await loading.edit("⦿ ⦿ ⭗")
-    await asyncio.sleep(0.20)
-    await loading.edit("⦿ ⦿ ⦿")
-    await asyncio.sleep(0.20)
+    await asyncio.sleep(0.10)
+    await loading.edit("○ ○ ○")
+    await asyncio.sleep(0.10)
+    await loading.edit("◐ ◐ ◐")
+    await asyncio.sleep(0.10)
+    await loading.edit("◓ ◓ ◓")
+    await asyncio.sleep(0.10)
+    await loading.edit("◑ ◑ ◑")
+    await asyncio.sleep(0.10)
+    await loading.edit("◒ ◒ ◒")
+    await asyncio.sleep(0.10)
     await loading.delete()
 
     if STRING=="FORMAT":
-        await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+        await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     elif STRING=="SPELL":
-        await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+        await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     else :
-        await update.message.edit_caption(caption=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+        await update.message.edit(text=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]), disable_web_page_preview=True)
      
 
 @Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=4)

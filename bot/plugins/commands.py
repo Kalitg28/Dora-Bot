@@ -230,32 +230,32 @@ async def get_id(bot:Client, update:Message):
 
     if chat_type=="private":
 
-        if not update.reply_to_message or update.reply_to_message.forward_from_chat:
+        if not update.reply_to_message:
 
-            await update.reply_text(f"<b>Your ID is : <code>{update.chat.id}</code></b>", parse_mode="html")
+            await update.reply_text(f"<b>Your ID is : <code>{update.chat.id}</code></b>", parse_mode="html", quote=True)
             return
 
-        if update.reply_to_message.forward_from_chat:
+        elif update.reply_to_message and update.reply_to_message.forward_from_chat:
 
-            await update.reply_text(f"<b>This Message Was Forwarded From : <code>{update.reply_to_message.forward_from_chat.id}</code></b>", parse_mode="html")
+            await update.reply_text(f"<b>This Message Was Forwarded From : <code>{update.reply_to_message.forward_from_chat.id}</code></b>", parse_mode="html", quote=True)
 
         else :
 
-            await update.reply_text(f"<b>Your ID is : <code>{update.chat.id}</code></b>", parse_mode="html")
+            await update.reply_text(f"<b>Your ID is : <code>{update.chat.id}</code></b>", parse_mode="html", quote=True)
 
     elif chat_type=="group" or chat_type=="supergroup":
 
         if update.reply_to_message:
 
-            await update.reply_text(f"This User's ID is : <code>{update.reply_to_message.from_user.id}</code>", parse_mode="html")
+            await update.reply_text(f"This User's ID is : <code>{update.reply_to_message.from_user.id}</code>", parse_mode="html", quote=True)
 
         else :
 
-            await update.reply_text(f"This Chat's ID is : <code>{update.chat.id}</code>", parse_mode="html")
+            await update.reply_text(f"This Chat's ID is : <code>{update.chat.id}</code>", parse_mode="html", quote=True)
 
     elif chat_type=="channel":
 
-        await update.reply_text(f"This Channel's ID is <code>{update.chat.id}</code>", parse_mode="html")
+        await update.reply_text(f"This Channel's ID is <code>{update.chat.id}</code>", parse_mode="html", quote=True)
 
      
 

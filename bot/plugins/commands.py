@@ -82,6 +82,7 @@ async def start(bot:Client , update:Message):
                 quote=True,
                 reply_markup=InlineKeyboardMarkup(buttons)
                     )
+                return
             except Exception as e:
                 print(e)
                 return await update.reply_text(f"Try Contacting Support Group Reason : <code>{e}</code>", parse_mode='html')

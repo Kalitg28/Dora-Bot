@@ -204,7 +204,7 @@ async def cb_all(bot:Client, update:CallbackQuery):
                     pass
                 except UserNotParticipant:
                     chat = str(chat_id).replace('-100','').replace('-','')
-                    return await update.answer(url=f"https://t.me/DoraFilterBot?start=fsubz{fsub}a{chat}a{update.message.message_id}z")
+                    return await update.answer(url=f"https://t.me/NoobSearchBot?start=fsubz{fsub}a{chat}a{update.message.message_id}z")
 
         for file in all_files:
 

@@ -2036,8 +2036,10 @@ async def cb_stats(bot:Client, update:CallbackQuery):
     try:
         await update.answer("Fᴇᴛᴄʜɪɴɢ Dᴇᴛᴀɪʟs...")
         stats = await db.get_stats()
+        text = f"♡ Dᴀᴛᴀʙᴀsᴇ sᴛᴀᴛs ᴏғ Dᴏʀᴀ:-\n\nFɪʟᴇs : {stats['files']}\n\nUsᴇʀs : {stats['users']}\n\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\n\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\n\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}"
+        if update.text == text: return
         await update.message.edit(
-            f"<b>♡ Dᴀᴛᴀʙᴀsᴇ sᴛᴀᴛs ᴏғ Dᴏʀᴀ:-</b>\n\nFɪʟᴇs : {stats['files']}\nUsᴇʀs : {stats['users']}\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}",
+            text,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="edit_c(START)"), InlineKeyboardButton("Rᴇғʀᴇsʜ", callback_data="stats")]]),
             parse_mode='html'
         )

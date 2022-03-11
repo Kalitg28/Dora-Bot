@@ -5,54 +5,60 @@ class Buttons():
 
     EN = {
         "START" : [
-            [InlineKeyboardButton("🅘 About 🅘", callback_data="edit_c(ABOUT)"),InlineKeyboardButton("🗺️ Map 🗺️", callback_data="edit_c(HELP)")],
-            [InlineKeyboardButton("⚒️ Support Team ⚒️", url="https://t.me/DoraSupportTeam"),InlineKeyboardButton("✘ Close ✘", callback_data="close")],
-            [InlineKeyboardButton("➕ Add Me To Your Group ➕", url="https://t.me/DoraFilterBot?startgroup=true")]
+            [InlineKeyboardButton("ꖜ About ꖜ", callback_data="edit_c(ABOUT)"),InlineKeyboardButton("⏣ Mᴀᴘ ⏣", callback_data="edit_c(HELP)")],
+            [InlineKeyboardButton("♡ Sᴜᴘᴘᴏʀᴛ Tᴇᴀᴍ ♡", url="https://t.me/DoraSupportTeam"),InlineKeyboardButton("ⓧ Cʟᴏsᴇ ⓧ", callback_data="close")],
+            [InlineKeyboardButton("⨭ Aᴅᴅ ᴍᴇ ᴛᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⨮", url="https://t.me/DoraFilterBot?startgroup=true")]
         ],
 
         "ABOUT": [
-            [InlineKeyboardButton("🗺️ Map 🗺️", callback_data="help"), InlineKeyboardButton("Stats", callback_data='stats')],
-            [InlineKeyboardButton("⇚ Back", callback_data="start")]
+            [InlineKeyboardButton("⸙ Cʀᴇᴅɪᴛs ⸙", callback_data="edit_c(CREDITS)"), InlineKeyboardButton("⏣ Mᴀᴘ ⏣️", callback_data="edit_c(HELP)"), InlineKeyboardButton("⌭ Sᴛᴀᴛs ⌭", callback_data='stats')],
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(START)")]
         ],
 
         "HELP": [
-            [InlineKeyboardButton("FILTERS ⇝", callback_data="ignore"),InlineKeyboardButton("Auto 🤖", callback_data="edit_c(AF)"),InlineKeyboardButton("Manual 👨‍💻", callback_data="edit_c(MF)")],
-            [InlineKeyboardButton("Connections 🔗", callback_data="edit_c(CONN)"),InlineKeyboardButton("Broadcast 📣", callback_data="edit_c(CAST)"),InlineKeyboardButton("Caption ➰", callback_data="edit_c(CAPTION)")],
-            [InlineKeyboardButton("SpellCheck 🖋️", callback_data='edit_c(SPELL)'),InlineKeyboardButton("Batch 🗂️", callback_data="edit_c(BATCH)"),InlineKeyboardButton("Others ⭕", callback_data="edit_c(OTHER)")],
-            [InlineKeyboardButton("🏡 Home 🏡", callback_data="edit_c(START)")]
+            [InlineKeyboardButton("⎔ Aᴜᴛᴏ Fɪʟᴛᴇʀ ⎔", callback_data="edit_c(AF)"), InlineKeyboardButton("⎎ Mᴀɴᴜᴀʟ Fɪʟᴛᴇʀs ⎎", callback_data="edit_c(MF)"), InlineKeyboardButton("꩜ Gʟᴏʙᴀʟ Fɪʟᴛᴇʀs ꩜", callback_data="edit_c(MF)")],
+            [InlineKeyboardButton("⎙ Bᴀᴛᴄʜ ⎙️", callback_data="edit_c(BATCH)"), InlineKeyboardButton("⌬ Cᴏɴɴᴇᴄᴛɪᴏɴ ⌬", callback_data="edit_c(CONN)"), InlineKeyboardButton("⌥ Bʀᴏᴀᴅᴄᴀsᴛ ⌥", callback_data="edit_c(CAST)")],
+            [InlineKeyboardButton("« AᴜᴛᴏDᴇʟᴇᴛᴇ »️", callback_data='edit_c(AUTODEL)'), InlineKeyboardButton("ꔮ Cᴀᴘᴛɪᴏɴ ꔮ", callback_data="edit_c(CAPTION)"), InlineKeyboardButton("✎ Sᴘᴇʟʟᴄʜᴇᴄᴋ ✎️", callback_data='edit_c(SPELL)')],
+            [InlineKeyboardButton("⏣ Oᴛʜᴇʀ ⏣", callback_data="edit_c(OTHER)"), InlineKeyboardButton("⌤ Hᴏᴍᴇ ⌤", callback_data="edit_c(START)")]
         ],
         "AF": [
-            [InlineKeyboardButton("Connections 🔗", callback_data="edit_c(CONN)")],
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
+            [InlineKeyboardButton("⌬ Cᴏɴɴᴇᴄᴛɪᴏɴ ⌬", callback_data="edit_c(CONN)")],
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
         ],
         "MF": [
-            [InlineKeyboardButton("Buttons 🖲️", callback_data="edit_c(BTN)")],
-            [InlineKeyboardButton("Formatting ✒️", callback_data="edit_c(FORMAT)")],
-            [InlineKeyboardButton("Connections 🔗", callback_data="edit_c(CONN)")],
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
+            [InlineKeyboardButton("⎉ Bᴜᴛᴛᴏɴs ⎉️", callback_data="edit_c(BTN)")],
+            [InlineKeyboardButton("⎚ Fᴏʀᴍᴀᴛᴛɪɴɢ ⎚️", callback_data="edit_c(FORMAT)")],
+            [InlineKeyboardButton("⌬ Cᴏɴɴᴇᴄᴛɪᴏɴ ⌬", callback_data="edit_c(CONN)")],
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
         ],
         "BATCH": [
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
+        ],
+        "CREDITS": [
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(ABOUT)")]
+        ],
+        "AUTODEL": [
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
         ],
         "CONN": [
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
         ],
         "FORMAT": [
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(MF)")]
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(MF)")]
         ],
         "BTN": [
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(MF)")]
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(MF)")]
         ],
         "OTHER": [
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
         ],
         "CAST": [
-            [InlineKeyboardButton("Connections 🔗", callback_data="edit_c(CONN)")],
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
+            [InlineKeyboardButton("⌬ Cᴏɴɴᴇᴄᴛɪᴏɴ ⌬", callback_data="edit_c(CONN)")],
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
         ],
         "CAPTION": [
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]],
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]],
         "SPELL": [
-            [InlineKeyboardButton("⇚ Back", callback_data="edit_c(HELP)")]
+            [InlineKeyboardButton("Bᴀᴄᴋ ⎆", callback_data="edit_c(HELP)")]
         ]
     }

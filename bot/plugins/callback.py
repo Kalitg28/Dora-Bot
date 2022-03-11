@@ -22,35 +22,6 @@ from bot.database import Database # pylint: disable=import-error
 
 db = Database()
 
-@Client.on_callback_query(filters.regex(r"all\((.+)\)"), group=4)
-async def cb_all(bot:Client, update:CallbackQuery):
-
-    chat_id = update.message.chat.id
-    try:
-        query = re.findall(r"all\((.+)\)", update.data)[0]
-        all_files = FIND.get(query).get("all_files")
-        settings = await db.find_chat(chat_id)
-        await update.answer("Sending files in PM...", show_alert=True)
-
-        for file in all_files:
-
-            file_id, file_name, file_caption, file_type = await db.get_file(file)
-            file_caption = "<b>" + file_name + "</b>\n\n" + settings.get("caption", "")
-            try:
-                await bot.send_cached_media(
-                update.from_user.id,
-                file_id,
-                caption = file_caption,
-                parse_mode="html",
-            )
-            except Exception as e:
-                await update.answer(f"<b>Error:</b>\n<code>{e}</code>", show_alert=True)
-                print(e)
-        return
-
-    except Exception as e:
-        print(e)
-
 
 @Client.on_callback_query(filters.regex(r"navigate\((.+)\)"), group=4)
 async def cb_navg(bot, update: CallbackQuery):
@@ -98,7 +69,6 @@ async def cb_navg(bot, update: CallbackQuery):
     show_invite = (False if pm_file_chat == True else show_invite)
     
     results = FIND.get(query).get("results")
-    leng = FIND.get(query).get("total_len")
     max_pages = FIND.get(query).get("max_pages")
     
     try:
@@ -110,25 +80,33 @@ async def cb_navg(bot, update: CallbackQuery):
         return
 
     if ((index_val + 1 )== max_pages) or ((index_val + 1) == len(results)): # Max Pages
-        temp_results.append([
-            InlineKeyboardButton("⇚ Back", callback_data=f"navigate({index_val}|back|{query})"),
-            InlineKeyboardButton(f"All", callback_data=f"all({query})")
+
+        if not index_val <= 0:
+            
+            temp_results.append([
+            InlineKeyboardButton("⇚ ʙᴀᴄᴋ", callback_data=f"navigate({index_val}|back|{query})")
         ])
 
-    elif int(index_val) == 0:
-        pass
+    elif int(index_val) <= 0:
+        temp_results.append(
+                [
+                    InlineKeyboardButton(f"📃 ᴘᴀɢᴇ 1/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore"),
+                    InlineKeyboardButton("ɴᴇxᴛ ⇛", callback_data=f"navigate(0|next|{query})")
+                ]
+            )
 
     else:
         temp_results.append([
-            InlineKeyboardButton("⇚ Back", callback_data=f"navigate({index_val}|back|{query})"),
-            InlineKeyboardButton(f"All", callback_data=f"all({query})"),
-            InlineKeyboardButton("Next ⇛", callback_data=f"navigate({index_val}|next|{query})")
+            InlineKeyboardButton("⇚ ʙᴀᴄᴋ", callback_data=f"navigate({index_val}|back|{query})"),
+            InlineKeyboardButton("ɴᴇxᴛ ⇛", callback_data=f"navigate({index_val}|next|{query})")
         ])
 
     if not int(index_val) == 0:    
         temp_results.append([
-            InlineKeyboardButton(f"📃 Page {index_val + 1}/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore")
+            InlineKeyboardButton(f"📃 ᴘᴀɢᴇ {index_val + 1}/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore")
         ])
+
+    
     
     if show_invite and int(index_val) !=0 :
         
@@ -172,10 +150,8 @@ async def cb_navg(bot, update: CallbackQuery):
         ibuttons = None
         achatId = None
     
-    reply_markup = InlineKeyboardMarkup(temp_results)
+    reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"), InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"), InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi({index_val}|{query})")]]+temp_results)
     
-
-        
     try:
         await update.message.edit_reply_markup(
                 reply_markup=reply_markup
@@ -230,6 +206,8 @@ async def cb_settings(bot, update: CallbackQuery):
     auto_filter = settings.get('af', True)
     size_button = settings.get('size', False)
     g_filter = settings.get('global', True)
+    fsub_msg = settings.get('fsub_msg', False)
+    autodel = settings.get('autodel', False)
     
     text=f"<i><b>Configure Your <u><code>{chat_name}</code></u> Group's Auto Filter Settings...</b></i>\n"
     
@@ -250,11 +228,17 @@ async def cb_settings(bot, update: CallbackQuery):
     else:
         text+=f"\n - Force Subscribe: {fsub['title']} ✅\n"
 
+    text+=f"\n- Fsub Message : {'Custom ✅' if fsub_msg else 'Default'}\n"
+
+    text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
+
     text+=f"\n- Custom Caption: {'Activated ✅' if caption else 'Inactive ❌'}\n"
 
     text+=f"\n- Spelling Check: {'Activated ✅' if spell else 'Inactive ❌'}\n"
 
     text+=f"\n- Size Button: {'Enabled ✅' if size_button else 'Disabled ❌'}\n"
+
+    text+=f"\n- Auto Delete: {f'{autodel/60} mins' if autodel else 'Disabled ❌'}\n"
     
     text+="\nAdjust Above Value Using Buttons Below... "
     buttons=[
@@ -298,11 +282,13 @@ async def cb_settings(bot, update: CallbackQuery):
     else:
         gf = InlineKeyboardButton('Global Filters', callback_data=f'global(off|{chat_id})')
 
+    fmb = InlineKeyboardButton('Fsub Message', callback_data=f"fsub_msg({chat_id})")
+
     buttons.append([af, sb])    
 
     buttons.append([spell_button, capt_button])
 
-    buttons.append([gf])
+    buttons.append([gf, fmb])
 
 
     if fsub:
@@ -340,7 +326,11 @@ async def cb_settings(bot, update: CallbackQuery):
             InlineKeyboardButton
                 (
                     "🎯 Result's Accuracy 🎯", callback_data=f"accuracy({accuracy_point}|{chat_id})"
-                )
+                ),
+            InlineKeyboardButton
+            (
+                "AutoDelete", callback_data=f"autodel({chat_id})"
+            )
         ]
     )
 
@@ -1954,8 +1944,8 @@ async def callback_data(bot, update: CallbackQuery):
         await update.message.delete()
 
     elif query_data == "instruct":
-        await update.answer("Please Check The Spelling Of The Movie\n\nMake Sure It Is Released\n\nAvoid Unnecessary Words", show_alert=True)
-    await bot.send_chat_action(update.message.chat.id, "cancel")
+        await update.answer("-Pʟᴇᴀsᴇ Cʜᴇᴄᴋ Tʜᴇ Sᴘᴇʟʟɪɴɢ Oғ Tʜᴇ Mᴏᴠɪᴇ\n-Mᴀᴋᴇ Sᴜʀᴇ Iᴛ Is Rᴇʟᴇᴀsᴇᴅ\n-Aᴠᴏɪᴅ Uɴɴᴇᴄᴇssᴀʀʏ Wᴏʀᴅs", show_alert=True)
+     
 
 @Client.on_callback_query(filters.regex(r"edit_c\((.+)\)"), group=4)
 async def edit_caption(bot:Client, update: CallbackQuery):
@@ -1965,23 +1955,23 @@ async def edit_caption(bot:Client, update: CallbackQuery):
     await bot.send_chat_action(update.message.chat.id, "typing")
     await update.answer()
 
-    loading = await bot.send_message(update.message.chat.id, "⭗ ⭗ ⭗")
+    loading = await bot.send_message(update.message.chat.id, "◌ ◌ ◌")
     await asyncio.sleep(0.20)
-    await loading.edit("⦿ ⭗ ⭗")
+    await loading.edit("● ◌ ◌")
     await asyncio.sleep(0.20)
-    await loading.edit("⦿ ⦿ ⭗")
+    await loading.edit("● ● ◌")
     await asyncio.sleep(0.20)
-    await loading.edit("⦿ ⦿ ⦿")
+    await loading.edit("● ● ●")
     await asyncio.sleep(0.20)
     await loading.delete()
 
     if STRING=="FORMAT":
-        await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+        await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     elif STRING=="SPELL":
-        await update.message.edit_caption(caption=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+        await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     else :
-        await update.message.edit_caption(caption=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
-    await bot.send_chat_action(update.message.chat.id, "cancel")
+        await update.message.edit(text=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]), disable_web_page_preview=True)
+     
 
 @Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=4)
 async def alerter(bot:Client, update: CallbackQuery):
@@ -2044,11 +2034,14 @@ async def edit_m(bot:Client, update: CallbackQuery):
 async def cb_stats(bot:Client, update:CallbackQuery):
 
     try:
-
+        await update.answer("Fᴇᴛᴄʜɪɴɢ Dᴇᴛᴀɪʟs...")
         stats = await db.get_stats()
+        text = f"♡ Dᴀᴛᴀʙᴀsᴇ sᴛᴀᴛs ᴏғ Dᴏʀᴀ:-\n\nFɪʟᴇs : {stats['files']}\n\nUsᴇʀs : {stats['users']}\n\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\n\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\n\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}"
+        if update.text == text: return
         await update.message.edit(
-            f"Files : {stats['files']}\n\nUsers : {stats['users']}\n\nConnected Users : {stats['conn']}\n\nManual Filters : {stats['filters']}\n\nCustomized Chats : {stats['chats']}\n\nSpace Used : {stats['used']}",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 Home 🏡", callback_data="start"), InlineKeyboardButton("✘ Close ✘", callback_data="close")]])
+            text,
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="edit_c(START)"), InlineKeyboardButton("Rᴇғʀᴇsʜ", callback_data="stats")]]),
+            parse_mode='html'
         )
     except Exception as e:
         print(e)
@@ -2056,7 +2049,32 @@ async def cb_stats(bot:Client, update:CallbackQuery):
 @Client.on_callback_query(filters.regex("ignore"), group=4)
 async def ignore(bot:Client, update:CallbackQuery):
 
-    await update.answer("You Have Hit A Wall 💥🧱🚗", show_alert=True)
+    await update.answer("Yᴏᴜ Hᴀᴠᴇ Hɪᴛ A Wᴀʟʟ 💥🧱🚗", show_alert=True)
+
+@Client.on_callback_query(filters.regex(r'answer\((.+)\)'))
+async def answer_alert(bot:Client, update:CallbackQuery):
+
+    key = re.findall(r'answer\((.+)\)', update.data)[0]
+
+    if key=='SELECTED':
+        await update.answer("Tʜɪs Hᴀs Aʟʀᴇᴀᴅʏ Bᴇᴇɴ Sᴇʟᴇᴄᴛᴇᴅ :)", show_alert=True)
+    elif key=='INFO':
+        await update.answer("""
+        Hᴏᴡ Tᴏ Dᴏᴡɴʟᴏᴀᴅ :
+
+        1. Sᴇɴᴅ ᴀ ᴍᴏᴠɪᴇ ɴᴀᴍᴇ
+        2. Cʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ᴡɪᴛʜ ᴄᴏʀʀᴇᴄᴛ ɴᴀᴍᴇ ᴀɴᴅ sɪᴢᴇ ғᴏʀ ʏᴏᴜ
+        3. Pʀᴇss sᴛᴀʀᴛ
+        """, show_alert=True)
+
+    elif key=="CLOSED":
+        await update.answer("""
+        Tʜᴇ Rᴇsᴜʟᴛs ғᴏʀ ᴛʜɪs ᴍᴏᴠɪᴇ ᴡᴀs ᴄʟᴏsᴇᴅ ᴀғᴛᴇʀ ᴀ ᴘʀᴇᴅᴇғɪɴᴇᴅ ᴛɪᴍᴇᴏᴜᴛ
+
+        Jᴜsᴛ Asᴋ Tʜᴇ ᴍᴏᴠɪᴇ ᴀɢᴀɪɴ ᴛᴏ ɢᴇᴛ ɪᴛ
+        """, show_alert=True)
+    else:
+        await update.answer()
 
 def time_formatter(seconds: float) -> str:
     """ 

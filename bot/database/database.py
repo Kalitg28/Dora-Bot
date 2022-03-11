@@ -805,10 +805,12 @@ class Database:
         pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
         regex = re.compile(pattern, flags=re.IGNORECASE)
 
-        results: list = list(fcol.find({'file_name': regex}))
+        results: list = fcol.find({'file_name': regex})
 
-        if not results or len(results)<1:
+        if not results :
             return False
+        else:
+            results = list(results)
             
         results.reverse()
 
@@ -818,6 +820,16 @@ class Database:
 
         filter = fcol.find_one({'_id': id})
         return filter
+
+    async def clear_predvd(self):
+
+        pattern = re.compile(r'predvd|camrip|hdts|hdcam|cam', re.IGNORECASE)
+        cleared = fcol.delete_many({'file_name': pattern})
+        return cleared.deleted_count
+
+    async def del_file(self, file_id: str):
+
+        return fcol.delete_one({'file_id': file_id})
 
 
 def getLen(e):

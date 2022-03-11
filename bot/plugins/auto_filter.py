@@ -25,7 +25,7 @@ ACTIVE_CHATS = {}
 db = Database()
 
 @Bot.on_message(filters.text & filters.group & ~filters.bot, group=0)
-async def auto_filter(bot:Client, update:Message):
+async def auto_filter(bot:Bot, update:Message):
     """
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
     """
@@ -39,8 +39,14 @@ async def auto_filter(bot:Client, update:Message):
     
     if ("https://" or "http://") in update.text:
         return
-    
-    query = re.sub(r"[1-2]\d{3}", "", update.text) # Targetting Only 1000 - 2999 😁
+
+    year = re.findall(r"[1-2]\d{3}", update.text) # Targetting Only 1000 - 2999 😁
+    if year:
+        year = year[0]
+    else:
+        year = '2022'
+
+    query = update.text.replace(year, '')
     
     if len(query) < 2:
         return
@@ -77,6 +83,9 @@ async def auto_filter(bot:Client, update:Message):
     if not filters and movie_info:
         
         filters = await db.search_media(movie_info["title"], max_results+5)
+
+        if not filters:
+            filters = await db.search_media(movie_info["localized title"], max_results+5)
     
     if filters:
         all_files = []
@@ -137,16 +146,32 @@ async def auto_filter(bot:Client, update:Message):
                 bot_ = FIND.get("bot_details")
                 file_link = f"https://t.me/{bot_.username}?start=z{unique_id}z{group_text}z"
 
-            if size_button :
-                results.append(
+            if year in file_name:
+
+                if size_button :
+                    results+=[[
+                        InlineKeyboardButton(file_name, url=file_link),
+                        InlineKeyboardButton(file_size, url=file_link)
+                    ]]
+                
+                else:
+                    button_text = f"{file_size} {file_name}"
+                    results+=[[
+                    InlineKeyboardButton(button_text, url=file_link)
+                ]]
+            
+            else:
+
+                if size_button :
+                    results.append(
                     [
                         InlineKeyboardButton(file_name, url=file_link),
                         InlineKeyboardButton(file_size, url=file_link)
                     ]
                 )
-            else:
-                button_text = f"{file_size} {file_name}"
-                results.append(
+                else:
+                    button_text = f"{file_size} {file_name}"
+                    results.append(
                 [
                     InlineKeyboardButton(button_text, url=file_link)
                 ]
@@ -168,7 +193,7 @@ async def auto_filter(bot:Client, update:Message):
             query=update.text
             )
 
-        await update.reply_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📄 Instructions 📄", callback_data="instruct"), InlineKeyboardButton("🔍 Search 🔎", url=f"https://google.com/search?q={update.text.replace(' ','+')}")]]))
+        await update.reply_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📄 Instructions 📄", callback_data="instruct"), InlineKeyboardButton("🔍 Search 🔎", url=f"https://google.com/search?q={update.text.replace(' ','+')}")]]), parse_mode='html')
 
         
 
@@ -179,6 +204,8 @@ async def auto_filter(bot:Client, update:Message):
         return
     
     else:
+
+        autodel = configs.get('autodel', False)
     
         result = []
         # seperating total files into chunks to make as seperate pages
@@ -187,50 +214,86 @@ async def auto_filter(bot:Client, update:Message):
         len_results = len(results)
         results = None # Free Up Memory
         
-        FIND[query] = {"results": result, "total_len": len_results, "max_pages": max_pages, "all_files": all_files} # TrojanzHex's Idea Of Dicts😅
+        FIND[query] = {"results": result, "total_len": len_results, "max_pages": max_pages, "all_files": all_files, "per_page": max_per_page} # TrojanzHex's Idea Of Dicts😅
+
+            
+        reply_markup = [[
+            InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"),
+            InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"),
+            InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi(0|{query})")
+        ]]+ result[0]
 
         # Add next buttin if page count is not equal to 1
         if len_result != 1:
-            result[0].append(
+            reply_markup.append(
                 [
-                    InlineKeyboardButton(f"📃 Page 1/{len_result if len_result < max_pages else max_pages} 📃", callback_data="ignore"),
-                    InlineKeyboardButton(f"All", callback_data=f"all({query})"),
-                    InlineKeyboardButton("Next ⇛", callback_data=f"navigate(0|next|{query})")
+                    InlineKeyboardButton(f"📃 ᴘᴀɢᴇ 1/{len_result if len_result < max_pages else max_pages} 📃", callback_data="ignore"),
+                    InlineKeyboardButton("ɴᴇxᴛ ⇛", callback_data=f"navigate(0|next|{query})")
                 ]
             )
-        
-            
-        reply_markup = InlineKeyboardMarkup(result[0])
+
+        reply_markup = InlineKeyboardMarkup(reply_markup)
+        msg = False
 
         if not movie_info :
 
-            await update.reply_text(
-                text=f"<b>I've Found {len_results} Results For Your Query <code>{update.text}</code></b>",
+            msg = await update.reply_text(
+                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
-            return
+
+        elif movie_info and movie_info["full-size cover url"]=="Unknown":
+
+            text = f"""
+<b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
+<b>⌗ ɢᴇɴʀᴇ </b>: <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
+<b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
+<b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} </code>
+<b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
+<b>⌬ ʟᴀɴɢᴜᴀɢᴇs </b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
+<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
+<b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
+
+<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
+        """
+
+            msg = await bot.send_message(
+                chat_id = update.chat.id,
+                text=text,
+                reply_markup=reply_markup,
+                parse_mode="html",
+                reply_to_message_id=update.message_id
+            )
+
         elif movie_info["full-size cover url"]=="Unknown":
-            await update.reply_text(
-                text=f"<b>I've Found {len_results} Results For Your Query <code>{update.text}</code></b>",
+            msg = await update.reply_text(
+                text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
-            return
 
-        text = f'''<b>📽️ Movie/Series</b> : <code>{movie_info['title']}</code>
-🌟 <b>Rating</b> : <i>{movie_info["rating"]}</i>
-🗳️ <b>Votes</b> : <i>{movie_info["votes"]}</i>
-🧬 <b>Genres</b> : <i>{str(movie_info["genres"]).replace('[','').replace(']','').replace("'",'')}</i>
-📅 <b>Released</b> : <i>{movie_info["original air date"]}</i>
-⏱️ <b>Duration</b> : <i>{movie_info["runtimes"]}</i>
-📁 <b>Results</b> : <i>{(len_results)}</i>
+        text = f"""
+<b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
+<b>⌗ ɢᴇɴʀᴇ </b>: <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
+<b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
+<b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} </code>
+<b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
+<b>⌬ ʟᴀɴɢᴜᴀɢᴇs </b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
+<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
+<b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
 
-<b>🅒 Uploaded By  {update.chat.title} </b>
-        '''
+<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
+        """        
+        if msg and autodel:
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+10
+            )
 
         try:
-            await bot.send_photo(
+            msg = await bot.send_photo(
                 photo=movie_info["full-size cover url"],
                 chat_id = update.chat.id,
                 caption=text,
@@ -239,30 +302,57 @@ async def auto_filter(bot:Client, update:Message):
                 reply_to_message_id=update.message_id
             )
 
+            if autodel:
+                await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del photo {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+autodel
+            )
+
         except MediaEmpty:
 
             text+=f"<a href='{movie_info['link']}'> </a>"
-            await update.reply_text(
+            msg = await update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
-        
+
+            if autodel:
+                await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+autodel
+            )
         except WebpageMediaEmpty:
 
             text+=f"<a href='{movie_info['link']}'> </a>"
-            await update.reply_text(
+            msg = await update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
+            )
+
+            if autodel:
+                await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+autodel
             )
 
         except ChatSendMediaForbidden:
             text+=f"<a href='{movie_info['link']}'> </a>"
-            await update.reply_text(
+            msg = await update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
+            )
+
+            if autodel:
+                await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+autodel
             )
 
         except ButtonDataInvalid:
@@ -272,14 +362,6 @@ async def auto_filter(bot:Client, update:Message):
             print(e)
 
         print(update.chat.title)
-
-
-
-@Client.on_message(filters.command('search'), group=4)
-async def media_search(bot:Client, update:Message):
-
-    query = update.text.split(None, 1)[1]
-    await db.search_media(query, 10)
 
 
 async def gen_invite_links(db, group_id, bot, update):

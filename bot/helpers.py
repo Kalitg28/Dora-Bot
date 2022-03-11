@@ -1,12 +1,16 @@
 # (c) @MrPurple902
 
-import re 
+import os
 import imdb
 import random
 from imdb import Movie
 from pyrogram.types import InlineQueryResultPhoto
 from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
 from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
+
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
 from bot.translation import Translation
 
@@ -19,7 +23,7 @@ class Helpers() :
  
  async def get_movie(my_movie):
 
-    info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "full-size cover url", "kind"]
+    info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "languages", "full-size cover url", "kind", "localized title"]
     movies = searcher.search_movie(my_movie, results=1)
     if len(movies)<1:
         return False
@@ -43,6 +47,11 @@ class Helpers() :
         except Exception as e :
 
             print(e)
+
+    movie_info['id'] = movie_id
+    movie_info['link'] = f"https://imdb.com/title/tt{movie_id}"
+    movie_info['rating_link'] = f"https://imdb.com/title/tt{movie_id}/ratings"
+    movie_info['release_link'] = f"https://imdb.com/title/tt{movie_id}/releaseinfo"
 
     air_date = movie.get("original air date", None)
     if not air_date:
@@ -157,4 +166,38 @@ class Helpers() :
 
      except Exception as e:
          print(e)
-              
+
+ async def list_to_str(l):
+
+     if type(l)=="str":
+         return l
+     res = " ".join(l)
+     return res
+
+ 
+ async def gen_closed_img(text):
+
+    # Open an Image
+    W, H = (640, 640)
+    img = Image.new("RGBA",(W,H),"black")
+    overlay = Image.open('/app/bot/assets/closed2.png')
+
+    # Call draw Method to add 2D graphics in an image
+    I1 = ImageDraw.Draw(img)
+
+    # Custom font style and font size
+    myFont = ImageFont.truetype('/app/bot/assets/Meteora.ttf', int((W/len(text)*2)-(275/len(text))))
+
+    w, h = I1.textsize(text, myFont)
+    print(w, h)
+
+    # Add Text to an image
+    I1.text(text=text, font=myFont, fill =(300, 1000, 1000), xy=((W/2)-(w/2) + 10, H/2-(h/2)), align='center')
+
+    #Pasting overlas to image
+    img.paste(overlay, (20,75), mask=overlay)
+
+    path = f'/app/bot/assets/{text}.png'
+    img.save(path)
+
+    return path

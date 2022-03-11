@@ -1972,6 +1972,8 @@ async def edit_caption(bot:Client, update: CallbackQuery):
         await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     else :
         await update.message.edit(text=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]), disable_web_page_preview=True)
+
+    await bot.send_chat_action(update.message.chat.id, "cancel")
      
 
 @Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=4)

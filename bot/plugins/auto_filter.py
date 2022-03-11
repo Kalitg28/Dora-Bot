@@ -272,6 +272,14 @@ async def auto_filter(bot:Bot, update:Message):
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
+      
+        if msg and autodel:
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+autodel
+            )
+            return
 
         text = f"""
 <b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
@@ -284,13 +292,7 @@ async def auto_filter(bot:Bot, update:Message):
 <b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
 
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
-        """        
-        if msg and autodel:
-            await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
-            )
+        """  
 
         try:
             msg = await bot.send_photo(

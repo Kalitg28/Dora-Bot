@@ -16,7 +16,7 @@ from bot.database import Database # pylint: disable=import-error
 SELECTED = {}
 db = Database()
 
-@Client.on_callback_query(filters.regex(r'multi\((.+)\)'))
+@Client.on_callback_query(filters.regex(r'multi\((.+)\)'), group=3)
 async def multiselect(bot:Client, update:CallbackQuery):
 
     global VERIFY
@@ -69,7 +69,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
     await update.message.edit_reply_markup(InlineKeyboardMarkup(total_btn))
     await update.answer()
 
-@Client.on_callback_query(filters.regex(r'^sel\((.+)\)'), group=4)
+@Client.on_callback_query(filters.regex(r'^sel\((.+)\)'), group=3)
 async def select(bot:Client, update:CallbackQuery):
 
     global VERIFY
@@ -143,8 +143,9 @@ async def sensel(bot:Client, update:CallbackQuery):
                 except PeerIdInvalid:
                     pass
                 except UserNotParticipant:
-                    chat = str(chat_id).replace('-100','').replace('-','')
-                    return await update.answer(url=f"https://t.me/NoobSearchBot?start=fsubz{fsub}a{chat}a{update.message.message_id}z")
+                    url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                    print(url)
+                    return await update.answer(url=url.replace('-100',''))
 
     global SELECTED
 
@@ -170,7 +171,7 @@ async def sensel(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                url=f"https://t.me/NoobSearchBot?start=retryz{chat_id}a{update.message.message_id}z"
+                url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
                 return await update.answer(url=url.replace('-100',''))
             except UserIsBlocked:
@@ -203,8 +204,9 @@ async def cb_all(bot:Client, update:CallbackQuery):
                 except PeerIdInvalid:
                     pass
                 except UserNotParticipant:
-                    chat = str(chat_id).replace('-100','').replace('-','')
-                    return await update.answer(url=f"https://t.me/NoobSearchBot?start=fsubz{fsub}a{chat}a{update.message.message_id}z")
+                    url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                    print(url)
+                    return await update.answer(url=url.replace('-100',''))
 
         for file in all_files:
 
@@ -218,7 +220,7 @@ async def cb_all(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                url=f"https://t.me/NoobSearchBot?start=retryz{chat_id}a{update.message.message_id}z"
+                url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
                 return await update.answer(url=url.replace('-100',''))
             except UserIsBlocked:

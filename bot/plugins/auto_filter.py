@@ -1,21 +1,17 @@
 import re
-import logging
 import asyncio
-import random
 
-from pyrogram import Client, filters
-from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from pyrogram.errors import ButtonDataInvalid, FloodWait, PhotoIdInvalid, ChatSendMediaForbidden
+from pyrogram import filters
+from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors import ButtonDataInvalid, FloodWait, ChatSendMediaForbidden
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, WebpageMediaEmpty
 
 from bot.database import Database # pylint: disable=import-error
 from bot.bot import Bot
 from bot.translation import Translation # pylint: disable=import-error
 from bot.helpers import(# pylint: disable=import-error 
-Helpers, IMDB
+Helpers
 )
-
-from pymongo.cursor import Cursor, CursorType
 
 from .batch import Batch
 
@@ -65,12 +61,7 @@ async def auto_filter(bot:Bot, update:Message):
     movie = await Helpers.cleanse(update.text)
     movie_info = await Helpers.get_movie(movie)
     
-    allow_video = True
-    allow_audio = False
-    allow_document = True
-    
     max_pages = configs["configs"]["max_pages"] # maximum page result of a query
-    pm_file_chat = configs["configs"]["pm_fchat"] # should file to be send from bot pm to user
     max_results = configs["configs"]["max_results"] # maximum total result of a query
     max_per_page = configs["configs"]["max_per_page"] # maximum buttom per page 
     auto_filter = configs.get('af', True)
@@ -92,7 +83,6 @@ async def auto_filter(bot:Bot, update:Message):
         group_text = Batch.encode(str(chat_id))
         for filter in filters: # iterating through each files
             file_name = filter.get("file_name")
-            file_type = filter.get("file_type")
             file_link = filter.get("file_link")
             file_size = int(filter.get("file_size", "0"))
             
@@ -109,42 +99,19 @@ async def auto_filter(bot:Bot, update:Message):
             
             
             file_size = "" if file_size == ("[0 B]") else file_size
-            
-            # add emoji down below inside " " if you want..
-            
-            
 
-            if file_type == "video":
-                if allow_video: 
-                    pass
-                else:
-                    continue
-                
-            elif file_type == "audio":
-                if allow_audio:
-                    pass
-                else:
-                    continue
-                
-            elif file_type == "document":
-                if allow_document:
-                    pass
-                else:
-                    continue
+            unique_id = filter.get("unique_id")
+            if not FIND.get("bot_details"):
+                try:
+                    bot_= await bot.get_me()
+                    FIND["bot_details"] = bot_
+                except FloodWait as e:
+                    asyncio.sleep(e.x)
+                    bot_= await bot.get_me()
+                    FIND["bot_details"] = bot_
             
-            if pm_file_chat: 
-                unique_id = filter.get("unique_id")
-                if not FIND.get("bot_details"):
-                    try:
-                        bot_= await bot.get_me()
-                        FIND["bot_details"] = bot_
-                    except FloodWait as e:
-                        asyncio.sleep(e.x)
-                        bot_= await bot.get_me()
-                        FIND["bot_details"] = bot_
-                
-                bot_ = FIND.get("bot_details")
-                file_link = f"https://t.me/{bot_.username}?start=z{unique_id}z{group_text}z"
+            bot_ = FIND.get("bot_details")
+            file_link = f"https://t.me/{bot_.username}?start=z{unique_id}z{group_text}z"
 
             if year in file_name:
 
@@ -272,6 +239,14 @@ async def auto_filter(bot:Bot, update:Message):
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
+      
+        if msg and autodel:
+            await bot.USER.send_message(
+                chat_id=Translation.LOG_CHANNEL,
+                text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                schedule_date=msg.date+autodel
+            )
+            return
 
         text = f"""
 <b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
@@ -284,13 +259,7 @@ async def auto_filter(bot:Bot, update:Message):
 <b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
 
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
-        """        
-        if msg and autodel:
-            await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+10
-            )
+        """  
 
         try:
             msg = await bot.send_photo(
@@ -362,34 +331,6 @@ async def auto_filter(bot:Bot, update:Message):
             print(e)
 
         print(update.chat.title)
-
-
-async def gen_invite_links(db, group_id, bot, update):
-    """
-    A Funtion To Generate Invite Links For All Active 
-    Connected Chats In A Group
-    """
-    chats = db.get("chat_ids")
-    global INVITE_LINK
-    
-    if INVITE_LINK.get(str(group_id)):
-        return
-    
-    Links = []
-    if chats:
-        for x in chats:
-            Name = x["chat_name"]
-            
-            if Name == None:
-                continue
-            
-            chatId=int(x["chat_id"])
-            
-            Link = await bot.export_chat_invite_link(chatId)
-            Links.append({"chat_id": chatId, "chat_name": Name, "invite_link": Link})
-
-        INVITE_LINK[str(group_id)] = Links
-    return 
 
 
 async def recacher(group_id, ReCacheInvite=True, ReCacheActive=False, bot=Bot, update=Message):

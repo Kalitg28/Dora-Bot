@@ -3,7 +3,7 @@
 import re
 
 from pyromod import listen
-from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import Message, InlineKeyboardMarkup
 from pyrogram import Client, filters
 from pyrogram.errors import PeerIdInvalid, MessageIdInvalid
 

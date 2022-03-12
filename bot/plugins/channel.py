@@ -20,7 +20,7 @@ from bot.helpers import Helpers
 db = Database()
     
     
-@Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=3)
+@Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=5)
 async def connect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /add Command TO COnnect A Chat With Group
@@ -189,7 +189,7 @@ async def connect(bot: Bot, update):
     await wait_msg.edit_text(f"Channel Was Sucessfully Added With <code>{len(data)}</code> Files..")
 
 
-@Client.on_message(filters.command(["del"]) & filters.chat(Translation.OWNER_ID), group=3)
+@Client.on_message(filters.command(["del"]) & filters.chat(Translation.OWNER_ID), group=5)
 async def disconnect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /del Command TO Disconnect A Chat With A Group
@@ -232,7 +232,7 @@ async def disconnect(bot: Bot, update):
     await wait_msg.edit_text("Sucessfully Deleted All Files From DB....")
 
 
-@Client.on_message(filters.command(["delall"]) & filters.chat(Translation.OWNER_ID), group=3)
+@Client.on_message(filters.command(["delall"]) & filters.chat(Translation.OWNER_ID), group=5)
 async def delall(bot: Bot, update):
     """
     A Funtion To Handle Incoming /delall Command TO Disconnect All Chats From A Group
@@ -244,7 +244,7 @@ async def delall(bot: Bot, update):
     
     await update.reply_text("Sucessfully Deleted All Connected Chats From This Group....")
 
-@Client.on_chat_member_updated(filters.chat(-1001547869793), group=3)
+@Client.on_chat_member_updated(filters.chat(-1001547869793), group=5)
 async def new_in_channel(bot:Client, update:ChatMemberUpdated):
 
     member = update.new_chat_member
@@ -270,21 +270,18 @@ async def new_files(bot: Bot, update):
             file_type = "video" 
             file_id = update.video.file_id
             file_name = update.video.file_name[0:-4]
-            file_caption  = update.caption if update.caption else ""
             file_size = update.video.file_size
 
         elif update.audio:
             file_type = "audio"
             file_id = update.audio.file_id
             file_name = update.audio.file_name[0:-4]
-            file_caption  = update.caption if update.caption else ""
             file_size = update.audio.file_size
 
         elif update.document:
             file_type = "document"
             file_id = update.document.file_id
             file_name = update.document.file_name[0:-4]
-            file_caption  = update.caption if update.caption else ""
             file_size = update.document.file_size
 
         for i in ["_", "|", "-", "."]: # Work Around
@@ -354,7 +351,7 @@ async def del_file(bot:Client, update:Message):
             await update.delete()
             await update.reply_text(f"File {msg.document.file_name} was Removed From Database Successfully :)")
 
-@Client.on_message(filters.command('del', prefixes=['/','.']) & filters.chat(Translation.LOG_CHANNEL))
+@Client.on_message(filters.command('del', prefixes=['/','.']) & filters.chat(Translation.LOG_CHANNEL), group=5)
 async def close_trigger(bot:Client, update:Message):
 
     cmd, type, chat_id, message_id, text = update.text.split(' ', 4)

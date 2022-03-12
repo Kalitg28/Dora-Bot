@@ -15,68 +15,7 @@ from bot import VERIFY # pylint: disable=import-error
 
 db = Database()
 
-@Client.on_message(filters.command(["settings"]) & filters.chat(Translation.OWNER_ID), group=4)
-async def pv_settings(bot, update):
-    
-    chat_id = 902
-    
-    bot_info = await bot.get_me()
-    bot_first_name= bot_info.first_name
-    
-    text =f"<i>{bot_first_name}'s</i> Settings Pannel.....\n"
-    text+=f"\n<i>You Can Use This Menu To Change Connectivity And Know Status Of Your Every Connected Channel, Change Filter Types, Configure Filter Results And To Know Status Of Your Group...</i>"
-    
-    buttons = [
-        [
-            InlineKeyboardButton
-                (
-                    "Channels", callback_data=f"channel_list({chat_id})"
-                ), 
-            
-            InlineKeyboardButton
-                (
-                    "Filter Types", callback_data=f"types({chat_id})"
-                )
-        ],
-        [
-            InlineKeyboardButton
-                (
-                    "Configure 🛠", callback_data=f"config({chat_id})"
-                )
-        ], 
-        [
-            InlineKeyboardButton
-                (
-                    "Status", callback_data=f"status({chat_id})"
-                ),
-            
-            InlineKeyboardButton
-                (
-                    "About", callback_data=f"about({chat_id})"
-                )
-        ],
-        [
-            InlineKeyboardButton
-                (
-                    "Close 🔐", callback_data="close"
-                )
-        ]
-    ]
-    
-    reply_markup = InlineKeyboardMarkup(buttons)
-    
-    await bot.send_message (
-        
-        chat_id=update.chat.id, 
-        text=text, 
-        reply_markup=reply_markup, 
-        parse_mode="html",
-        reply_to_message_id=update.message_id
-        
-        )
-
-
-@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=4)
+@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=3)
 async def settings(bot, update: Message):
     
     chat_id = update.chat.id
@@ -341,7 +280,7 @@ async def connect(bot: Client, update: Message):
 
         print(e)
 
-@Client.on_message(filters.command("disconnect") & filters.private, group=4)
+@Client.on_message(filters.command("disconnect") & filters.private, group=5)
 async def disconnect(bot: Client, update: Message):
 
     user_id = update.from_user.id
@@ -355,7 +294,7 @@ async def disconnect(bot: Client, update: Message):
     else :
 
         await update.reply_text("Please Connect To A Chat First To Delete Connection")
-@Client.on_message(filters.command('knight') & filters.group, group=4)
+@Client.on_message(filters.command('knight') & filters.group, group=5)
 async def new_knight(bot:Client, update:Message):
 
     if not update.from_user.id==Translation.OWNER_ID:
@@ -371,7 +310,7 @@ async def new_knight(bot:Client, update:Message):
     
     await update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
 
-@Client.on_message(filters.command('deknight') & filters.incoming, group=4)
+@Client.on_message(filters.command('deknight') & filters.incoming, group=5)
 async def del_knight(bot:Client, update:Message):
     if not update.from_user.id==Translation.OWNER_ID:
         return await update.reply_text('Nice Try Kid...')

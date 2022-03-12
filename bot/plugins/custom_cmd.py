@@ -1,18 +1,12 @@
 
-
 from pyrogram import filters, Client
-from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotParticipant
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from pyrogram.types.messages_and_media import photo
+from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
 from pyrogram.types.messages_and_media.message import Message
-from bot import Translation, LOGGER # pylint: disable=import-error
 from bot.database import Database # pylint: disable=import-error
-from bot.plugins.batch import Batch
-from bot import Buttons
 
 db = Database()
 
-@Client.on_message(filters.command("setcaption"), group=4)
+@Client.on_message(filters.command("setcaption"), group=5)
 async def setcaption(bot:Client, update:Message):
 
     chat_id = update.chat.id
@@ -48,7 +42,7 @@ async def setcaption(bot:Client, update:Message):
     await db.set_main(int(chat_id), "caption", caption)
     await update.reply("Your Custom Caption Was Saved Successfully...", quote=True)
 
-@Client.on_message(filters.command("delcaption"), group=4)
+@Client.on_message(filters.command("delcaption"), group=5)
 async def delcaption(bot:Client, update:Message):
 
     chat_id = update.chat.id
@@ -78,7 +72,7 @@ async def delcaption(bot:Client, update:Message):
     await db.del_main(int(chat_id), "caption")
     await update.reply("Your Request Was Updated Successfully", quote=True)
 
-@Client.on_message(filters.command("setspell"), group=4)
+@Client.on_message(filters.command("setspell"), group=5)
 async def setspell(bot:Client, update:Message):
 
     chat_id = update.chat.id
@@ -114,7 +108,7 @@ async def setspell(bot:Client, update:Message):
     await db.set_main(int(chat_id), "noresult", caption)
     await update.reply("Your Custom Spelling Message Was Saved Successfully...", quote=True)
 
-@Client.on_message(filters.command("delspell"), group=4)
+@Client.on_message(filters.command("delspell"), group=5)
 async def delspell(bot:Client, update:Message):
 
     chat_id = update.chat.id
@@ -144,7 +138,7 @@ async def delspell(bot:Client, update:Message):
     await db.del_main(int(chat_id), "noresult")
     await update.reply("Your Request Was Updated Successfully", quote=True)
 
-@Client.on_message(filters.command('autofilter'), group=4)
+@Client.on_message(filters.command('autofilter'), group=5)
 async def toggle_af(bot:Client, update:Message):
     '''
     A Function to toggle AutoFilter Mode

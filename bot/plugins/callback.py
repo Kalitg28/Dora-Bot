@@ -1,7 +1,5 @@
 import re
-import time
 import asyncio
-import pyrogram
 
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid
@@ -11,13 +9,9 @@ from bot import start_uptime, Translation, Buttons, VERIFY # pylint: disable=imp
 from bot.plugins.auto_filter import ( # pylint: disable=import-error
     FIND, 
     INVITE_LINK, 
-    ACTIVE_CHATS,
-    recacher,
-    gen_invite_links
+    ACTIVE_CHATS
     )
-from bot.plugins.settings import( # pylint: disable=import-error
-    remove_emoji
-)
+
 from bot.database import Database # pylint: disable=import-error
 
 db = Database()
@@ -106,49 +100,6 @@ async def cb_navg(bot, update: CallbackQuery):
             InlineKeyboardButton(f"📃 ᴘᴀɢᴇ {index_val + 1}/{len(results) if len(results) < max_pages else max_pages} 📃", callback_data="ignore")
         ])
 
-    
-    
-    if show_invite and int(index_val) !=0 :
-        
-        ibuttons = []
-        achatId = []
-        await gen_invite_links(configs, chat_id, bot, update)
-        
-        for x in achats["chats"] if isinstance(achats, dict) else achats:
-            achatId.append(int(x["chat_id"])) if isinstance(x, dict) else achatId.append(x)
-        
-        for y in INVITE_LINK.get(str(chat_id)):
-            
-            chat_id = int(y["chat_id"])
-            
-            if chat_id not in achatId:
-                continue
-            
-            chat_name = y["chat_name"]
-            invite_link = y["invite_link"]
-            
-            if ((len(ibuttons)%2) == 0):
-                ibuttons.append(
-                    [
-                        InlineKeyboardButton
-                            (
-                                f"⚜ {chat_name} ⚜", url=invite_link
-                            )
-                    ]
-                )
-
-            else:
-                ibuttons[-1].append(
-                    InlineKeyboardButton
-                        (
-                            f"⚜ {chat_name} ⚜", url=invite_link
-                        )
-                )
-            
-        for x in ibuttons:
-            temp_results.insert(0, x)
-        ibuttons = None
-        achatId = None
     
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"), InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"), InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi({index_val}|{query})")]]+temp_results)
     

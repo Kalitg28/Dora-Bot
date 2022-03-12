@@ -11,7 +11,7 @@ from bot import VERIFY
 
 db = Database()
 
-@Client.on_callback_query(filters.regex(r'fix\((.+)\)'))
+@Client.on_callback_query(filters.regex(r'fix\((.+)\)'), group=4)
 async def fix_value(bot:Client, update:CallbackQuery):
 
     key, action, group_id = re.findall(r'fix\((.+)\)', update.data)[0].split('|',2)
@@ -133,7 +133,7 @@ async def toggle_af(bot:Client, update:CallbackQuery):
 
     await update.message.edit_text("Use The Buttons Below To Toggle AutoFilter On/Off ...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'size\((.+)\)'))
+@Client.on_callback_query(filters.regex(r'size\((.+)\)'), group=4)
 async def size_button(bot:Client, update:CallbackQuery):
 
     status, group_id = re.findall(r'size\((.+)\)', update.data)[0].split('|',1)
@@ -219,7 +219,7 @@ async def fsub(bot:Client, update:CallbackQuery):
 
     await update.message.edit_text("Use The Buttons Below To Change Or Add A Fsub Channel...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'global\((.+)\)'))
+@Client.on_callback_query(filters.regex(r'global\((.+)\)'), group=4)
 async def global_filters(bot:Client, update:Message):
 
     status, group_id = re.findall(r'global\((.+)\)', update.data)[0].split('|',1)

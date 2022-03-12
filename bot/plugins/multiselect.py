@@ -16,7 +16,7 @@ from bot.database import Database # pylint: disable=import-error
 SELECTED = {}
 db = Database()
 
-@Client.on_callback_query(filters.regex(r'multi\((.+)\)'))
+@Client.on_callback_query(filters.regex(r'multi\((.+)\)'), group=3)
 async def multiselect(bot:Client, update:CallbackQuery):
 
     global VERIFY
@@ -69,7 +69,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
     await update.message.edit_reply_markup(InlineKeyboardMarkup(total_btn))
     await update.answer()
 
-@Client.on_callback_query(filters.regex(r'^sel\((.+)\)'), group=4)
+@Client.on_callback_query(filters.regex(r'^sel\((.+)\)'), group=3)
 async def select(bot:Client, update:CallbackQuery):
 
     global VERIFY

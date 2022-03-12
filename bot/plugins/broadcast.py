@@ -10,7 +10,7 @@ from pymongo.cursor import Cursor
 
 db = Database()
 
-@Client.on_message(filters.command(["concast","concast@DoraFilterBot"]) & filters.chat(Translation.OWNER_ID), group=4)
+@Client.on_message(filters.command(["concast","concast@DoraFilterBot"]) & filters.chat(Translation.OWNER_ID), group=5)
 async def connected_cast(bot:Client, update:Message) :
 
     media = False
@@ -62,7 +62,7 @@ async def connected_cast(bot:Client, update:Message) :
         except Exception as e:
             print(e)
 
-@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & filters.chat(Translation.OWNER_ID), group=4)
+@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & filters.chat(Translation.OWNER_ID), group=5)
 async def broadcast_all(bot:Client, update:Message) :
 
     media = False
@@ -113,7 +113,7 @@ async def broadcast_all(bot:Client, update:Message) :
         except Exception as e:
             print(e)
 
-@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & ~filters.channel, group=4)
+@Client.on_message(filters.command(["broadcast","broadcast@DoraFilterBot"]) & ~filters.channel, group=5)
 async def broadcast(bot:Client, update:Message) :
 
     chat_id = update.chat.id

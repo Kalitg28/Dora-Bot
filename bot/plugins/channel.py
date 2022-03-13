@@ -256,7 +256,7 @@ async def new_in_channel(bot:Client, update:ChatMemberUpdated):
 
 
 @Client.on_message(filters.chat([-1001774321778, -1001547869793]) & (filters.video | filters.document) & ~filters.edited, group=1)
-async def new_files(bot: Bot, update):
+async def new_files(bot: Bot, update:Message):
     """
     A Funtion To Handle Incoming New Files In A Channel ANd Add Them To Respective Channels..
     """
@@ -319,7 +319,11 @@ async def new_files(bot: Bot, update):
                 )
             
     data.append(data_packets)
-    await db.add_filters(data)
+
+    if update.chat.id in (-1001774321778, -1001547869793):
+        await db.add_filters(data)
+    else :
+        await db.add_filters_reverse(data)
     return
 
 @Client.on_deleted_messages(filters.chat([-1001774321778, -1001547869793]) & (filters.video | filters.audio | filters.document), group=1)

@@ -324,7 +324,17 @@ async def autodel(bot:Client, update:CallbackQuery):
         [InlineKeyboardButton("1 Hour", callback_data=f'fixdel({group_id}|60)'),InlineKeyboardButton("2 Hours", callback_data=f'fixdel({group_id}|120)')],
         [InlineKeyboardButton("5 Hour", callback_data=f'fixdel({group_id}|300)'),InlineKeyboardButton("10 Hours", callback_data=f'fixdel({group_id}|600)')],
         [InlineKeyboardButton("12 Hours", callback_data=f'fixdel({group_id}|720)'),InlineKeyboardButton("1 Day", callback_data=f'fixdel({group_id}|1440)')],
-        [InlineKeyboardButton("2 Days", callback_data=f'fixdel({group_id}|2880)'),InlineKeyboardButton("4 Days", callback_data=f'fixdel({group_id}|5760)')]
+        [InlineKeyboardButton("2 Days", callback_data=f'fixdel({group_id}|2880)'),InlineKeyboardButton("4 Days", callback_data=f'fixdel({group_id}|5760)')],
+        [InlineKeyboardButton
+                (
+                    "🔙 Back", callback_data="settings"
+                ),
+            
+            InlineKeyboardButton
+                (
+                    "Close 🔐", callback_data="close"
+                )
+        ]
     ]
 
     await update.message.edit(

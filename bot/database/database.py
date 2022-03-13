@@ -413,11 +413,16 @@ class Database:
         a bulk in reverse to db
         """
         try:
-            await self.fcol.insert_many(data, upsert=True)
-        except Exception as e:
-            print(e)
-            await self.fcol.insert_many(data)
-        
+            for pack in data:
+                try:
+                    if self.fcol.find_one({'file_name':pack['file_name']}):
+                        continue
+                    await self.fcol.insert_one(pack)
+                except Exception as e:
+                    print(e)
+                    await self.fcol.insert_one(pack)
+        except Exception as f:
+            print(f)
         return True
 
 

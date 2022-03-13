@@ -143,7 +143,7 @@ async def sensel(bot:Client, update:CallbackQuery):
                 except PeerIdInvalid:
                     pass
                 except UserNotParticipant:
-                    url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                    url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                     print(url)
                     return await update.answer(url=url.replace('-100',''))
 
@@ -171,11 +171,11 @@ async def sensel(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
                 return await update.answer(url=url.replace('-100',''))
             except UserIsBlocked:
-                url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
                 return await update.answer(url=url.replace('-100',''))
             except Exception as e:
@@ -204,7 +204,7 @@ async def cb_all(bot:Client, update:CallbackQuery):
                 except PeerIdInvalid:
                     pass
                 except UserNotParticipant:
-                    url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                    url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                     print(url)
                     return await update.answer(url=url.replace('-100',''))
 
@@ -220,11 +220,11 @@ async def cb_all(bot:Client, update:CallbackQuery):
                 parse_mode="html",
             )
             except PeerIdInvalid:
-                url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
                 return await update.answer(url=url.replace('-100',''))
             except UserIsBlocked:
-                url=f"https://t.me/NoobSearchBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
+                url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
                 return await update.answer(url=url.replace('-100',''))
             except Exception as e:

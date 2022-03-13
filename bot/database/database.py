@@ -407,6 +407,19 @@ class Database:
         
         return True
 
+    async def add_filters_reverse(self, data):
+        """
+        A Funtion to add document as
+        a bulk in reverse to db
+        """
+        try:
+            await self.fcol.insert_many(data, upsert=True)
+        except Exception as e:
+            print(e)
+            await self.fcol.insert_many(data)
+        
+        return True
+
 
     async def del_filters(self, group_id: int, channel_id: int):
         """

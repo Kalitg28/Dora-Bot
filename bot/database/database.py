@@ -51,7 +51,7 @@ class Database:
         """
         Create text index if not in db
         """
-        await self.fcol.create_index([("file_name", "text")])
+        self.fcol.create_index([("file_name", "text")])
 
 
     def new_chat(self, group_id, channel_id, channel_name):
@@ -93,13 +93,13 @@ class Database:
         """
         group_id = int(group_id)
         
-        total_filter = await self.tf_count(group_id)
+        total_filter = self.tf_count(group_id)
         
-        chats = await self.find_chat(group_id)
+        chats = self.find_chat(group_id)
         chats = chats.get("chat_ids")
         total_chats = len(chats) if chats is not None else 0
         
-        achats = await self.find_active(group_id)
+        achats = self.find_active(group_id)
         if achats not in (None, False):
             achats = achats.get("chats")
             if achats == None:
@@ -135,7 +135,7 @@ class Database:
         A funtion to fetch a group's settings
         """
 
-        connections = await self.col.find_one({'_id': group_id})
+        connections = self.col.find_one({'_id': group_id})
         
         if connections:
 
@@ -150,17 +150,17 @@ class Database:
         """
         new = self.new_chat(group_id, channel_id, channel_name)
         update_d = {"$push" : {"chat_ids" : {"chat_id": channel_id, "chat_name" : channel_name}}}
-        prev = await self.col.find_one({'_id':group_id})
+        prev = self.col.find_one({'_id':group_id})
         
         if prev:
-            await self.col.update_one({'_id':group_id}, update_d)
-            await self.update_active(group_id, channel_id, channel_name)
+            self.col.update_one({'_id':group_id}, update_d)
+            self.update_active(group_id, channel_id, channel_name)
             
             return True
         
         
-        await self.col.insert_one(new)
-        await self.add_active(group_id, channel_id, channel_name)
+        self.col.insert_one(new)
+        self.add_active(group_id, channel_id, channel_name)
         
         return True
 
@@ -175,7 +175,7 @@ class Database:
         
         if prev:
             
-            await self.col.update_one(
+            self.col.update_one(
                 {"_id": group_id}, 
                     {"$pull" : 
                         {"chat_ids" : 
@@ -186,7 +186,7 @@ class Database:
                     }
             )
 
-            await self.del_active(group_id, channel_id)
+            self.del_active(group_id, channel_id)
 
             return True
 
@@ -198,7 +198,7 @@ class Database:
         Check whether if the given channel id is in db or not...
         """
         
-        connections = await self.col.find_one({'_id': group_id})
+        connections = self.col.find_one({'_id': group_id})
         
         check_list = []
         
@@ -217,11 +217,11 @@ class Database:
         A Funtion to update a chat's filter types in db
         """
         group_id = int(group_id)
-        prev = await self.col.find_one({"_id": group_id})
+        prev = self.col.find_one({"_id": group_id})
         
         if prev:
             try:
-                await self.col.update_one({"_id": group_id}, {"$set": {"types": settings}})
+                self.col.update_one({"_id": group_id}, {"$set": {"types": settings}})
                 return True
             
             except Exception as e:
@@ -236,11 +236,11 @@ class Database:
         """
         A Funtion to update a chat's configs in db
         """
-        prev = await self.col.find_one({"_id": group_id})
+        prev = self.col.find_one({"_id": group_id})
 
         if prev:
             try:
-                await self.col.update_one(prev, {"$set":{"configs": configs}})
+                self.col.update_one(prev, {"$set":{"configs": configs}})
                 return True
 
             except Exception as e:
@@ -249,7 +249,7 @@ class Database:
                 
         else :
             try :
-                await self.col.insert_one({"_id": group_id, "configs": configs})
+                self.col.insert_one({"_id": group_id, "configs": configs})
                 return True
 
             except Exception as e:
@@ -265,11 +265,11 @@ class Database:
         A Funtion to delete all documents related to a
         chat from db
         """
-        prev = await self.col.find_one({"_id": group_id})
+        prev = self.col.find_one({"_id": group_id})
         if prev:
-            await self.delall_active(group_id)
-            await self.delall_filters(group_id)
-            await self.del_main(group_id)
+            self.delall_active(group_id)
+            self.delall_filters(group_id)
+            self.del_main(group_id)
             
         return
 
@@ -278,7 +278,7 @@ class Database:
         """
         A Funtion To Delete the chat's main db document
         """
-        await self.col.delete_one({"_id": group_id})
+        self.col.delete_one({"_id": group_id})
         
         return True
 
@@ -293,8 +293,8 @@ class Database:
         templ = {"_id": group_id, "chats":[{"chat_id": channel_id, "chat_name": channel_name}]}
         
         try:
-            await self.acol.insert_one(templ)
-            await self.refresh_acache(group_id)
+            self.acol.insert_one(templ)
+            self.refresh_acache(group_id)
         except Exception as e:
             print(e)
             return False
@@ -309,12 +309,12 @@ class Database:
         templ = {"$pull": {"chats": dict(chat_id = channel_id)}}
         
         try:
-            await self.acol.update_one({"_id": group_id}, templ)
+            self.acol.update_one({"_id": group_id}, templ)
         except Exception as e:
             print(e)
             pass
         
-        await self.refresh_acache(group_id)
+        self.refresh_acache(group_id)
         return True
 
 
@@ -324,17 +324,17 @@ class Database:
         """
         group_id, channel_id = int(group_id), int(channel_id)
         
-        prev = await self.acol.find_one({"_id": group_id})
+        prev = self.acol.find_one({"_id": group_id})
         templ = {"$push" : {"chats" : dict(chat_id = channel_id, chat_name = channel_name)}}
-        in_c = await self.in_active(group_id, channel_id)
+        in_c = self.in_active(group_id, channel_id)
         
         if prev:
             if not in_c:
-                await self.acol.update_one({"_id": group_id}, templ)
+                self.acol.update_one({"_id": group_id}, templ)
             else:
                 return False
         else:
-            await self.add_active(group_id, channel_id, channel_name)
+            self.add_active(group_id, channel_id, channel_name)
         return True
 
 
@@ -346,7 +346,7 @@ class Database:
         if self.acache.get(str(group_id)):
             self.acache.get(str(group_id))
         
-        connection = await self.acol.find_one({"_id": group_id})
+        connection = self.acol.find_one({"_id": group_id})
 
         if connection:
             return connection
@@ -358,7 +358,7 @@ class Database:
         A Funtion to check if a chat id is in the active
         chat id list in db
         """
-        prev = await self.acol.find_one({"_id": group_id})
+        prev = self.acol.find_one({"_id": group_id})
         
         if prev:
             for x in prev["chats"]:
@@ -375,8 +375,8 @@ class Database:
         A Funtion to Delete all active chats of 
         a group from db
         """
-        await self.acol.delete_one({"_id":int(group_id)})
-        await self.refresh_acache(group_id)
+        self.acol.delete_one({"_id":int(group_id)})
+        self.refresh_acache(group_id)
         return
 
 
@@ -388,7 +388,7 @@ class Database:
         if self.acache.get(str(group_id)):
             self.acache.pop(str(group_id))
         
-        prev = await self.acol.find_one({"_id": group_id})
+        prev = self.acol.find_one({"_id": group_id})
         
         if prev:
             self.acache[str(group_id)] = prev
@@ -401,10 +401,28 @@ class Database:
         a bulk to db
         """
         try:
-            await self.fcol.insert_many(data)
+            self.fcol.insert_many(data)
         except Exception as e:
             print(e)
         
+        return True
+
+    async def add_filters_reverse(self, data):
+        """
+        A Funtion to add document as
+        a bulk in reverse to db
+        """
+        try:
+            for pack in data:
+                try:
+                    if self.fcol.find_one({'file_name':pack['file_name']}):
+                        continue
+                    self.fcol.insert_one(pack)
+                except Exception as e:
+                    print(e)
+                    self.fcol.insert_one(pack)
+        except Exception as f:
+            print(f)
         return True
 
 
@@ -416,8 +434,8 @@ class Database:
         group_id, channel_id = int(group_id), int(channel_id)
         
         try:
-            await self.fcol.delete_many({"chat_id": channel_id, "group_id": group_id})
-            print(await self.cf_count(group_id, channel_id))
+            self.fcol.delete_many({"chat_id": channel_id, "group_id": group_id})
+            print(self.cf_count(group_id, channel_id))
             return True
         except Exception as e:
             print(e) 
@@ -428,7 +446,7 @@ class Database:
         """
         A Funtion To delete all filters of a group
         """
-        await self.fcol.delete_many({"group_id": int(group_id)})
+        self.fcol.delete_many({"group_id": int(group_id)})
         return True
 
 
@@ -437,11 +455,11 @@ class Database:
         A Funtion to fetch all similar results for a keyowrd
         from using text index
         """
-        await self.create_index()
+        self.create_index()
 
-        chat = await self.find_chat(group_id)
+        chat = self.find_chat(group_id)
         chat_accuracy = float(chat["configs"].get("accuracy", 0.70))
-        achats = await self.find_active(group_id)
+        achats = self.find_active(group_id)
         
         achat_ids=[]
         if not achats:
@@ -481,7 +499,7 @@ class Database:
         A Funtion to get a specific files using its
         unique id
         """
-        file = await self.fcol.find_one({"unique_id": unique_id})
+        file = self.fcol.find_one({"unique_id": unique_id})
         file_id = None
         file_type = None
         file_name = None
@@ -500,14 +518,14 @@ class Database:
         A Funtion To count number of filter in channel
         w.r.t the connect group
         """
-        return await self.fcol.count_documents({"chat_id": channel_id, "group_id": group_id})
+        return self.fcol.count_documents({"chat_id": channel_id, "group_id": group_id})
     
     
     async def tf_count(self, group_id: int):
         """
         A Funtion to count total filters of a group
         """
-        return await self.fcol.count_documents({"group_id": group_id})
+        return self.fcol.count_documents({"group_id": group_id})
 
     async def user_count(self):
         """

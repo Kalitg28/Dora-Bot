@@ -33,7 +33,6 @@ async def sudo_handler(bot:Client, update:Message):
 async def pvt_handler(bot:Client, update:Message):
 
     cmd = update.command[0]
-    print(cmd)
 
     if cmd=='start':
         await start(bot, update)

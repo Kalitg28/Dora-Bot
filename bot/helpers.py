@@ -1,6 +1,5 @@
 # (c) @MrPurple902
 
-import os
 import imdb
 import random
 from imdb import Movie
@@ -16,7 +15,6 @@ from bot.translation import Translation
 
 
 searcher = imdb.IMDb()
-IMDB = {}
 
 class Helpers() :
 

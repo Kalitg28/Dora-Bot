@@ -16,14 +16,15 @@ async def auto_filter_manager(bot:Client, update:Message):
     af = Thread(target=asyncio.run, args=(auto_filter(bot, update),))
     af.start()
 
+
 @Client.on_message(filters.text & ~filters.channel & ~filters.edited, group=1)
 async def manual_filters_manager(bot:Client, update:Message):
 
     mf = Thread(target=asyncio.run, args=(mfilter(bot, update),))
-    gf = Thread(target=asyncio.run, args=(global_filter(bot, update),))
+#    gf = Thread(target=asyncio.run, args=(global_filter(bot, update),))
 
     mf.start()
-    gf.start()
+#    gf.start()
 
 @Client.on_inline_query(group=0)
 async def inline_search_handler(bot:Client, update:InlineQuery):

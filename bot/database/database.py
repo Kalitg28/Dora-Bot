@@ -135,7 +135,7 @@ class Database:
         A funtion to fetch a group's settings
         """
 
-        connections = self.col.find_one({'_id': group_id})
+        connections = await self.col.find_one({'_id': group_id})
         
         if connections:
 

@@ -7,7 +7,7 @@ from bot.plugins.callback import *
 from bot.plugins.custom_cb import *
 from bot.plugins.multiselect import *
 
-@Client.on_callback_query(group=2)
+@Client.on_callback_query(group=0)
 async def all_callbacks_manager(bot:Client, update:CallbackQuery):
 
     query = update.data

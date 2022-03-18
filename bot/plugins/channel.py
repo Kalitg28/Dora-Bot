@@ -19,8 +19,7 @@ from bot.helpers import Helpers
 
 db = Database()
     
-    
-@Client.on_message(filters.command(["add"]) & filters.chat(Translation.OWNER_ID), group=5)
+
 async def connect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /add Command TO COnnect A Chat With Group
@@ -189,7 +188,6 @@ async def connect(bot: Bot, update):
     await wait_msg.edit_text(f"Channel Was Sucessfully Added With <code>{len(data)}</code> Files..")
 
 
-@Client.on_message(filters.command(["del"]) & filters.chat(Translation.OWNER_ID), group=5)
 async def disconnect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /del Command TO Disconnect A Chat With A Group
@@ -232,19 +230,18 @@ async def disconnect(bot: Bot, update):
     await wait_msg.edit_text("Sucessfully Deleted All Files From DB....")
 
 
-@Client.on_message(filters.command(["delall"]) & filters.chat(Translation.OWNER_ID), group=5)
 async def delall(bot: Bot, update):
     """
     A Funtion To Handle Incoming /delall Command TO Disconnect All Chats From A Group
     """
     chat_id=902
     
-    await db.delete_all(chat_id)
+    #await db.delete_all(chat_id)
     await recacher(chat_id, True, True, bot, update)
     
     await update.reply_text("Sucessfully Deleted All Connected Chats From This Group....")
 
-@Client.on_chat_member_updated(filters.chat(-1001547869793), group=5)
+
 async def new_in_channel(bot:Client, update:ChatMemberUpdated):
 
     member = update.new_chat_member
@@ -255,8 +252,8 @@ async def new_in_channel(bot:Client, update:ChatMemberUpdated):
         await bot.revoke_chat_invite_link(update.invite_link)
 
 
-@Client.on_message(filters.chat([-1001774321778, -1001547869793]) & (filters.video | filters.document) & ~filters.edited, group=1)
-async def new_files(bot: Bot, update):
+
+async def new_files(bot: Bot, update:Message):
     """
     A Funtion To Handle Incoming New Files In A Channel ANd Add Them To Respective Channels..
     """
@@ -319,10 +316,11 @@ async def new_files(bot: Bot, update):
                 )
             
     data.append(data_packets)
-    await db.add_filters(data)
+
+    await db.add_filters_reverse(data)
     return
 
-@Client.on_deleted_messages(filters.chat([-1001774321778, -1001547869793]) & (filters.video | filters.audio | filters.document), group=1)
+
 async def del_filter(bot:Client, update):
 
     try:
@@ -338,7 +336,7 @@ async def del_filter(bot:Client, update):
     except Exception as e:
         print(e)
 
-@Client.on_message(filters.command('rm') & filters.chat([-1001774321778, -1001547869793]) & filters.user(Translation.OWNER_ID))
+
 async def del_file(bot:Client, update:Message):
 
     if not update.from_user.id==Translation.OWNER_ID:
@@ -351,7 +349,7 @@ async def del_file(bot:Client, update:Message):
             await update.delete()
             await update.reply_text(f"File {msg.document.file_name} was Removed From Database Successfully :)")
 
-@Client.on_message(filters.command('del', prefixes=['/','.']) & filters.chat(Translation.LOG_CHANNEL), group=5)
+
 async def close_trigger(bot:Client, update:Message):
 
     cmd, type, chat_id, message_id, text = update.text.split(' ', 4)

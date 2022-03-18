@@ -15,7 +15,6 @@ from bot import VERIFY # pylint: disable=import-error
 
 db = Database()
 
-@Client.on_message(filters.command(["settings","settings@DoraFilterBot"]) & filters.incoming, group=3)
 async def settings(bot, update: Message):
     
     chat_id = update.chat.id
@@ -217,7 +216,6 @@ async def settings(bot, update: Message):
         )
 
 
-@Client.on_message(filters.command("connect") & (filters.private | filters.group), group=4)
 async def connect(bot: Client, update: Message):
 
     text = update.text
@@ -280,7 +278,6 @@ async def connect(bot: Client, update: Message):
 
         print(e)
 
-@Client.on_message(filters.command("disconnect") & filters.private, group=5)
 async def disconnect(bot: Client, update: Message):
 
     user_id = update.from_user.id
@@ -294,7 +291,7 @@ async def disconnect(bot: Client, update: Message):
     else :
 
         await update.reply_text("Please Connect To A Chat First To Delete Connection")
-@Client.on_message(filters.command('knight') & filters.group, group=5)
+
 async def new_knight(bot:Client, update:Message):
 
     if not update.from_user.id==Translation.OWNER_ID:
@@ -310,7 +307,6 @@ async def new_knight(bot:Client, update:Message):
     
     await update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
 
-@Client.on_message(filters.command('deknight') & filters.incoming, group=5)
 async def del_knight(bot:Client, update:Message):
     if not update.from_user.id==Translation.OWNER_ID:
         return await update.reply_text('Nice Try Kid...')

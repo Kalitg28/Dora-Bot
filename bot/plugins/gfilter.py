@@ -68,8 +68,6 @@ async def global_filter(bot, update:Message):
                 parse_mode="html",
                 quote=True
             )
-
-@Client.on_message(filters.command(["gfilters","gfilters@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=3)
 async def all_gfilter(bot, update: Message):
 
     total_filters = ""
@@ -83,8 +81,6 @@ async def all_gfilter(bot, update: Message):
         total_filters+=f"\n- <code>{filter}</code>"
 
     await update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For <b>Global</b> : {total_filters}", parse_mode="html", quote=True)
-
-@Client.on_message(filters.command(["stopglobal","stopglobal@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=3)
 async def stopglobal(bot, update: Message):
 
     chat_type = update.chat.type
@@ -126,7 +122,6 @@ async def stopglobal(bot, update: Message):
     await db.set_main(chat_id, 'stopped', new)
     await update.reply_text(f"The Global Filter for {keyword} will no longer work in this chat...")
 
-@Client.on_message(filters.command(["startglobal","startglobal@DoraFilterBot"], case_sensitive=False) & filters.incoming, group=3)
 async def startglobal(bot, update: Message):
 
     chat_type = update.chat.type

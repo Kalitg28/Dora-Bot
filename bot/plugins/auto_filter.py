@@ -20,7 +20,6 @@ INVITE_LINK = {}
 ACTIVE_CHATS = {}
 db = Database()
 
-@Bot.on_message(filters.text & filters.group & ~filters.bot, group=0)
 async def auto_filter(bot:Bot, update:Message):
     """
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
@@ -213,14 +212,14 @@ async def auto_filter(bot:Bot, update:Message):
         elif movie_info and movie_info["full-size cover url"]=="Unknown":
 
             text = f"""
-<b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
-<b>⌗ ɢᴇɴʀᴇ </b>: <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
-<b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
-<b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} </code>
-<b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
-<b>⌬ ʟᴀɴɢᴜᴀɢᴇs </b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
-<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
-<b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
+⍞ ᴛɪᴛʟᴇ : <a href='{movie_info['link']}'>{movie_info['title']}</a>
+⌗ ɢᴇɴʀᴇ : <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
+★ ʀᴀᴛɪɴɢ : <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
+⎚ ᴠᴏᴛᴇs : <code>{movie_info["votes"]} </code>
+⌥ ʀᴜɴᴛɪᴍᴇ : <code>{movie_info["runtimes"]}</code>
+⌬ ʟᴀɴɢᴜᴀɢᴇs : <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
+〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
+⎙ ʀᴇsᴜʟᴛs : <code>{len_results}</code>
 
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
         """
@@ -249,17 +248,17 @@ async def auto_filter(bot:Bot, update:Message):
             return
 
         text = f"""
-<b>⍞ ᴛɪᴛʟᴇ </b>: <a href='{movie_info['link']}'>{movie_info['title']}</a>
-<b>⌗ ɢᴇɴʀᴇ </b>: <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
-<b>★ ʀᴀᴛɪɴɢ </b>: <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
-<b>⎚ ᴠᴏᴛᴇs </b>: <code>{movie_info["votes"]} </code>
-<b>⌥ ʀᴜɴᴛɪᴍᴇ </b>: <code>{movie_info["runtimes"]}</code>
-<b>⌬ ʟᴀɴɢᴜᴀɢᴇs </b>: <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
-<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ</b> : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
-<b>⎙ ʀᴇsᴜʟᴛs</b> : <code>{len_results}</code>
+⍞ ᴛɪᴛʟᴇ : <a href='{movie_info['link']}'>{movie_info['title']}</a>
+⌗ ɢᴇɴʀᴇ : <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
+★ ʀᴀᴛɪɴɢ : <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
+⎚ ᴠᴏᴛᴇs : <code>{movie_info["votes"]} </code>
+⌥ ʀᴜɴᴛɪᴍᴇ : <code>{movie_info["runtimes"]}</code>
+⌬ ʟᴀɴɢᴜᴀɢᴇs : <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
+〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
+⎙ ʀᴇsᴜʟᴛs : <code>{len_results}</code>
 
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
-        """  
+        """
 
         try:
             msg = await bot.send_photo(

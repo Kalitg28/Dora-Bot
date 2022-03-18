@@ -10,7 +10,6 @@ from bot.translation import Translation
 
 searcher = imdb.IMDb()
 
-@Client.on_inline_query(group=0)
 async def inline_imdb(bot:Client, update:InlineQuery):
 
     text = update.query

@@ -11,7 +11,7 @@ from bot.plugins import mfilter, gfilter, settings
 from bot.plugins.custom_cmd import delcaption, delspell, setcaption, setspell, toggle_af
 from bot.translation import Translation
 
-@Client.on_message(filters.command("") & filters.chat(Translation.OWNER_ID), group=4)
+@Client.on_message(filters.regex(r"^\/") & filters.chat(Translation.OWNER_ID), group=4)
 async def sudo_handler(bot:Client, update:Message):
 
     cmd = update.command[0]
@@ -29,7 +29,7 @@ async def sudo_handler(bot:Client, update:Message):
     elif cmd=='cleardvd':
         await clearpredvd(bot, update)
 
-@Client.on_message(filters.command("") & filters.private, group=3)
+@Client.on_message(filters.regex(r"^\/") & filters.private, group=3)
 async def pvt_handler(bot:Client, update:Message):
 
     cmd = update.command[0]
@@ -49,23 +49,8 @@ async def pvt_handler(bot:Client, update:Message):
         await settings.connect(bot, update)
     elif cmd=='disconnect':
         await settings.disconnect(bot, update)
-
-
-@Client.on_message(filters.regex(r'(\/|\.|\!)(.+)filter(.+)') & ~filters.channel, group=3)
-async def filters_command(bot, update):
-
-    cmd = update.text.split(None, 1)[0][1:]
-
-    if cmd=='filter':
-        await mfilter.new_filter(bot, update)
-    elif cmd=='stop':
-        await mfilter.stop_filter(bot, update)
-    elif cmd=='filters':
-        await mfilter.n_filter(bot, update)
-    elif cmd=='gfilters':
-        await gfilter.all_gfilter(bot, update)
-
-@Client.on_message(filters.command("") & ~filters.channel, group=3)
+ 
+@Client.on_message(filters.regex(r"^\/") & ~filters.channel, group=3)
 async def public_handler(bot:Client, update:Message):
 
     cmd = update.command[0]
@@ -74,6 +59,14 @@ async def public_handler(bot:Client, update:Message):
         await start(bot, update)
     elif cmd=='map':
         await help(bot, update)
+    elif cmd=='filter':
+        await mfilter.new_filter(bot, update)
+    elif cmd=='stop':
+        await mfilter.stop_filter(bot, update)
+    elif cmd=='filters':
+        await mfilter.n_filter(bot, update)
+    elif cmd=='gfilters':
+        await gfilter.all_gfilter(bot, update)
     elif cmd=='broadcast':
         await broadcast(bot, update),
     elif cmd=='knight':

@@ -14,7 +14,7 @@ from bot.translation import Translation
 @Client.on_message(filters.regex(r"^\/") & filters.chat(Translation.OWNER_ID), group=4)
 async def sudo_handler(bot:Client, update:Message):
 
-    cmd = update.command[0]
+    cmd = update.text.split(None, 1)[0][1:]
 
     if cmd=='broadcast':
         await broadcast_all(bot, update)
@@ -32,7 +32,7 @@ async def sudo_handler(bot:Client, update:Message):
 @Client.on_message(filters.regex(r"^\/") & filters.private, group=3)
 async def pvt_handler(bot:Client, update:Message):
 
-    cmd = update.command[0]
+    cmd = update.text.split(None, 1)[0][1:]
 
     if cmd=='start':
         await start(bot, update)

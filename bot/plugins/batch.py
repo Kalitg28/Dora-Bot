@@ -7,7 +7,6 @@ from pyrogram.types import Message, InlineKeyboardMarkup
 from pyrogram import Client, filters
 from pyrogram.errors import PeerIdInvalid, MessageIdInvalid
 
-@Client.on_message(filters.command("batch") & filters.private & ~filters.bot, group=4)
 async def batch(bot:Client, update:Message):
 
     user_id = update.from_user.id

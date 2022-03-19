@@ -11,7 +11,6 @@ from bot import VERIFY
 
 db = Database()
 
-@Client.on_callback_query(filters.regex(r'fix\((.+)\)'), group=4)
 async def fix_value(bot:Client, update:CallbackQuery):
 
     key, action, group_id = re.findall(r'fix\((.+)\)', update.data)[0].split('|',2)
@@ -85,7 +84,6 @@ async def fix_value(bot:Client, update:CallbackQuery):
         ]]))
 
 
-@Client.on_callback_query(filters.regex(r"fsub_msg\((.+)\)"), group=4)
 async def toggle_fsubmsg(bot: Client, update:CallbackQuery):
 
     group_id = re.findall(r'fsub_msg\((.+)\)', update.data)[0]
@@ -103,7 +101,6 @@ async def toggle_fsubmsg(bot: Client, update:CallbackQuery):
 
     await update.message.edit_text("Use The Buttons Below To Set A Custom Message To Show Someone Who Hasn't Joined The Fsub Channel...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'af\((.+)\)'), group=4)
 async def toggle_af(bot:Client, update:CallbackQuery):
 
     status, group_id = re.findall(r'af\((.+)\)', update.data)[0].split('|',1)
@@ -133,7 +130,6 @@ async def toggle_af(bot:Client, update:CallbackQuery):
 
     await update.message.edit_text("Use The Buttons Below To Toggle AutoFilter On/Off ...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'size\((.+)\)'), group=4)
 async def size_button(bot:Client, update:CallbackQuery):
 
     status, group_id = re.findall(r'size\((.+)\)', update.data)[0].split('|',1)
@@ -163,7 +159,6 @@ async def size_button(bot:Client, update:CallbackQuery):
 
     await update.message.edit_text("Use The Buttons Below To Select Wether File Size Should Be Shown With Seperate Button ...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'capt\((.+)\)'), group=4)
 async def custom_cap(bot:Client, update:CallbackQuery):
 
     status, group_id = re.findall(r'capt\((.+)\)', update.data)[0].split('|',1)
@@ -191,7 +186,6 @@ async def custom_cap(bot:Client, update:CallbackQuery):
 
     await update.message.edit_text("Use The Buttons Below To Change Or Add A Custom Caption...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'fsub\((.+)\)'), group=4)
 async def fsub(bot:Client, update:CallbackQuery):
 
     status, group_id = re.findall(r'fsub\((.+)\)', update.data)[0].split('|',1)
@@ -219,7 +213,6 @@ async def fsub(bot:Client, update:CallbackQuery):
 
     await update.message.edit_text("Use The Buttons Below To Change Or Add A Fsub Channel...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'global\((.+)\)'), group=4)
 async def global_filters(bot:Client, update:Message):
 
     status, group_id = re.findall(r'global\((.+)\)', update.data)[0].split('|',1)
@@ -249,7 +242,6 @@ async def global_filters(bot:Client, update:Message):
 
     await update.message.edit_text("Use The Buttons Below To Toggle Global Filter On/Off ...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'spell\((.+)\)'), group=4)
 async def spell_check(bot:Client, update:CallbackQuery):
 
     status, group_id = re.findall(r'spell\((.+)\)', update.data)[0].split('|',1)
@@ -277,7 +269,6 @@ async def spell_check(bot:Client, update:CallbackQuery):
 
     await update.message.edit_text("Use The Buttons Below To Change Or Add A Spell Check Message...", reply_markup=InlineKeyboardMarkup(buttons))
 
-@Client.on_callback_query(filters.regex(r'gen_link\((.+)\)'), group=4)
 async def privat_link_gen(bot:Client, update:CallbackQuery):
 
     try:
@@ -306,7 +297,6 @@ async def privat_link_gen(bot:Client, update:CallbackQuery):
 
         await update.answer(str(e), show_alert=True)
 
-@Client.on_callback_query(filters.regex(r'autodel\((.+)\)'), group=4)
 async def autodel(bot:Client, update:CallbackQuery):
 
     group_id = re.findall(r'autodel\((.+)\)', update.data)[0]
@@ -343,7 +333,6 @@ async def autodel(bot:Client, update:CallbackQuery):
     )
     await update.answer()
 
-@Client.on_callback_query(filters.regex(r'fixdel\((.+)\)'), group=4)
 async def fixdel(bot:Client, update:CallbackQuery):
 
     group_id, value = re.findall(r'fixdel\((.+)\)', update.data)[0].split('|',1)

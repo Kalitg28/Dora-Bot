@@ -47,6 +47,10 @@ async def pvt_handler(bot:Client, update:Message):
         await help(bot, update)
     elif cmd=='about':
         await about(bot, update)
+    elif cmd=='stats':
+        await get_stats(bot, update)
+    elif cmd=='id':
+        await get_id(bot, update)
     elif cmd=='connect':
         await settings.connect(bot, update)
     elif cmd=='disconnect':
@@ -83,14 +87,5 @@ async def pvt_handler(bot:Client, update:Message):
         await setcaption(bot, update)
     elif cmd=='delcaption':
         await delcaption(bot, update)
- 
-@Client.on_message(filters.regex(r"^\/") & ~filters.channel, group=3)
-async def public_handler(bot:Client, update:Message):
 
-    cmd = update.text.split(None, 1)[0][1:]
-
-    if cmd=='start':
-        await start(bot, update)
-    elif cmd=='map':
-        await help(bot, update)
     

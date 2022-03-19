@@ -11,22 +11,23 @@ from bot.plugins.mfilter import mfilter
 from bot.plugins.inline import inline_imdb
 
 @Client.on_message(filters.text & filters.group & ~filters.edited, group=0)
-async def auto_filter_manager(bot:Client, update:Message):
+def auto_filter_manager(bot:Client, update:Message):
 
-    af = Thread(target=asyncio.run, args=(auto_filter(bot, update),))
+    af = Thread(target=auto_filter, args=(bot, update))
     af.start()
 
 
 @Client.on_message(filters.text & ~filters.channel & ~filters.edited, group=1)
-async def manual_filters_manager(bot:Client, update:Message):
+def manual_filters_manager(bot:Client, update:Message):
 
-    mf = Thread(target=asyncio.run, args=(mfilter(bot, update),))
+    mf = Thread(target=auto_filter, args=(bot, update))
     mf.start()
 
 @Client.on_message(filters.text & ~filters.channel & ~filters.edited, group=5)
-async def global_filters_manager(bot:Client, update:Message):
+def global_filters_manager(bot:Client, update:Message):
 
-    await global_filter(bot, update)
+    gf = Thread(target=auto_filter, args=(bot, update))
+    gf.start()
 
 @Client.on_inline_query(group=0)
 async def inline_search_handler(bot:Client, update:InlineQuery):

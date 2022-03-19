@@ -52,7 +52,7 @@ async def pvt_handler(bot:Client, update:Message):
 @Client.on_message(filters.regex(r"^\/") & ~filters.channel, group=3)
 async def public_handler(bot:Client, update:Message):
 
-    cmd = update.command[0]
+    cmd = update.text.split(None, 1)[0][1:]
 
     if cmd=='start':
         await start(bot, update)

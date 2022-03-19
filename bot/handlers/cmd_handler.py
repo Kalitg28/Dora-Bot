@@ -12,83 +12,83 @@ from bot.plugins.custom_cmd import delcaption, delspell, setcaption, setspell, t
 from bot.translation import Translation
 
 @Client.on_message(filters.regex(r"^\/") & filters.chat(Translation.OWNER_ID), group=4)
-async def sudo_handler(bot:Client, update:Message):
+def sudo_handler(bot:Client, update:Message):
 
     cmd = update.text.split(None, 1)[0][1:]
 
     if cmd=='broadcast':
-        await broadcast_all(bot, update)
+        broadcast_all(bot, update)
     elif cmd=='concast':
-        await connected_cast(bot, update)
+        connected_cast(bot, update)
     elif cmd=='add':
-        await connect(bot, update)
+        connect(bot, update)
     elif cmd=='del':
-        await disconnect(bot, update)
+        disconnect(bot, update)
     elif cmd=='delall':
-        await delall(bot, update)
+        delall(bot, update)
     elif cmd=='cleardvd':
-        await clearpredvd(bot, update)
+        clearpredvd(bot, update)
 
 @Client.on_message(filters.regex(r"^\/") & ~filters.channel, group=3)
-async def pvt_handler(bot:Client, update:Message):
+def pvt_handler(bot:Client, update:Message):
 
     cmd = update.text.split(None, 1)[0][1:]
     #type = update.chat.type
     
     if cmd=='start':
-        await start(bot, update)
+        start(bot, update)
     elif cmd=='json':
-        await get_json(bot, update)
+        get_json(bot, update)
     elif cmd=='batch':
-        await batch(bot, update)
+        batch(bot, update)
     elif cmd=='map':
-        await help(bot, update)
+        help(bot, update)
     elif cmd=='about':
-        await about(bot, update)
+        about(bot, update)
     elif cmd=='connect':
-        await settings.connect(bot, update)
+        settings.connect(bot, update)
     elif cmd=='disconnect':
-        await settings.disconnect(bot, update)
+        settings.disconnect(bot, update)
     elif cmd=='filter':
-        await mfilter.new_filter(bot, update)
+        mfilter.new_filter(bot, update)
     elif cmd=='stop':
-        await mfilter.stop_filter(bot, update)
+        mfilter.stop_filter(bot, update)
     elif cmd=='filters':
-        await mfilter.n_filter(bot, update)
+        mfilter.n_filter(bot, update)
     elif cmd=='gfilters':
-        await gfilter.all_gfilter(bot, update)
+        gfilter.all_gfilter(bot, update)
     elif cmd=='broadcast':
-        await broadcast(bot, update),
+        broadcast(bot, update),
     elif cmd=='knight':
-        await settings.new_knight(bot, update)
+        settings.new_knight(bot, update)
     elif cmd=='deknight':
-        await settings.del_knight(bot, update)
+        settings.del_knight(bot, update)
     elif cmd=='connect':
-        await settings.connect(bot, update)
+        settings.connect(bot, update)
     elif cmd=='settings':
-        await settings.settings(bot, update)
+        settings.settings(bot, update)
     elif cmd=='stopglobal':
-        await gfilter.stopglobal(bot, update)
+        gfilter.stopglobal(bot, update)
     elif cmd=='startglobal':
-        await gfilter.startglobal(bot, update)
+        gfilter.startglobal(bot, update)
     elif cmd=='autofilter':
-        await toggle_af(bot, update)
+        toggle_af(bot, update)
     elif cmd=='setspell':
-        await setspell(bot, update)
+        setspell(bot, update)
     elif cmd=='delspell':
-        await delspell(bot, update)
+        delspell(bot, update)
     elif cmd=='setcaption':
-        await setcaption(bot, update)
+        setcaption(bot, update)
     elif cmd=='delcaption':
-        await delcaption(bot, update)
+        delcaption(bot, update)
  
 @Client.on_message(filters.regex(r"^\/") & ~filters.channel, group=3)
-async def public_handler(bot:Client, update:Message):
+def public_handler(bot:Client, update:Message):
 
     cmd = update.text.split(None, 1)[0][1:]
 
     if cmd=='start':
-        await start(bot, update)
+        start(bot, update)
     elif cmd=='map':
-        await help(bot, update)
+        help(bot, update)
     

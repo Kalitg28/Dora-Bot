@@ -30,6 +30,6 @@ def global_filters_manager(bot:Client, update:Message):
     gf.start()
 
 @Client.on_inline_query(group=0)
-async def inline_search_handler(bot:Client, update:InlineQuery):
+def inline_search_handler(bot:Client, update:InlineQuery):
 
-    await inline_imdb(bot, update)
+    inline_imdb(bot, update)

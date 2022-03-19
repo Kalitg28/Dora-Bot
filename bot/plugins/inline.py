@@ -10,16 +10,16 @@ from bot.translation import Translation
 
 searcher = imdb.IMDb()
 
-async def inline_imdb(bot:Client, update:InlineQuery):
+def inline_imdb(bot:Client, update:InlineQuery):
 
     text = update.query
     print(update)
 
-    results = await all_imdb(text)
+    results = all_imdb(text)
 
     if results:
 
-        await update.answer(
+        update.answer(
             results=results,
             cache_time=0,
             switch_pm_text=f"Heres What I Found For {text}",
@@ -30,12 +30,12 @@ async def inline_imdb(bot:Client, update:InlineQuery):
             
     else :
 
-        await update.answer(results=[],
+        update.answer(results=[],
                         cache_time=0,
                         switch_pm_text=f'No Results Were Found For {text}',
                         switch_pm_parameter='idk')
 
-async def all_imdb(query):
+def all_imdb(query):
 
      query = query.strip()
      print(query)

@@ -17,7 +17,7 @@ from bot.database import Database # pylint: disable=import-error
 db = Database()
 
 
-async def cb_navg(bot, update: CallbackQuery):
+def cb_navg(bot, update: CallbackQuery):
     """
     A Callback Funtion For The Next Button Appearing In Results
     """
@@ -38,7 +38,7 @@ async def cb_navg(bot, update: CallbackQuery):
         
         admin_list = []
         
-        async for x in bot.iter_chat_members(chat_id=chat_id, filter="administrators"):
+        for x in bot.iter_chat_members(chat_id=chat_id, filter="administrators"):
             admin_id = x.user.id 
             admin_list.append(admin_id)
             
@@ -46,7 +46,7 @@ async def cb_navg(bot, update: CallbackQuery):
         VERIFY[str(chat_id)] = admin_list
     
     if not ((user_id == ruser_id) or (user_id in admin_list)): # Checks if user is same as requested user or is admin
-        await update.answer("Nice Try ;)",show_alert=True)
+        update.answer("Nice Try ;)",show_alert=True)
         return
 
 
@@ -56,7 +56,7 @@ async def cb_navg(bot, update: CallbackQuery):
         index_val = int(index_val) - 1
     
     achats = ACTIVE_CHATS[str(chat_id)]
-    configs = await db.find_chat(chat_id)
+    configs = db.find_chat(chat_id)
     pm_file_chat = configs["configs"]["pm_fchat"]
     show_invite = configs["configs"]["show_invite_link"]
     show_invite = (False if pm_file_chat == True else show_invite)
@@ -103,18 +103,18 @@ async def cb_navg(bot, update: CallbackQuery):
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"), InlineKeyboardButton(f"ᴀʟʟ", callback_data=f"all({query})"), InlineKeyboardButton("sᴇʟᴇᴄᴛ", callback_data=f"multi({index_val}|{query})")]]+temp_results)
     
     try:
-        await update.message.edit_reply_markup(
+        update.message.edit_reply_markup(
                 reply_markup=reply_markup
         )
         
     except FloodWait as f: # Flood Wait Caused By Spamming Next/Back Buttons
-        await asyncio.sleep(f.x)
-        await update.message.edit_reply_markup(
+        asyncio.sleep(f.x)
+        update.message.edit_reply_markup(
                 reply_markup=reply_markup
         )
 
 
-async def cb_settings(bot, update: CallbackQuery):
+def cb_settings(bot, update: CallbackQuery):
     """
     A Callback Funtion For Back Button in /settings Command
     """
@@ -125,24 +125,24 @@ async def cb_settings(bot, update: CallbackQuery):
 
     if chat_type=="private" :
 
-        chat_id = await db.get_conn(user_id)
+        chat_id = db.get_conn(user_id)
         if not chat_id :
 
-            await update.message.reply("<b>Please Connect To A Chat First Using The <code>/connect</code> Command To Use The Settings Panel From PM</b>", parse_mode="html")
+            update.message.reply("<b>Please Connect To A Chat First Using The <code>/connect</code> Command To Use The Settings Panel From PM</b>", parse_mode="html")
             return
 
 
     if not user_id in VERIFY.get(str(chat_id)): # Checks if user is admin of the chat
         return
     
-    bot_info = await bot.get_me()
+    bot_info = bot.get_me()
     bot_first_name= bot_info.first_name
-    settings = await db.find_chat(int(chat_id))
+    settings = db.find_chat(int(chat_id))
     try :
-        chat_name = await bot.get_chat(int(chat_id))
+        chat_name = bot.get_chat(int(chat_id))
         chat_name = chat_name.title
     except PeerIdInvalid:
-        await update.message.reply_text("Looks Like I Couldnt Access This Chat Make Sure This Chat ID is valid And I am an admin There")
+        update.message.reply_text("Looks Like I Couldnt Access This Chat Make Sure This Chat ID is valid And I am an admin There")
     
     mp_count = settings["configs"]["max_pages"]
     mf_count = settings["configs"]["max_results"]
@@ -303,14 +303,14 @@ async def cb_settings(bot, update: CallbackQuery):
     
     reply_markup = InlineKeyboardMarkup(buttons)
     
-    await update.message.edit_text (
+    update.message.edit_text (
         text=text, 
         reply_markup=reply_markup, 
         parse_mode="html",
         )
 
 
-async def cb_max_buttons(bot, update: CallbackQuery):
+def cb_max_buttons(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Result To Be Shown Per Page
     """
@@ -319,7 +319,7 @@ async def cb_max_buttons(bot, update: CallbackQuery):
     chat_type = update.message.chat.type
 
     if chat_type=="private":
-        chat_id = await db.get_conn(update.from_user.id)
+        chat_id = db.get_conn(update.from_user.id)
         chat_name = "Your Group"
         if not chat_id:
             return
@@ -416,13 +416,13 @@ async def cb_max_buttons(bot, update: CallbackQuery):
 
     reply_markup = InlineKeyboardMarkup(buttons)
 
-    await update.message.edit_text(
+    update.message.edit_text(
         text, reply_markup=reply_markup, parse_mode="html"
     )
 
 
 
-async def cb_max_page(bot, update: CallbackQuery):
+def cb_max_page(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Maximum Result Pages To Be Shown
     """
@@ -431,7 +431,7 @@ async def cb_max_page(bot, update: CallbackQuery):
     chat_type = update.message.chat.type
 
     if chat_type=="private":
-        chat_id = await db.get_conn(update.from_user.id)
+        chat_id = db.get_conn(update.from_user.id)
         chat_name = "Your Group"
         if not chat_id:
             return
@@ -490,13 +490,13 @@ async def cb_max_page(bot, update: CallbackQuery):
     
     reply_markup = InlineKeyboardMarkup(buttons)
     
-    await update.message.edit_text(
+    update.message.edit_text(
         text, reply_markup=reply_markup, parse_mode="html"
     )
 
 
 
-async def cb_max_results(bot, update: CallbackQuery):
+def cb_max_results(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Maximum Files TO Be Fetched From Database
     """
@@ -505,7 +505,7 @@ async def cb_max_results(bot, update: CallbackQuery):
     chat_type = update.message.chat.type
 
     if chat_type=="private":
-        chat_id = await db.get_conn(update.from_user.id)
+        chat_id = db.get_conn(update.from_user.id)
         chat_name = "Your Group"
         if not chat_id:
             return
@@ -569,11 +569,11 @@ async def cb_max_results(bot, update: CallbackQuery):
 
     reply_markup = InlineKeyboardMarkup(buttons)
 
-    await update.message.edit_text(
+    update.message.edit_text(
         text, reply_markup=reply_markup, parse_mode="html"
     )
 
-async def cb_accuracy(bot, update: CallbackQuery):
+def cb_accuracy(bot, update: CallbackQuery):
     """
     A Callaback Funtion to control the accuracy of matching results
     that the bot should return for a query....
@@ -582,7 +582,7 @@ async def cb_accuracy(bot, update: CallbackQuery):
     chat_type = update.message.chat.type
 
     if chat_type=="private":
-        chat_id = await db.get_conn(update.from_user.id)
+        chat_id = db.get_conn(update.from_user.id)
         chat_name = "Your Group"
         if not chat_id:
             return
@@ -663,12 +663,12 @@ async def cb_accuracy(bot, update: CallbackQuery):
 
     reply_markup = InlineKeyboardMarkup(buttons)
 
-    await update.message.edit_text(
+    update.message.edit_text(
         text, reply_markup=reply_markup, parse_mode="html"
     )
 
 
-async def cb_set(bot, update: CallbackQuery):
+def cb_set(bot, update: CallbackQuery):
     """
     A Callback Funtion Support For config()
     """
@@ -687,10 +687,10 @@ async def cb_set(bot, update: CallbackQuery):
         chat_id = int(chat_id)
     
     if val == curr_val:
-        await update.answer("New Value Cannot Be Old Value...Please Choose Different Value...!!!", show_alert=True)
+        update.answer("New Value Cannot Be Old Value...Please Choose Different Value...!!!", show_alert=True)
         return
     
-    prev = await db.find_chat(chat_id)
+    prev = db.find_chat(chat_id)
 
     accuracy = float(prev["configs"].get("accuracy", 0.70))
     max_pages = int(prev["configs"].get("max_pages"))
@@ -727,11 +727,11 @@ async def cb_set(bot, update: CallbackQuery):
         show_invite_link=show_invite_link
     )
     
-    append_db = await db.update_configs(chat_id, new)
+    append_db = db.update_configs(chat_id, new)
     
     if not append_db:
         text="Something Wrong Please Check Bot Log For More Information...."
-        await update.answer(text=text, show_alert=True)
+        update.answer(text=text, show_alert=True)
         return
     
     text=f"Your Request Was Updated Sucessfully....\nNow All Upcoming Results Will Show According To This Settings..."
@@ -752,12 +752,12 @@ async def cb_set(bot, update: CallbackQuery):
     
     reply_markup=InlineKeyboardMarkup(buttons)
     
-    await update.message.edit_text(
+    update.message.edit_text(
         text, reply_markup=reply_markup, parse_mode="html"
     )
 
-async def callback_data(bot, update: CallbackQuery):
-    await bot.send_chat_action(update.message.chat.id, "typing")
+def callback_data(bot, update: CallbackQuery):
+    bot.send_chat_action(update.message.chat.id, "typing")
 
     query_data = update.data
 
@@ -766,7 +766,7 @@ async def callback_data(bot, update: CallbackQuery):
     
         reply_markup = InlineKeyboardMarkup(buttons)
         
-        await update.message.edit_caption(
+        update.message.edit_caption(
             Translation.EN["START"].format(update.from_user.mention),
             reply_markup=reply_markup,
             parse_mode="html"
@@ -778,7 +778,7 @@ async def callback_data(bot, update: CallbackQuery):
     
         reply_markup = InlineKeyboardMarkup(buttons)
         
-        await update.message.edit_caption(
+        update.message.edit_caption(
             Translation.EN["HELP"].format(update.from_user.mention),
             reply_markup=reply_markup,
             parse_mode="html"
@@ -790,7 +790,7 @@ async def callback_data(bot, update: CallbackQuery):
         
         reply_markup = InlineKeyboardMarkup(buttons)
         
-        await update.message.edit_caption(
+        update.message.edit_caption(
             Translation.EN["ABOUT"],
             reply_markup=reply_markup,
             parse_mode="html"
@@ -798,104 +798,104 @@ async def callback_data(bot, update: CallbackQuery):
 
 
     elif query_data == "close":
-        await update.message.delete()
+        update.message.delete()
 
     elif query_data == "instruct":
-        await update.answer("-Pʟᴇᴀsᴇ Cʜᴇᴄᴋ Tʜᴇ Sᴘᴇʟʟɪɴɢ Oғ Tʜᴇ Mᴏᴠɪᴇ\n-Mᴀᴋᴇ Sᴜʀᴇ Iᴛ Is Rᴇʟᴇᴀsᴇᴅ\n-Aᴠᴏɪᴅ Uɴɴᴇᴄᴇssᴀʀʏ Wᴏʀᴅs", show_alert=True)
+        update.answer("-Pʟᴇᴀsᴇ Cʜᴇᴄᴋ Tʜᴇ Sᴘᴇʟʟɪɴɢ Oғ Tʜᴇ Mᴏᴠɪᴇ\n-Mᴀᴋᴇ Sᴜʀᴇ Iᴛ Is Rᴇʟᴇᴀsᴇᴅ\n-Aᴠᴏɪᴅ Uɴɴᴇᴄᴇssᴀʀʏ Wᴏʀᴅs", show_alert=True)
      
 
-async def edit_caption(bot:Client, update: CallbackQuery):
+def edit_caption(bot:Client, update: CallbackQuery):
 
     STRING = re.findall(r"edit_c\((.+)\)", update.data)[0]
 
-    await bot.send_chat_action(update.message.chat.id, "typing")
-    await update.answer()
+    bot.send_chat_action(update.message.chat.id, "typing")
+    update.answer()
 
     if update.message.chat.type=='private':
-        loading = await bot.send_message(update.message.chat.id, "◌ ◌ ◌")
-        await asyncio.sleep(0.20)
-        await loading.edit("● ◌ ◌")
-        await asyncio.sleep(0.20)
-        await loading.edit("● ● ◌")
-        await asyncio.sleep(0.20)
-        await loading.edit("● ● ●")
-        await asyncio.sleep(0.20)
-        await loading.delete()
+        loading = bot.send_message(update.message.chat.id, "◌ ◌ ◌")
+        asyncio.sleep(0.20)
+        loading.edit("● ◌ ◌")
+        asyncio.sleep(0.20)
+        loading.edit("● ● ◌")
+        asyncio.sleep(0.20)
+        loading.edit("● ● ●")
+        asyncio.sleep(0.20)
+        loading.delete()
 
     if STRING=="FORMAT":
-        await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+        update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     elif STRING=="SPELL":
-        await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+        update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
     else :
-        await update.message.edit(text=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]), disable_web_page_preview=True)
+        update.message.edit(text=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]), disable_web_page_preview=True)
 
-    await bot.send_chat_action(update.message.chat.id, "cancel")
+    bot.send_chat_action(update.message.chat.id, "cancel")
      
 
-async def alerter(bot:Client, update: CallbackQuery):
+def alerter(bot:Client, update: CallbackQuery):
 
     id, index = re.findall(r"alert\((.+)\)", update.data)[0].split("|",1)
 
-    text = await db.get_alert(id, index)
+    text = db.get_alert(id, index)
 
     if not text:
         return
 
-    await update.answer(text, show_alert=True)
+    update.answer(text, show_alert=True)
 
-async def edit_t(bot:Client, update: CallbackQuery):
+def edit_t(bot:Client, update: CallbackQuery):
 
     id, index = re.findall(r"edit_t\((.+)\)", update.data)[0].split("|",1)
 
-    text, buttons = await db.get_edit(id, int(index))
+    text, buttons = db.get_edit(id, int(index))
 
     if text and buttons:
 
         buttons = eval(buttons)
-        await update.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+        update.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
 
     elif text:
 
-        await update.message.edit(text=text)
+        update.message.edit(text=text)
 
     else :
 
-        return await update.answer("Theres Nothing Here Man...")
+        return update.answer("Theres Nothing Here Man...")
 
-    await update.answer()
+    update.answer()
 
-async def edit_m(bot:Client, update: CallbackQuery):
+def edit_m(bot:Client, update: CallbackQuery):
 
     id = re.findall(r"edit_m\((.+)\)", update.data)[0]
 
-    filter = await db.get_mfilter(id)
+    filter = db.get_mfilter(id)
     text = filter.get('text', 'null')
     buttons = filter.get('buttons', None)
 
     if text and buttons:
 
         buttons = eval(buttons)
-        await update.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+        update.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
 
     elif text:
 
-        await update.message.edit(text=text)
+        update.message.edit(text=text)
 
     else :
 
-        return await update.answer("Theres Nothing Here Man...")
+        return update.answer("Theres Nothing Here Man...")
 
-    await update.answer()
+    update.answer()
 
 
-async def cb_stats(bot:Client, update:CallbackQuery):
+def cb_stats(bot:Client, update:CallbackQuery):
 
     try:
-        await update.answer("Fᴇᴛᴄʜɪɴɢ Dᴇᴛᴀɪʟs...")
-        stats = await db.get_stats()
+        update.answer("Fᴇᴛᴄʜɪɴɢ Dᴇᴛᴀɪʟs...")
+        stats = db.get_stats()
         text = f"♡ Dᴀᴛᴀʙᴀsᴇ sᴛᴀᴛs ᴏғ Dᴏʀᴀ:-\n\nFɪʟᴇs : {stats['files']}\n\nUsᴇʀs : {stats['users']}\n\nCᴏɴɴᴇᴄᴛᴇᴅ Usᴇʀs : {stats['conn']}\n\nMᴀɴᴜᴀʟ Fɪʟᴛᴇʀs : {stats['filters']}\n\nCᴜsᴛᴏᴍɪᴢᴇᴅ Cʜᴀᴛs : {stats['chats']}"
         if update.message.text == text: return
-        await update.message.edit(
+        update.message.edit(
             text,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏡 ʜᴏᴍᴇ 🏡", callback_data="edit_c(START)"), InlineKeyboardButton("Rᴇғʀᴇsʜ", callback_data="stats")]]),
             parse_mode='html'
@@ -903,18 +903,18 @@ async def cb_stats(bot:Client, update:CallbackQuery):
     except Exception as e:
         print(e)
     
-async def ignore(bot:Client, update:CallbackQuery):
+def ignore(bot:Client, update:CallbackQuery):
 
-    await update.answer("Yᴏᴜ Hᴀᴠᴇ Hɪᴛ A Wᴀʟʟ 💥🧱🚗", show_alert=True)
+    update.answer("Yᴏᴜ Hᴀᴠᴇ Hɪᴛ A Wᴀʟʟ 💥🧱🚗", show_alert=True)
 
-async def answer_alert(bot:Client, update:CallbackQuery):
+def answer_alert(bot:Client, update:CallbackQuery):
 
     key = re.findall(r'answer\((.+)\)', update.data)[0]
 
     if key=='SELECTED':
-        await update.answer("Tʜɪs Hᴀs Aʟʀᴇᴀᴅʏ Bᴇᴇɴ Sᴇʟᴇᴄᴛᴇᴅ :)", show_alert=True)
+        update.answer("Tʜɪs Hᴀs Aʟʀᴇᴀᴅʏ Bᴇᴇɴ Sᴇʟᴇᴄᴛᴇᴅ :)", show_alert=True)
     elif key=='INFO':
-        await update.answer("""
+        update.answer("""
         Hᴏᴡ Tᴏ Dᴏᴡɴʟᴏᴀᴅ :
 
         1. Sᴇɴᴅ ᴀ ᴍᴏᴠɪᴇ ɴᴀᴍᴇ
@@ -923,13 +923,13 @@ async def answer_alert(bot:Client, update:CallbackQuery):
         """, show_alert=True)
 
     elif key=="CLOSED":
-        await update.answer("""
+        update.answer("""
         Tʜᴇ Rᴇsᴜʟᴛs ғᴏʀ ᴛʜɪs ᴍᴏᴠɪᴇ ᴡᴀs ᴄʟᴏsᴇᴅ ᴀғᴛᴇʀ ᴀ ᴘʀᴇᴅᴇғɪɴᴇᴅ ᴛɪᴍᴇᴏᴜᴛ
 
         Jᴜsᴛ Asᴋ Tʜᴇ ᴍᴏᴠɪᴇ ᴀɢᴀɪɴ ᴛᴏ ɢᴇᴛ ɪᴛ
         """, show_alert=True)
     else:
-        await update.answer()
+        update.answer()
 
 def time_formatter(seconds: float) -> str:
     """ 

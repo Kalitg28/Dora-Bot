@@ -15,7 +15,7 @@ from bot import VERIFY # pylint: disable=import-error
 
 db = Database()
 
-async def settings(bot, update: Message):
+def settings(bot, update: Message):
     
     chat_id = update.chat.id
     user_id = update.from_user.id if update.from_user else None
@@ -24,15 +24,15 @@ async def settings(bot, update: Message):
 
     if chat_type=="private" :
 
-        chat_id = await db.get_conn(user_id)
+        chat_id = db.get_conn(user_id)
         if not chat_id :
 
-            await update.reply("<b>Please Connect To A Chat First Using The <code>/connect</code> Command To Use The Settings Panel From PM</b>", parse_mode="html")
+            update.reply("<b>Please Connect To A Chat First Using The <code>/connect</code> Command To Use The Settings Panel From PM</b>", parse_mode="html")
             return
 
     if VERIFY.get(str(chat_id)) == None: # Make Admin's ID List
         admin_list = []
-        async for x in bot.iter_chat_members(chat_id=chat_id, filter="administrators"):
+        for x in bot.iter_chat_members(chat_id=chat_id, filter="administrators"):
             admin_id = x.user.id 
             admin_list.append(admin_id)
         admin_list.append(None)
@@ -42,14 +42,14 @@ async def settings(bot, update: Message):
     if not user_id in VERIFY.get(str(chat_id)): # Checks if user is admin of the chat
         return
     
-    bot_info = await bot.get_me()
+    bot_info = bot.get_me()
     bot_first_name= bot_info.first_name
-    settings = await db.find_chat(int(chat_id))
+    settings = db.find_chat(int(chat_id))
     try :
-        chat_name = await bot.get_chat(int(chat_id))
+        chat_name = bot.get_chat(int(chat_id))
         chat_name = chat_name.title
     except PeerIdInvalid:
-        await update.reply_text("Looks Like I Couldnt Access This Chat Make Sure This Chat ID is valid And I am an admin There")
+        update.reply_text("Looks Like I Couldnt Access This Chat Make Sure This Chat ID is valid And I am an admin There")
         return
     
     mp_count = settings["configs"]["max_pages"]
@@ -209,14 +209,14 @@ async def settings(bot, update: Message):
     
     reply_markup = InlineKeyboardMarkup(buttons)
     
-    await update.reply_text( 
+    update.reply_text( 
         text=text, 
         reply_markup=reply_markup, 
         parse_mode="html"
         )
 
 
-async def connect(bot: Client, update: Message):
+def connect(bot: Client, update: Message):
 
     text = update.text
     user_id = update.from_user.id
@@ -226,11 +226,11 @@ async def connect(bot: Client, update: Message):
 
         if chat_type in ('group','supergroup'):
             if update.from_user:
-                member = await bot.get_chat_member(update.chat.id, update.from_user.id)
+                member = bot.get_chat_member(update.chat.id, update.from_user.id)
                 if not member.status in ('creator','administrator'):
                     return
             buttons = [[InlineKeyboardButton("Connect To PM", url=f"https://t.me/DoraFilterBot?start=connect{update.chat.id}")]]
-            await update.reply_text("Click On The Button Below To Connect To This Chat To Get PM Powers(Admins Only) :)", reply_markup=InlineKeyboardMarkup(buttons))
+            update.reply_text("Click On The Button Below To Connect To This Chat To Get PM Powers(Admins Only) :)", reply_markup=InlineKeyboardMarkup(buttons))
             return
 
         chat_id = text.replace("/connect", "").strip()
@@ -238,91 +238,91 @@ async def connect(bot: Client, update: Message):
 
         try :
 
-            link = await bot.export_chat_invite_link(chat_id=chat_id)
-            grp = await bot.get_chat(chat_id)
+            link = bot.export_chat_invite_link(chat_id=chat_id)
+            grp = bot.get_chat(chat_id)
 
-            user = await bot.get_chat_member(chat_id,update.from_user.id)
+            user = bot.get_chat_member(chat_id,update.from_user.id)
             if not user.status in ("administrator","creator") :
-                await update.reply("Nice Try You Non-Admin")
+                update.reply("Nice Try You Non-Admin")
                 return
 
         except PeerIdInvalid:
 
-            await update.reply_text("This Doesnt Seem Like A Valid Chat ID \nMake Sure The ID is Correct if it is Make Sure I'm a member Of The Chat")
+            update.reply_text("This Doesnt Seem Like A Valid Chat ID \nMake Sure The ID is Correct if it is Make Sure I'm a member Of The Chat")
             return
 
         except ChatAdminInviteRequired:
 
-            await update.reply_text("I Dont Have Enough Admin Permission Here Please Add Me To The Chat With Full Admin Permissions")
+            update.reply_text("I Dont Have Enough Admin Permission Here Please Add Me To The Chat With Full Admin Permissions")
             return
         except ChatAdminRequired:
             
-            await update.reply_text("Make Me An Admin In Your Group First")
+            update.reply_text("Make Me An Admin In Your Group First")
             return
         
         except Exception as e :
 
             print(e)
 
-        success = await db.conn_user(user_id, chat_id)
+        success = db.conn_user(user_id, chat_id)
 
         if not success :
 
-            await update.reply("Looks Like We Faced Some Problem Please Try Again Later")
+            update.reply("Looks Like We Faced Some Problem Please Try Again Later")
         
         else :
 
-            await update.reply(f"Woohoo... You're Now Successfully Connected To {grp.title} You Can Now Modify AutoFilter Settings And Edit Manual Filters From Here")
+            update.reply(f"Woohoo... You're Now Successfully Connected To {grp.title} You Can Now Modify AutoFilter Settings And Edit Manual Filters From Here")
 
     except Exception as e :
 
         print(e)
 
-async def disconnect(bot: Client, update: Message):
+def disconnect(bot: Client, update: Message):
 
     user_id = update.from_user.id
 
-    Result = await db.del_conn(user_id)
+    Result = db.del_conn(user_id)
     
     if Result:
 
-        await update.reply_text("Any Existing Connections Have Been Successfully Removed")
+        update.reply_text("Any Existing Connections Have Been Successfully Removed")
 
     else :
 
-        await update.reply_text("Please Connect To A Chat First To Delete Connection")
+        update.reply_text("Please Connect To A Chat First To Delete Connection")
 
-async def new_knight(bot:Client, update:Message):
+def new_knight(bot:Client, update:Message):
 
     if not update.from_user.id==Translation.OWNER_ID:
-        return await update.reply_text('Nice Try Kid...')
+        return update.reply_text('Nice Try Kid...')
 
     user = update.reply_to_message.from_user
     id = user.id
 
-    success = await db.conn_user(id, 902)
+    success = db.conn_user(id, 902)
 
     if not success:
-        return await update.reply_text(f'Failed To Promote {user.mention} To A Knight :( ...')
+        return update.reply_text(f'Failed To Promote {user.mention} To A Knight :( ...')
     
-    await update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
+    update.reply_text(f'User {user.mention} Has Now Been Promoted To A Knight xD...')
 
-async def del_knight(bot:Client, update:Message):
+def del_knight(bot:Client, update:Message):
     if not update.from_user.id==Translation.OWNER_ID:
-        return await update.reply_text('Nice Try Kid...')
+        return update.reply_text('Nice Try Kid...')
 
     if update.reply_to_message:
         user = update.reply_to_message.from_user
         id = user.id
     else:
         id = int(update.text.split()[1])
-        user = await bot.get_users(id)
+        user = bot.get_users(id)
 
-    success = await db.del_conn(id)
+    success = db.del_conn(id)
     if success:
-        await update.reply_text(f"Knight {user.mention} Was Demoted To A User :( ...")
+        update.reply_text(f"Knight {user.mention} Was Demoted To A User :( ...")
     else:
-        await update.reply_text(f"Demote Fialed...")
+        update.reply_text(f"Demote Fialed...")
 def remove_emoji(string):
     emoji_pattern = re.compile("["
                                u"\U0001F600-\U0001F64F" 

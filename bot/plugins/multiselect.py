@@ -16,7 +16,7 @@ from bot.database import Database # pylint: disable=import-error
 SELECTED = {}
 db = Database()
 
-async def multiselect(bot:Client, update:CallbackQuery):
+def multiselect(bot:Client, update:CallbackQuery):
 
     global VERIFY
     query_data = update.data
@@ -35,7 +35,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
         
         admin_list = []
         
-        async for x in bot.iter_chat_members(chat_id=chat_id, filter="administrators"):
+        for x in bot.iter_chat_members(chat_id=chat_id, filter="administrators"):
             admin_id = x.user.id 
             admin_list.append(admin_id)
             
@@ -43,7 +43,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
         VERIFY[str(chat_id)] = admin_list
     
     if not ((user_id == ruser_id) or (user_id in admin_list)): # Checks if user is same as requested user or is admin
-        await update.answer("Nice Try :)",show_alert=True)
+        update.answer("Nice Try :)",show_alert=True)
         return
 
     res = FIND.get(query).get('results')
@@ -51,7 +51,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
         page = res[int(index_val)].copy()
     except Exception as e:
         print(e)
-        return await update.answer("Bad Request :(")
+        return update.answer("Bad Request :(")
 
     index = 0
     total_btn = []
@@ -65,10 +65,10 @@ async def multiselect(bot:Client, update:CallbackQuery):
 
     total_btn.append([InlineKeyboardButton("ʙᴀᴄᴋ", callback_data=f"multi({int(index_val)-1}|{query})"), InlineKeyboardButton("Exɪᴛ", callback_data=f"navigate({int(index_val)+1}|back|{query})"), InlineKeyboardButton("Sᴇɴᴅ", callback_data=f"sensel({query})"), InlineKeyboardButton("ɴᴇxᴛ", callback_data=f"multi({int(index_val)+1}|{query})")])
 
-    await update.message.edit_reply_markup(InlineKeyboardMarkup(total_btn))
-    await update.answer()
+    update.message.edit_reply_markup(InlineKeyboardMarkup(total_btn))
+    update.answer()
 
-async def select(bot:Client, update:CallbackQuery):
+def select(bot:Client, update:CallbackQuery):
 
     global VERIFY
     query_data = update.data
@@ -87,7 +87,7 @@ async def select(bot:Client, update:CallbackQuery):
         
         admin_list = []
         
-        async for x in bot.iter_chat_members(chat_id=chat_id, filter="administrators"):
+        for x in bot.iter_chat_members(chat_id=chat_id, filter="administrators"):
             admin_id = x.user.id 
             admin_list.append(admin_id)
             
@@ -95,7 +95,7 @@ async def select(bot:Client, update:CallbackQuery):
         VERIFY[str(chat_id)] = admin_list
     
     if not ((user_id == ruser_id) or (user_id in admin_list)): # Checks if user is same as requested user or is admin
-        await update.answer("Nice Try :)",show_alert=True)
+        update.answer("Nice Try :)",show_alert=True)
         return
 
     page_btn = update.message.reply_markup.inline_keyboard
@@ -118,50 +118,50 @@ async def select(bot:Client, update:CallbackQuery):
 
     SELECTED[str(update.from_user.id)] = prev
 
-    await update.message.edit_reply_markup(InlineKeyboardMarkup(page_btn))
-    await update.answer()
+    update.message.edit_reply_markup(InlineKeyboardMarkup(page_btn))
+    update.answer()
 
-async def sensel(bot:Client, update:CallbackQuery):
+def sensel(bot:Client, update:CallbackQuery):
 
     chat_id = update.message.chat.id
     user_id = update.from_user.id
 
-    settings = await db.find_chat(chat_id)
+    settings = db.find_chat(chat_id)
     fsub = settings.get("fsub", None)
         
 
     if fsub:
                 fsub = fsub["id"]
                 try:
-                    member = await bot.get_chat_member(int(fsub), user_id)
+                    member = bot.get_chat_member(int(fsub), user_id)
                     if member.status=='kicked':
-                        await update.answer("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!", show_alert=True)
+                        update.answer("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!", show_alert=True)
                         return
                 except PeerIdInvalid:
                     pass
                 except UserNotParticipant:
                     url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                     print(url)
-                    return await update.answer(url=url.replace('-100',''))
+                    return update.answer(url=url.replace('-100',''))
 
     global SELECTED
 
     if not SELECTED.get(str(user_id)):
-        return await update.answer("Tʜɪs Bᴜᴛᴛᴏɴ Isɴᴛ Fᴏʀ Yᴏᴜ :(", show_alert=True)
+        return update.answer("Tʜɪs Bᴜᴛᴛᴏɴ Isɴᴛ Fᴏʀ Yᴏᴜ :(", show_alert=True)
 
     query = re.findall(r"sensel\((.+)\)", update.data)[0]
 
     if not SELECTED[str(user_id)].get(query):
-        return await update.answer("Tʜɪs Bᴜᴛᴛᴏɴ Isɴᴛ Fᴏʀ Yᴏᴜ :(", show_alert=True)
+        return update.answer("Tʜɪs Bᴜᴛᴛᴏɴ Isɴᴛ Fᴏʀ Yᴏᴜ :(", show_alert=True)
 
     files = SELECTED[str(user_id)][query]
 
     for file in files:
 
-            file_id, file_name, file_caption, file_type = await db.get_file(file)
+            file_id, file_name, file_caption, file_type = db.get_file(file)
             file_caption = "<b>" + file_name + "</b>\n\n" + settings.get("caption", "")
             try:
-                await bot.send_cached_media(
+                bot.send_cached_media(
                 user_id,
                 file_id,
                 caption = file_caption,
@@ -170,46 +170,46 @@ async def sensel(bot:Client, update:CallbackQuery):
             except PeerIdInvalid:
                 url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
-                return await update.answer(url=url.replace('-100',''))
+                return update.answer(url=url.replace('-100',''))
             except UserIsBlocked:
                 url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
-                return await update.answer(url=url.replace('-100',''))
+                return update.answer(url=url.replace('-100',''))
             except Exception as e:
                 print(e)
-                return await update.answer(f"Error:\n{e}", show_alert=True)
+                return update.answer(f"Error:\n{e}", show_alert=True)
 
-    await update.answer("Fɪʟᴇs Hᴀᴠᴇ Bᴇᴇɴ Sᴇɴᴛ Tᴏ PM :)", show_alert=True)
+    update.answer("Fɪʟᴇs Hᴀᴠᴇ Bᴇᴇɴ Sᴇɴᴛ Tᴏ PM :)", show_alert=True)
 
-async def cb_all(bot:Client, update:CallbackQuery):
+def cb_all(bot:Client, update:CallbackQuery):
 
     chat_id = update.message.chat.id
     try:
         query = re.findall(r"all\((.+)\)", update.data)[0]
         all_files = FIND.get(query).get("all_files")
-        settings = await db.find_chat(chat_id)
+        settings = db.find_chat(chat_id)
         fsub = settings.get("fsub", None)
 
         if fsub:
                 fsub = fsub["id"]
                 try:
-                    member = await bot.get_chat_member(int(fsub), update.from_user.id)
+                    member = bot.get_chat_member(int(fsub), update.from_user.id)
                     if member.status=='kicked':
-                        await update.answer("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!", show_alert=True)
+                        update.answer("Sorry Dude You're Banned In My Force Subscribe Channel So You Cant Use Me Right Now.....!!", show_alert=True)
                         return
                 except PeerIdInvalid:
                     pass
                 except UserNotParticipant:
                     url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                     print(url)
-                    return await update.answer(url=url.replace('-100',''))
+                    return update.answer(url=url.replace('-100',''))
 
         for file in all_files:
 
-            file_id, file_name, file_caption, file_type = await db.get_file(file)
+            file_id, file_name, file_caption, file_type = db.get_file(file)
             file_caption = "<b>" + file_name + "</b>\n\n" + settings.get("caption", "")
             try:
-                await bot.send_cached_media(
+                bot.send_cached_media(
                 update.from_user.id,
                 file_id,
                 caption = file_caption,
@@ -218,17 +218,17 @@ async def cb_all(bot:Client, update:CallbackQuery):
             except PeerIdInvalid:
                 url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
-                return await update.answer(url=url.replace('-100',''))
+                return update.answer(url=url.replace('-100',''))
             except UserIsBlocked:
                 url=f"https://t.me/DoraFilterBot?start=retryz{str(chat_id).replace('-100','').strip()}a{update.message.message_id}z"
                 print(url)
-                return await update.answer(url=url.replace('-100',''))
+                return update.answer(url=url.replace('-100',''))
             except Exception as e:
-                await update.answer(f"Error:\n{e}", show_alert=True)
+                update.answer(f"Error:\n{e}", show_alert=True)
                 print(e)
                 return
 
-        await update.answer("Fɪʟᴇs Hᴀᴠᴇ Bᴇᴇɴ Sᴇɴᴛ Tᴏ PM :)", show_alert=True)
+        update.answer("Fɪʟᴇs Hᴀᴠᴇ Bᴇᴇɴ Sᴇɴᴛ Tᴏ PM :)", show_alert=True)
 
     except Exception as e:
         print(e)

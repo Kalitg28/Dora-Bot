@@ -10,14 +10,14 @@ from pymongo.cursor import Cursor
 
 db = Database()
 
-async def connected_cast(bot:Client, update:Message) :
+def connected_cast(bot:Client, update:Message) :
 
     media = False
     markup = False
 
-    results = await db.all_connected()
+    results = db.all_connected()
     count = 0
-    status = await bot.send_message(
+    status = bot.send_message(
         chat_id=update.chat.id,
         text="Starting Broadcast...."
     )
@@ -31,13 +31,13 @@ async def connected_cast(bot:Client, update:Message) :
         try:
          if media :
             if not markup:
-                sent = await update.reply_to_message.copy(
+                sent = update.reply_to_message.copy(
                     chat_id=id,
                     caption=update.reply_to_message.caption.html,
                     parse_mode="html"
                 )
             else :
-                sent = await update.reply_to_message.copy(
+                sent = update.reply_to_message.copy(
                     chat_id=id,
                     caption=update.reply_to_message.caption.html,
                     parse_mode="html",
@@ -45,30 +45,30 @@ async def connected_cast(bot:Client, update:Message) :
                 )
          else :
             if not markup:
-                sent = await update.reply_to_message.copy(
+                sent = update.reply_to_message.copy(
                     chat_id=id,
                 )
             else :
-                sent = await update.reply_to_message.copy(
+                sent = update.reply_to_message.copy(
                     chat_id=id,
                     reply_markup=markup
                 )
          count+=1
-         await status.edit(f"Broadcasted Successfully To {count} Users")
-         await bot.send_message(Translation.OWNER_ID, sent.chat.title)
+         status.edit(f"Broadcasted Successfully To {count} Users")
+         bot.send_message(Translation.OWNER_ID, sent.chat.title)
         except PeerIdInvalid:
             pass
         except Exception as e:
             print(e)
 
-async def broadcast_all(bot:Client, update:Message) :
+def broadcast_all(bot:Client, update:Message) :
 
     media = False
     markup = False
 
-    results = await db.all_users()
+    results = db.all_users()
     count = 0
-    status = await bot.send_message(
+    status = bot.send_message(
         chat_id=update.chat.id,
         text="Starting Broadcast...."
     )
@@ -82,13 +82,13 @@ async def broadcast_all(bot:Client, update:Message) :
         try:
          if media :
             if not markup:
-                await update.reply_to_message.copy(
+                update.reply_to_message.copy(
                     chat_id=id,
                     caption=update.reply_to_message.caption.html,
                     parse_mode="html"
                 )
             else :
-                await update.reply_to_message.copy(
+                update.reply_to_message.copy(
                     chat_id=id,
                     caption=update.reply_to_message.caption.html,
                     parse_mode="html",
@@ -96,22 +96,22 @@ async def broadcast_all(bot:Client, update:Message) :
                 )
          else :
             if not markup:
-                await update.reply_to_message.copy(
+                update.reply_to_message.copy(
                     chat_id=id,
                 )
             else :
-                await update.reply_to_message.copy(
+                update.reply_to_message.copy(
                     chat_id=id,
                     reply_markup=markup
                 )
          count+=1
-         await status.edit(f"Broadcasted Successfully To {count} Users")
+         status.edit(f"Broadcasted Successfully To {count} Users")
         except PeerIdInvalid:
             pass
         except Exception as e:
             print(e)
 
-async def broadcast(bot:Client, update:Message) :
+def broadcast(bot:Client, update:Message) :
 
     chat_id = update.chat.id
     chat_type = update.chat.type
@@ -119,19 +119,19 @@ async def broadcast(bot:Client, update:Message) :
     markup = False
 
     if chat_type=="private":
-        chat_id = await db.get_conn(chat_id)
+        chat_id = db.get_conn(chat_id)
         if not chat_id:
-            await update.reply_text("Looks Like You Arent Connected To Any Chat To Do A Broadcast", quote=True)
+            update.reply_text("Looks Like You Arent Connected To Any Chat To Do A Broadcast", quote=True)
             return
     
     if not update.reply_to_message:
-        await update.reply_text("Please Reply This Command To The Message You Would Like To Broadcast", quote=True)
+        update.reply_text("Please Reply This Command To The Message You Would Like To Broadcast", quote=True)
         return
     try:
-        requester = await bot.get_chat_member(chat_id, update.from_user.id)
+        requester = bot.get_chat_member(chat_id, update.from_user.id)
         if not requester.status in ("administrator","creator"): return
     except PeerIdInvalid:
-        await update.reply_text("Im Not An Admin In Your Group", quote=True)
+        update.reply_text("Im Not An Admin In Your Group", quote=True)
 
     if update.reply_to_message.caption:
         media = True
@@ -139,23 +139,23 @@ async def broadcast(bot:Client, update:Message) :
         markup = update.reply_to_message.reply_markup.inline_keyboard
     count = 0
 
-    status = await bot.send_message(
+    status = bot.send_message(
         chat_id=update.chat.id,
         text="Starting Broadcast...."
     )
-    async for member in bot.iter_chat_members(chat_id=chat_id):
+    for member in bot.iter_chat_members(chat_id=chat_id):
 
         id = member.user.id
         try:
          if media :
             if not markup:
-                await update.reply_to_message.copy(
+                update.reply_to_message.copy(
                     chat_id=id,
                     caption=update.reply_to_message.caption.html,
                     parse_mode="html"
                 )
             else :
-                await update.reply_to_message.copy(
+                update.reply_to_message.copy(
                     chat_id=id,
                     caption=update.reply_to_message.caption.html,
                     parse_mode="html",
@@ -163,16 +163,16 @@ async def broadcast(bot:Client, update:Message) :
                 )
          else :
             if not markup:
-                await update.reply_to_message.copy(
+                update.reply_to_message.copy(
                     chat_id=id,
                 )
             else :
-                await update.reply_to_message.copy(
+                update.reply_to_message.copy(
                     chat_id=id,
                     reply_markup=InlineKeyboardMarkup(markup)
                 )
          count+=1
-         await status.edit(f"Broadcasted Successfully To {count} Users")
+         status.edit(f"Broadcasted Successfully To {count} Users")
         except PeerIdInvalid:
             pass
         except UserIsBot:
@@ -180,7 +180,7 @@ async def broadcast(bot:Client, update:Message) :
         except Exception as e:
             print(e)
 
-        await status.edit(f"Completed Broadcast Successfully To {count} Users")
+        status.edit(f"Completed Broadcast Successfully To {count} Users")
 
 def parser(text):
 

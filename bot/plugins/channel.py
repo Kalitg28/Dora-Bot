@@ -20,7 +20,7 @@ from bot.helpers import Helpers
 db = Database()
     
 
-async def connect(bot: Bot, update):
+def connect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /add Command TO COnnect A Chat With Group
     """
@@ -31,58 +31,58 @@ async def connect(bot: Bot, update):
     try:
         if target_chat[1].startswith("@"):
             if len(target_chat[1]) < 5:
-                await update.reply_text("Invalid Username...!!!")
+                update.reply_text("Invalid Username...!!!")
                 return
             target = target_chat[1]
             
         elif not target_chat[1].startswith("@"):
             if len(target_chat[1]) < 14:
-                await update.reply_text("Invalid Chat Id...\nChat ID Should Be Something Like This: <code>-100xxxxxxxxxx</code>")
+                update.reply_text("Invalid Chat Id...\nChat ID Should Be Something Like This: <code>-100xxxxxxxxxx</code>")
                 return
             target = int(target_chat[1])
                 
     except Exception:
-        await update.reply_text("Invalid Input...\nYou Should Specify Valid <code>chat_id(-100xxxxxxxxxx)</code> or <code>@username</code>")
+        update.reply_text("Invalid Input...\nYou Should Specify Valid <code>chat_id(-100xxxxxxxxxx)</code> or <code>@username</code>")
         return
     
     try:
-        join_link = await bot.export_chat_invite_link(target)
+        join_link = bot.export_chat_invite_link(target)
     except Exception as e:
         print(e)
-        await update.reply_text(f"Make Sure Im Admin At <code>{target}</code> And Have Permission For '<i>Inviting Users via Link</i>' And Try Again.....!!!")
+        update.reply_text(f"Make Sure Im Admin At <code>{target}</code> And Have Permission For '<i>Inviting Users via Link</i>' And Try Again.....!!!")
         return
     
-    userbot_info = await bot.USER.get_me()
+    userbot_info = bot.USER.get_me()
     userbot_id = userbot_info.id
     userbot_name = userbot_info.first_name
     
     #try:
-    #    await bot.USER.join_chat(join_link)
+    #    bot.USER.join_chat(join_link)
         
     #except UserAlreadyParticipant:
     #    pass
     
     #except Exception:
-    #    await update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Join The Channel `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
+    #    update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Join The Channel `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
     #   return
     
     try:
-        c_chat = await bot.get_chat(target)
+        c_chat = bot.get_chat(target)
         channel_id = c_chat.id
         channel_name = c_chat.title
         
     except Exception as e:
-        await update.reply_text("Encountered Some Issue..Please Check Logs..!!")
+        update.reply_text("Encountered Some Issue..Please Check Logs..!!")
         raise e
         
         
-    in_db = await db.in_db(chat_id, channel_id)
+    in_db = db.in_db(chat_id, channel_id)
     
     if in_db:
-        await update.reply_text("Channel Aldready In Db...!!!")
+        update.reply_text("Channel Aldready In Db...!!!")
         return
     
-    wait_msg = await update.reply_text("Please Wait Till I Add All Your Files From Channel To Db\n\n<i>This May Take 10 or 15 Mins Depending On Your No. Of Files In Channel.....</i>\n\nUntil Then Please Dont Sent Any Other Command Or This Operation May Be Intrupted....")
+    wait_msg = update.reply_text("Please Wait Till I Add All Your Files From Channel To Db\n\n<i>This May Take 10 or 15 Mins Depending On Your No. Of Files In Channel.....</i>\n\nUntil Then Please Dont Sent Any Other Command Or This Operation May Be Intrupted....")
     
     try:
         type_list = ["video", "audio", "document"]
@@ -92,17 +92,17 @@ async def connect(bot: Bot, update):
 
         for typ in type_list:
 
-            async for msgs in bot.USER.search_messages(channel_id,filter=typ): #Thanks To @PrgOfficial For Suggesting
+            for msgs in bot.USER.search_messages(channel_id,filter=typ): #Thanks To @PrgOfficial For Suggesting
                 
                 # Using 'if elif' instead of 'or' to determine 'file_type'
                 # Better Way? Make A PR
                 try:
                     if msgs.video:
                         try:
-                            file_id = await bot.get_messages(channel_id, message_ids=msgs.message_id)
+                            file_id = bot.get_messages(channel_id, message_ids=msgs.message_id)
                         except FloodWait as e:
                             asyncio.sleep(e.x)
-                            file_id = await bot.get_messages(channel_id, message_ids=msgs.message_id)
+                            file_id = bot.get_messages(channel_id, message_ids=msgs.message_id)
                         except Exception as e:
                             print(e)
                             continue
@@ -113,10 +113,10 @@ async def connect(bot: Bot, update):
                     
                     elif msgs.audio:
                         try:
-                            file_id = await bot.get_messages(channel_id, message_ids=msgs.message_id)
+                            file_id = bot.get_messages(channel_id, message_ids=msgs.message_id)
                         except FloodWait as e:
                             asyncio.sleep(e.x)
-                            file_id = await bot.get_messages(channel_id, message_ids=msgs.message_id)
+                            file_id = bot.get_messages(channel_id, message_ids=msgs.message_id)
                         except Exception as e:
                             print(e)
                             continue
@@ -127,10 +127,10 @@ async def connect(bot: Bot, update):
                     
                     elif msgs.document:
                         try:
-                            file_id = await bot.get_messages(channel_id, message_ids=msgs.message_id)
+                            file_id = bot.get_messages(channel_id, message_ids=msgs.message_id)
                         except FloodWait as e:
                             asyncio.sleep(e.x)
-                            file_id = await bot.get_messages(channel_id, message_ids=msgs.message_id)
+                            file_id = bot.get_messages(channel_id, message_ids=msgs.message_id)
                         except Exception as e:
                             print(str(e))
                             continue
@@ -169,7 +169,7 @@ async def connect(bot: Bot, update):
                     
                     data.append(dicted)
                     count+=1
-                    await wait_msg.edit_text(f"Fetched Data Of {count} Files")
+                    wait_msg.edit_text(f"Fetched Data Of {count} Files")
                 except Exception as e:
                     if 'NoneType' in str(e): # For Some Unknown Reason Some File Names are NoneType
                         skipCT +=1
@@ -178,17 +178,17 @@ async def connect(bot: Bot, update):
 
         print(f"{skipCT} Files Been Skipped Due To File Name Been None..... #BlameTG")
     except Exception as e:
-        await wait_msg.edit_text("Couldnt Fetch Files From Channel... Please look Into Logs For More Details")
+        wait_msg.edit_text("Couldnt Fetch Files From Channel... Please look Into Logs For More Details")
         raise e
     
-    await db.add_filters(data)
-    await db.add_chat(chat_id, channel_id, channel_name)
-    await recacher(chat_id, True, True, bot, update)
+    db.add_filters(data)
+    db.add_chat(chat_id, channel_id, channel_name)
+    recacher(chat_id, True, True, bot, update)
     
-    await wait_msg.edit_text(f"Channel Was Sucessfully Added With <code>{len(data)}</code> Files..")
+    wait_msg.edit_text(f"Channel Was Sucessfully Added With <code>{len(data)}</code> Files..")
 
 
-async def disconnect(bot: Bot, update):
+def disconnect(bot: Bot, update):
     """
     A Funtion To Handle Incoming /del Command TO Disconnect A Chat With A Group
     """
@@ -203,57 +203,57 @@ async def disconnect(bot: Bot, update):
     except Exception as e:
         print(e)
     
-    userbot = await bot.USER.get_me()
+    userbot = bot.USER.get_me()
     userbot_name = userbot.first_name
     userbot_id = userbot.id
     
     try:
-        channel_info = await bot.USER.get_chat(target)
+        channel_info = bot.USER.get_chat(target)
         channel_id = channel_info.id
     except Exception:
-        await update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Fetch Details Of `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
+        update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Fetch Details Of `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
         return
     
-    in_db = await db.in_db(chat_id, channel_id)
+    in_db = db.in_db(chat_id, channel_id)
     
     if not in_db:
-        await update.reply_text("This Channel Is Not Connected With The Group...")
+        update.reply_text("This Channel Is Not Connected With The Group...")
         return
     
-    wait_msg = await update.reply_text("Deleting All Files Of This Channel From DB....!!!\n\nPlease Be Patience...Dont Sent Another Command Until This Process Finishes..")
+    wait_msg = update.reply_text("Deleting All Files Of This Channel From DB....!!!\n\nPlease Be Patience...Dont Sent Another Command Until This Process Finishes..")
     
-    await db.del_filters(chat_id, channel_id)
-    await db.del_active(chat_id, channel_id)
-    await db.del_chat(chat_id, channel_id)
-    await recacher(chat_id, True, True, bot, update)
+    db.del_filters(chat_id, channel_id)
+    db.del_active(chat_id, channel_id)
+    db.del_chat(chat_id, channel_id)
+    recacher(chat_id, True, True, bot, update)
     
-    await wait_msg.edit_text("Sucessfully Deleted All Files From DB....")
+    wait_msg.edit_text("Sucessfully Deleted All Files From DB....")
 
 
-async def delall(bot: Bot, update):
+def delall(bot: Bot, update):
     """
     A Funtion To Handle Incoming /delall Command TO Disconnect All Chats From A Group
     """
     chat_id=902
     
-    #await db.delete_all(chat_id)
-    await recacher(chat_id, True, True, bot, update)
+    #db.delete_all(chat_id)
+    recacher(chat_id, True, True, bot, update)
     
-    await update.reply_text("Sucessfully Deleted All Connected Chats From This Group....")
+    update.reply_text("Sucessfully Deleted All Connected Chats From This Group....")
 
 
-async def new_in_channel(bot:Client, update:ChatMemberUpdated):
+def new_in_channel(bot:Client, update:ChatMemberUpdated):
 
     member = update.new_chat_member
     if not member:
         return
-    await bot.send_message(-1001547869793, f"Hey {member.user.mention} You Can Post The Movie Files For Me Here :)")
+    bot.send_message(-1001547869793, f"Hey {member.user.mention} You Can Post The Movie Files For Me Here :)")
     if update.invite_link:
-        await bot.revoke_chat_invite_link(update.invite_link)
+        bot.revoke_chat_invite_link(update.invite_link)
 
 
 
-async def new_files(bot: Bot, update:Message):
+def new_files(bot: Bot, update:Message):
     """
     A Funtion To Handle Incoming New Files In A Channel ANd Add Them To Respective Channels..
     """
@@ -317,11 +317,11 @@ async def new_files(bot: Bot, update:Message):
             
     data.append(data_packets)
 
-    await db.add_filters_reverse(data)
+    db.add_filters_reverse(data)
     return
 
 
-async def del_filter(bot:Client, update):
+def del_filter(bot:Client, update):
 
     try:
 
@@ -331,26 +331,26 @@ async def del_filter(bot:Client, update):
             print("No Attrib Link")
             return
 
-        await db.del_filter(link)
+        db.del_filter(link)
         
     except Exception as e:
         print(e)
 
 
-async def del_file(bot:Client, update:Message):
+def del_file(bot:Client, update:Message):
 
     if not update.from_user.id==Translation.OWNER_ID:
         return
     else:
         msg = update.reply_to_message
-        hm = await db.del_file(msg.document.file_id)
+        hm = db.del_file(msg.document.file_id)
         if hm:
-            await msg.delete()
-            await update.delete()
-            await update.reply_text(f"File {msg.document.file_name} was Removed From Database Successfully :)")
+            msg.delete()
+            update.delete()
+            update.reply_text(f"File {msg.document.file_name} was Removed From Database Successfully :)")
 
 
-async def close_trigger(bot:Client, update:Message):
+def close_trigger(bot:Client, update:Message):
 
     cmd, type, chat_id, message_id, text = update.text.split(' ', 4)
 
@@ -360,8 +360,8 @@ async def close_trigger(bot:Client, update:Message):
 
     if type=="photo":
 
-        path = await Helpers.gen_closed_img(text)
-        await bot.edit_message_media(
+        path = Helpers.gen_closed_img(text)
+        bot.edit_message_media(
             chat_id=int(chat_id),
             message_id=int(message_id),
             media=InputMediaPhoto(
@@ -373,7 +373,7 @@ async def close_trigger(bot:Client, update:Message):
         )
     elif type=="text":
 
-        await bot.edit_message_text(
+        bot.edit_message_text(
             chat_id=int(chat_id),
             message_id=int(message_id),
             caption=f"<i>Tʜᴇ Rᴇsᴜʟᴛs Fᴏʀ {text} Wᴀs Cʟᴏsᴇᴅ Aғᴛᴇʀ Tɪᴍᴇᴏᴜᴛ</i>",

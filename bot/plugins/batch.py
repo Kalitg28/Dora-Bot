@@ -7,65 +7,65 @@ from pyrogram.types import Message, InlineKeyboardMarkup
 from pyrogram import Client, filters
 from pyrogram.errors import PeerIdInvalid, MessageIdInvalid
 
-async def batch(bot:Client, update:Message):
+def batch(bot:Client, update:Message):
 
     user_id = update.from_user.id
 
-    post1:Message = await bot.ask(chat_id=update.chat.id, text="Please Forward The First Post From The Channel (Where I Am an admin)", timeout=360)
+    post1:Message = bot.ask(chat_id=update.chat.id, text="Please Forward The First Post From The Channel (Where I Am an admin)", timeout=360)
     if not post1: return
 
     if not post1.forward_from_chat:
 
-        await update.reply_text("Please Forward The Message With Quotes (ie : Forwarded From ...)")
+        update.reply_text("Please Forward The Message With Quotes (ie : Forwarded From ...)")
         return
 
     chat_id1 = post1.forward_from_chat.id
     try :
 
         msg_id1 = post1.forward_from_message_id
-        await bot.get_messages(
+        bot.get_messages(
             chat_id=chat_id1,
             message_ids=msg_id1
         )
     except PeerIdInvalid:
-        return await update.reply_text("Looks like Im Not A Member Of The Chat Where This Message Is Posted")
+        return update.reply_text("Looks like Im Not A Member Of The Chat Where This Message Is Posted")
     except MessageIdInvalid:
-        return await update.reply_text("Looks Like The Message You Forwarded No Longer Exists")
+        return update.reply_text("Looks Like The Message You Forwarded No Longer Exists")
     except Exception as e:
         print(e)
-        return await update.reply_text("Something Went Wrong Please Try Again Later")
+        return update.reply_text("Something Went Wrong Please Try Again Later")
 
-    post2 = await bot.ask(chat_id=update.chat.id, text="Now Forward The Last Message From The Same Channel", timeout=360)
+    post2 = bot.ask(chat_id=update.chat.id, text="Now Forward The Last Message From The Same Channel", timeout=360)
     if not post2 : return
 
     chat_id2 = post2.forward_from_chat.id
     if not chat_id1==chat_id2 :
-        return await update.reply_text("These Two Messages Arent From The Same Chat")
+        return update.reply_text("These Two Messages Arent From The Same Chat")
 
     try :
 
         msg_id2 = post2.forward_from_message_id
-        await bot.get_messages(
+        bot.get_messages(
             chat_id=chat_id2,
             message_ids=msg_id2
         )
     except PeerIdInvalid:
-        return await update.reply_text("Looks like Im Not A Member Of The Chat Where This Message Is Posted")
+        return update.reply_text("Looks like Im Not A Member Of The Chat Where This Message Is Posted")
     except MessageIdInvalid:
-        return await update.reply_text("Looks Like The Message You Forwarded No Longer Exists")
+        return update.reply_text("Looks Like The Message You Forwarded No Longer Exists")
     except Exception as e:
         print(e)
-        return await update.reply_text("Something Went Wrong Please Try Again Later")
+        return update.reply_text("Something Went Wrong Please Try Again Later")
 
     if not msg_id1<=msg_id2:
-        return await update.reply_text("The First Message Has To Be Posted Above The Second In The Channel To Generate A Batch")
+        return update.reply_text("The First Message Has To Be Posted Above The Second In The Channel To Generate A Batch")
 
-    encoded = await encode(f"{str(chat_id1).replace('-100','')} {msg_id1} {msg_id2}")
+    encoded = encode(f"{str(chat_id1).replace('-100','')} {msg_id1} {msg_id2}")
     url = f"https://t.me/DoraFilterBot?start=a{encoded}"
 
-    await update.reply_text(f"Woohoo... I've Successfully Generated A Link For Your Batch\n{url}\nPS:This Link Will Only Work As Long As I AM An Admin In The From Channel")
+    update.reply_text(f"Woohoo... I've Successfully Generated A Link For Your Batch\n{url}\nPS:This Link Will Only Work As Long As I AM An Admin In The From Channel")
 
-async def encode(text:str):
+def encode(text:str):
     string = text
     encoder = {'1': 'B', '2':'Y', '3':'i', '4':'P', '5':'q', '6':'k', '7':'r', '8':'R', '9':'J', '0':'h', ' ':'a'}
 
@@ -95,7 +95,7 @@ class Batch():
     
         return string.strip()
 
-    async def get_batch(batch:str, bot:Client, update:Message):
+    def get_batch(batch:str, bot:Client, update:Message):
 
         user_id = update.chat.id
 
@@ -106,7 +106,7 @@ class Batch():
             count = 0
             for id in range(int(msg1), int(msg2)):
                 try :
-                    message = await bot.get_messages(chat_id=int(channel_id), message_ids=id)
+                    message = bot.get_messages(chat_id=int(channel_id), message_ids=id)
                     file = message.document or\
                   message.video or\
                   message.photo or\
@@ -119,7 +119,7 @@ class Batch():
                             caption = ""
                             if message.caption : 
                                 caption = "" if not message.caption.html else message.caption.html
-                            await bot.copy_message(
+                            bot.copy_message(
                                 chat_id=user_id,
                                 from_chat_id=int(channel_id),
                                 message_id=id,
@@ -128,7 +128,7 @@ class Batch():
                                 caption=caption
                             )
                         else:
-                            await bot.copy_message(
+                            bot.copy_message(
                                 chat_id=user_id,
                                 from_chat_id=int(channel_id),
                                 message_id=id,
@@ -140,7 +140,7 @@ class Batch():
                             caption = ""
                             if message.caption : 
                                 caption = "" if not message.caption.html else message.caption.html
-                            await bot.copy_message(
+                            bot.copy_message(
                                 chat_id=user_id,
                                 from_chat_id=int(channel_id),
                                 message_id=id,
@@ -148,7 +148,7 @@ class Batch():
                                 caption=caption
                             )
                         else:
-                            await bot.copy_message(
+                            bot.copy_message(
                                 chat_id=user_id,
                                 from_chat_id=int(channel_id),
                                 message_id=id,
@@ -159,7 +159,7 @@ class Batch():
                 except MessageIdInvalid:
                     pass
                 except PeerIdInvalid:
-                    await update.reply_text("Failed To Get Messages\nReason : Im not A Member of The Original Channel")
+                    update.reply_text("Failed To Get Messages\nReason : Im not A Member of The Original Channel")
                     return
                 except Exception as e:
                     print(e)

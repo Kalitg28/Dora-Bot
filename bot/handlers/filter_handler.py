@@ -20,13 +20,13 @@ def auto_filter_manager(bot:Client, update:Message):
 @Client.on_message(filters.text & ~filters.channel & ~filters.edited, group=1)
 def manual_filters_manager(bot:Client, update:Message):
 
-    mf = Thread(target=auto_filter, args=(bot, update))
+    mf = Thread(target=mfilter, args=(bot, update))
     mf.start()
 
 @Client.on_message(filters.text & ~filters.channel & ~filters.edited, group=5)
 def global_filters_manager(bot:Client, update:Message):
 
-    gf = Thread(target=auto_filter, args=(bot, update))
+    gf = Thread(target=global_filter, args=(bot, update))
     gf.start()
 
 @Client.on_inline_query(group=0)

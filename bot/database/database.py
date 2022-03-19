@@ -130,12 +130,12 @@ class Database:
         return group_list
 
     # Related TO Finding Channel(s)
-    def find_chat(self, group_id: int):
+    async def find_chat(self, group_id: int):
         """
         A funtion to fetch a group's settings
         """
 
-        connections = self.col.find_one({'_id': group_id})
+        connections = await self.col.find_one({'_id': group_id})
         
         if connections:
 

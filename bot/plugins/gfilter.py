@@ -11,14 +11,14 @@ from bot.translation import Translation
 db = Database()
 
 @Bot.on_message(filters.text & filters.group & ~filters.bot, group=2)
-async def global_filter(bot, update:Message):
+def global_filter(bot, update:Message):
 
-    configs = await db.find_chat(update.chat.id)
+    configs = db.find_chat(update.chat.id)
 
     g_filter = configs.get('global', True)
     if not g_filter: return
 
-    f_result = await db.find_mfilter(group_id=902, query=update.text)
+    f_result = db.find_mfilter(group_id=902, query=update.text)
     if not f_result :
         return
     else:
@@ -31,16 +31,16 @@ async def global_filter(bot, update:Message):
 
     if sticker and file_id:
         if buttons:
-            await update.reply_sticker(
+            update.reply_sticker(
                 sticker=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 quote=True
                 )
         else :
-            await update.reply_sticker(sticker=file_id)
+            update.reply_sticker(sticker=file_id)
     elif file_id:
         if buttons:
-            await update.reply_cached_media(
+            update.reply_cached_media(
                 file_id=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode="html",
@@ -48,7 +48,7 @@ async def global_filter(bot, update:Message):
                 quote=True
             )
         else:
-            await update.reply_cached_media(
+            update.reply_cached_media(
                 file_id=file_id,
                 parse_mode="html",
                 caption=content,
@@ -56,32 +56,32 @@ async def global_filter(bot, update:Message):
             )
     else :
         if buttons:
-            await update.reply_text(
+            update.reply_text(
                 text=content,
                 parse_mode="html",
                 reply_markup=InlineKeyboardMarkup(buttons),
                 quote=True
             )
         else :
-            await update.reply_text(
+            update.reply_text(
                 text=content,
                 parse_mode="html",
                 quote=True
             )
-async def all_gfilter(bot, update: Message):
+def all_gfilter(bot, update: Message):
 
     total_filters = ""
 
-    filters = await db.all_mfilter(902)
+    filters = db.all_mfilter(902)
 
     if not filters :
-        await update.reply_text("Looks Like You Havent Saved Any Filters In Global", quote=True)
+        update.reply_text("Looks Like You Havent Saved Any Filters In Global", quote=True)
         return
     for filter in filters :
         total_filters+=f"\n- <code>{filter}</code>"
 
-    await update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For <b>Global</b> : {total_filters}", parse_mode="html", quote=True)
-async def stopglobal(bot, update: Message):
+    update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For <b>Global</b> : {total_filters}", parse_mode="html", quote=True)
+def stopglobal(bot, update: Message):
 
     chat_type = update.chat.type
     chat_id = update.chat.id
@@ -89,14 +89,14 @@ async def stopglobal(bot, update: Message):
 
     if chat_type=="private":
 
-        chat_id = await db.get_conn(chat_id)
+        chat_id = db.get_conn(chat_id)
 
     if not chat_id:
 
-        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
+        update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
         return
     
-    st = await bot.get_chat_member(chat_id, userid)
+    st = bot.get_chat_member(chat_id, userid)
 
     print("Mark 2")
     if not ((st.status == "administrator") or (st.status == "creator") or (userid in (Translation.OWNER_ID,))):
@@ -104,25 +104,25 @@ async def stopglobal(bot, update: Message):
 
     splitted = update.text.split(None, 1)
     if len(splitted)<2:
-        return await update.reply_text("Gimme A KeyWord Bro...")
+        return update.reply_text("Gimme A KeyWord Bro...")
 
     keyword = splitted[1] 
 
-    globals = await db.all_mfilter(902)
-    settings = await db.find_chat(chat_id)
+    globals = db.all_mfilter(902)
+    settings = db.find_chat(chat_id)
     prev = settings.get('stopped',[])
 
     if keyword in prev:
-        return await update.reply_text("You've Already Stopped This Filter In This Chat...")
+        return update.reply_text("You've Already Stopped This Filter In This Chat...")
     elif not keyword in globals:
-        return await update.reply_text(f"Looks Like There Is No Global Filter For `{keyword}`")
+        return update.reply_text(f"Looks Like There Is No Global Filter For `{keyword}`")
     else :
         new = prev.append(keyword)
     
-    await db.set_main(chat_id, 'stopped', new)
-    await update.reply_text(f"The Global Filter for {keyword} will no longer work in this chat...")
+    db.set_main(chat_id, 'stopped', new)
+    update.reply_text(f"The Global Filter for {keyword} will no longer work in this chat...")
 
-async def startglobal(bot, update: Message):
+def startglobal(bot, update: Message):
 
     chat_type = update.chat.type
     chat_id = update.chat.id
@@ -130,14 +130,14 @@ async def startglobal(bot, update: Message):
 
     if chat_type=="private":
 
-        chat_id = await db.get_conn(chat_id)
+        chat_id = db.get_conn(chat_id)
 
     if not chat_id:
 
-        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
+        update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
         return
     
-    st = await bot.get_chat_member(chat_id, userid)
+    st = bot.get_chat_member(chat_id, userid)
 
     print("Mark 2")
     if not ((st.status == "administrator") or (st.status == "creator") or (userid in (Translation.OWNER_ID,))):
@@ -145,21 +145,21 @@ async def startglobal(bot, update: Message):
 
     splitted = update.text.split(None, 1)
     if len(splitted)<2:
-        return await update.reply_text("Gimme A KeyWord Bro...")
+        return update.reply_text("Gimme A KeyWord Bro...")
 
     keyword = splitted[1] 
 
-    globals = await db.all_mfilter(902)
-    settings = await db.find_chat(chat_id)
+    globals = db.all_mfilter(902)
+    settings = db.find_chat(chat_id)
     prev = settings.get('stopped',[])
 
     if not keyword in prev:
-        return await update.reply_text("You've Already Started This Filter In This Chat...")
+        return update.reply_text("You've Already Started This Filter In This Chat...")
     elif not keyword in globals:
-        return await update.reply_text(f"Looks Like There Is No Global Filter For `{keyword}`")
+        return update.reply_text(f"Looks Like There Is No Global Filter For `{keyword}`")
     else :
         index = prev.index(keyword)
         new = prev.pop(index)
     
-    await db.set_main(chat_id, 'stopped', new)
-    await update.reply_text(f"The Global Filter for {keyword}  Will Work in this chat...")
+    db.set_main(chat_id, 'stopped', new)
+    update.reply_text(f"The Global Filter for {keyword}  Will Work in this chat...")

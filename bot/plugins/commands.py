@@ -59,7 +59,7 @@ async def start(bot:Client , update:Message):
     add = threading.Thread(target=asyncio.run, args=(db.add_user(update.from_user.id),))
     add.start()
     try:
-        file_uid:str = update.command[1]
+        file_uid:str = update.text.split(None, 1)[1]
     except IndexError:
         file_uid = False
 

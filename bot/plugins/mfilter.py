@@ -21,7 +21,7 @@ db = Database()
 
 
 
-async def new_filter(bot, update: Message):
+def new_filter(bot, update: Message):
 
     chat_id = update.chat.id
     chat_type = update.chat.type
@@ -32,15 +32,15 @@ async def new_filter(bot, update: Message):
 
     if chat_type=="private" :
 
-        chat_id = await db.get_conn(userid)
+        chat_id = db.get_conn(userid)
         print("Mark 1")
 
         if not chat_id :
 
-            await update.reply_text("Please Connect To A Chat First To Use This Command In PM", quote=True)
+            update.reply_text("Please Connect To A Chat First To Use This Command In PM", quote=True)
             return
     if not chat_id==902:
-        st = await bot.get_chat_member(chat_id, userid)
+        st = bot.get_chat_member(chat_id, userid)
 
         print("Mark 2")
         if not ((st.status == "administrator") or (st.status == "creator") or (userid in (Translation.OWNER_ID,))):
@@ -48,7 +48,7 @@ async def new_filter(bot, update: Message):
         
 
     if len(args) < 2:
-        await update.reply_text("Command Incomplete :(", quote=True)
+        update.reply_text("Command Incomplete :(", quote=True)
         return
     
     extracted = split_quotes(args[1])
@@ -57,16 +57,16 @@ async def new_filter(bot, update: Message):
     print("Mark 3")
    
     if not update.reply_to_message and len(extracted) < 2:
-        await update.reply_text("Add some content to save your filter!", quote=True)
+        update.reply_text("Add some content to save your filter!", quote=True)
         return
 
     try:
-                chat = await bot.get_chat(chat_id)
+                chat = bot.get_chat(chat_id)
                 title = chat.title
     except :
                 if not chat_id==902:
                     title = 'Global'
-                    await update.reply_text("Make sure I'm present in your group!!", quote=True)
+                    update.reply_text("Make sure I'm present in your group!!", quote=True)
                     return
                 title = 'Global'
 
@@ -82,7 +82,7 @@ async def new_filter(bot, update: Message):
         reply_text, btn, alert, edits = parser(unique_id, "", extracted[1])
         fileid = None
         if not reply_text:
-            await update.reply_text("You cannot have buttons alone, give some text to go with it!", quote=True)
+            update.reply_text("You cannot have buttons alone, give some text to go with it!", quote=True)
             return
         
     
@@ -179,38 +179,38 @@ async def new_filter(bot, update: Message):
     else:
         return
     
-    await db.add_mfilter(unique_id, chat_id, text, reply_text.replace('"',''), fileid, str(btn), alert, sticker, edits)
+    db.add_mfilter(unique_id, chat_id, text, reply_text.replace('"',''), fileid, str(btn), alert, sticker, edits)
 
-    await update.reply_text(
+    update.reply_text(
         f"Successfully Saved A Manual Filter For `{text}` in **{title}**",
         quote=True,
         parse_mode="md"
     )
 
-async def stop_filter(bot, update: Message):
+def stop_filter(bot, update: Message):
 
     chat_type = update.chat.type
     chat_id = update.chat.id
 
     if chat_type=="private":
 
-        chat_id = await db.get_conn(chat_id)
+        chat_id = db.get_conn(chat_id)
 
     if not chat_id:
 
-        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
+        update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
         return
 
     filter = update.text.split(" ", 1)[1]
 
-    success = await db.del_mfilter(chat_id, filter)
+    success = db.del_mfilter(chat_id, filter)
 
     if success :
-        await update.reply_text(f"Successfully Deleted The Filter For {filter}", quote=True)
+        update.reply_text(f"Successfully Deleted The Filter For {filter}", quote=True)
     else :
-        await update.reply_text(f'Couldnt Delete Any Filter For {filter}', quote=True)
+        update.reply_text(f'Couldnt Delete Any Filter For {filter}', quote=True)
 
-async def n_filter(bot, update: Message):
+def n_filter(bot, update: Message):
 
     chat_type = update.chat.type
     chat_id = update.chat.id
@@ -218,29 +218,29 @@ async def n_filter(bot, update: Message):
 
     if chat_type=="private":
 
-        chat_id = await db.get_conn(chat_id)
+        chat_id = db.get_conn(chat_id)
 
     if not chat_id:
 
-        await update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
+        update.reply_text("Please Connect To A Chat First To Use This Bot In PM", quote=True)
         return
 
-    filters = await db.all_mfilter(chat_id)
+    filters = db.all_mfilter(chat_id)
     try:
-        chat = await bot.get_chat(chat_id)
+        chat = bot.get_chat(chat_id)
         title = chat.title
     except Exception:
         title = 'Global'
     total_filters = ""
     if not filters :
-        await update.reply_text("Looks Like You Havent Saved Any Filters In This Chat", quote=True)
+        update.reply_text("Looks Like You Havent Saved Any Filters In This Chat", quote=True)
         return
     for filter in filters :
         total_filters+=f"\n- <code>{filter}</code>"
 
-    await update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For {title} : {total_filters}", parse_mode="html", quote=True)
+    update.reply_text(f"Total Of {len(filters)} Manual Filters Have Been Saved For {title} : {total_filters}", parse_mode="html", quote=True)
 
-async def mfilter(bot:Client, update:Message):
+def mfilter(bot:Client, update:Message):
     '''A Function To Filter All Messages For Manual Filter Matches'''
 
     chat_type = update.chat.type
@@ -248,13 +248,13 @@ async def mfilter(bot:Client, update:Message):
     buttons = False
 
     if chat_type=="private":
-        chat_id = await db.get_conn(update.from_user.id)
+        chat_id = db.get_conn(update.from_user.id)
         if not chat_id:
             return
 
 
     query = update.text
-    result = await db.find_mfilter(group_id=chat_id, query=query)
+    result = db.find_mfilter(group_id=chat_id, query=query)
     if not result :
         return
     else:
@@ -267,16 +267,16 @@ async def mfilter(bot:Client, update:Message):
 
     if sticker and file_id:
         if buttons:
-            await update.reply_sticker(
+            update.reply_sticker(
                 sticker=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 quote=True
                 )
         else :
-            await update.reply_sticker(sticker=file_id)
+            update.reply_sticker(sticker=file_id)
     elif file_id:
         if buttons:
-            await update.reply_cached_media(
+            update.reply_cached_media(
                 file_id=file_id,
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode="html",
@@ -284,7 +284,7 @@ async def mfilter(bot:Client, update:Message):
                 quote=True
             )
         else:
-            await update.reply_cached_media(
+            update.reply_cached_media(
                 file_id=file_id,
                 parse_mode="html",
                 caption=content,
@@ -292,14 +292,14 @@ async def mfilter(bot:Client, update:Message):
             )
     else :
         if buttons:
-            await update.reply_text(
+            update.reply_text(
                 text=content,
                 parse_mode="html",
                 reply_markup=InlineKeyboardMarkup(buttons),
                 quote=True
             )
         else :
-            await update.reply_text(
+            update.reply_text(
                 text=content,
                 parse_mode="html",
                 quote=True

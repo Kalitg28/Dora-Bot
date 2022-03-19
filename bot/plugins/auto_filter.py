@@ -20,14 +20,14 @@ INVITE_LINK = {}
 ACTIVE_CHATS = {}
 db = Database()
 
-async def auto_filter(bot:Bot, update:Message):
+def auto_filter(bot:Bot, update:Message):
     """
     A Funtion To Handle Incoming Text And Reply With Appropriate Results
     """
     chat_id = update.chat.id
 
     if chat_id in (-1001547869793,):
-        return await update.delete()
+        return update.delete()
 
     if re.findall(r"((^\/|^,|^\.|^[\U0001F600-\U000E007F]).*)", update.text):
         return
@@ -52,13 +52,13 @@ async def auto_filter(bot:Bot, update:Message):
     global FIND
     
     configs = db.find_chat(chat_id)
-    achats = ACTIVE_CHATS["902"] if ACTIVE_CHATS.get("902") else await db.find_active(902)
+    achats = ACTIVE_CHATS["902"] if ACTIVE_CHATS.get("902") else db.find_active(902)
     ACTIVE_CHATS[str(chat_id)] = achats
     
     if not configs:
         return
-    movie = await Helpers.cleanse(update.text)
-    movie_info = await Helpers.get_movie(movie)
+    movie = Helpers.cleanse(update.text)
+    movie_info = Helpers.get_movie(movie)
     
     max_pages = configs["configs"]["max_pages"] # maximum page result of a query
     max_results = configs["configs"]["max_results"] # maximum total result of a query
@@ -68,14 +68,14 @@ async def auto_filter(bot:Bot, update:Message):
     if not auto_filter:
         return
     
-    filters = await db.search_media(query, max_results+5)
+    filters = db.search_media(query, max_results+5)
 
     if not filters and movie_info:
         
-        filters = await db.search_media(movie_info["title"], max_results+5)
+        filters = db.search_media(movie_info["title"], max_results+5)
 
         if not filters:
-            filters = await db.search_media(movie_info["localized title"], max_results+5)
+            filters = db.search_media(movie_info["localized title"], max_results+5)
     
     if filters:
         all_files = []
@@ -102,11 +102,11 @@ async def auto_filter(bot:Bot, update:Message):
             unique_id = filter.get("unique_id")
             if not FIND.get("bot_details"):
                 try:
-                    bot_= await bot.get_me()
+                    bot_= bot.get_me()
                     FIND["bot_details"] = bot_
                 except FloodWait as e:
                     asyncio.sleep(e.x)
-                    bot_= await bot.get_me()
+                    bot_= bot.get_me()
                     FIND["bot_details"] = bot_
             
             bot_ = FIND.get("bot_details")
@@ -159,7 +159,7 @@ async def auto_filter(bot:Bot, update:Message):
             query=update.text
             )
 
-        await update.reply_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📄 Instructions 📄", callback_data="instruct"), InlineKeyboardButton("🔍 Search 🔎", url=f"https://google.com/search?q={update.text.replace(' ','+')}")]]), parse_mode='html')
+        update.reply_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📄 Instructions 📄", callback_data="instruct"), InlineKeyboardButton("🔍 Search 🔎", url=f"https://google.com/search?q={update.text.replace(' ','+')}")]]), parse_mode='html')
 
         
 
@@ -203,7 +203,7 @@ async def auto_filter(bot:Bot, update:Message):
 
         if not movie_info :
 
-            msg = await update.reply_text(
+            msg = update.reply_text(
                 text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
@@ -213,18 +213,18 @@ async def auto_filter(bot:Bot, update:Message):
 
             text = f"""
 ⍞ ᴛɪᴛʟᴇ : <a href='{movie_info['link']}'>{movie_info['title']}</a>
-⌗ ɢᴇɴʀᴇ : <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
+⌗ ɢᴇɴʀᴇ : <code>{Helpers.list_to_str(movie_info["genres"])}</code>
 ★ ʀᴀᴛɪɴɢ : <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
 ⎚ ᴠᴏᴛᴇs : <code>{movie_info["votes"]} </code>
 ⌥ ʀᴜɴᴛɪᴍᴇ : <code>{movie_info["runtimes"]}</code>
-⌬ ʟᴀɴɢᴜᴀɢᴇs : <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
+⌬ ʟᴀɴɢᴜᴀɢᴇs : <code>{Helpers.list_to_str(movie_info['languages'])}</code>
 〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
 ⎙ ʀᴇsᴜʟᴛs : <code>{len_results}</code>
 
 <i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
         """
 
-            msg = await bot.send_message(
+            msg = bot.send_message(
                 chat_id = update.chat.id,
                 text=text,
                 reply_markup=reply_markup,
@@ -233,14 +233,14 @@ async def auto_filter(bot:Bot, update:Message):
             )
 
         elif movie_info["full-size cover url"]=="Unknown":
-            msg = await update.reply_text(
+            msg = update.reply_text(
                 text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
       
         if msg and autodel:
-            await bot.USER.send_message(
+            bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del text {msg.chat.id} {msg.message_id} {query}",
                 schedule_date=msg.date+autodel
@@ -249,11 +249,11 @@ async def auto_filter(bot:Bot, update:Message):
 
         text = f"""
 ⍞ ᴛɪᴛʟᴇ : <a href='{movie_info['link']}'>{movie_info['title']}</a>
-⌗ ɢᴇɴʀᴇ : <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
+⌗ ɢᴇɴʀᴇ : <code>{Helpers.list_to_str(movie_info["genres"])}</code>
 ★ ʀᴀᴛɪɴɢ : <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
 ⎚ ᴠᴏᴛᴇs : <code>{movie_info["votes"]} </code>
 ⌥ ʀᴜɴᴛɪᴍᴇ : <code>{movie_info["runtimes"]}</code>
-⌬ ʟᴀɴɢᴜᴀɢᴇs : <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
+⌬ ʟᴀɴɢᴜᴀɢᴇs : <code>{Helpers.list_to_str(movie_info['languages'])}</code>
 〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
 ⎙ ʀᴇsᴜʟᴛs : <code>{len_results}</code>
 
@@ -261,7 +261,7 @@ async def auto_filter(bot:Bot, update:Message):
         """
 
         try:
-            msg = await bot.send_photo(
+            msg = bot.send_photo(
                 photo=movie_info["full-size cover url"],
                 chat_id = update.chat.id,
                 caption=text,
@@ -271,7 +271,7 @@ async def auto_filter(bot:Bot, update:Message):
             )
 
             if autodel:
-                await bot.USER.send_message(
+                bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del photo {msg.chat.id} {msg.message_id} {query}",
                 schedule_date=msg.date+autodel
@@ -280,14 +280,14 @@ async def auto_filter(bot:Bot, update:Message):
         except MediaEmpty:
 
             text+=f"<a href='{movie_info['link']}'> </a>"
-            msg = await update.reply_text(
+            msg = update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
 
             if autodel:
-                await bot.USER.send_message(
+                bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del text {msg.chat.id} {msg.message_id} {query}",
                 schedule_date=msg.date+autodel
@@ -295,14 +295,14 @@ async def auto_filter(bot:Bot, update:Message):
         except WebpageMediaEmpty:
 
             text+=f"<a href='{movie_info['link']}'> </a>"
-            msg = await update.reply_text(
+            msg = update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
 
             if autodel:
-                await bot.USER.send_message(
+                bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del text {msg.chat.id} {msg.message_id} {query}",
                 schedule_date=msg.date+autodel
@@ -310,14 +310,14 @@ async def auto_filter(bot:Bot, update:Message):
 
         except ChatSendMediaForbidden:
             text+=f"<a href='{movie_info['link']}'> </a>"
-            msg = await update.reply_text(
+            msg = update.reply_text(
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode="html"
             )
 
             if autodel:
-                await bot.USER.send_message(
+                bot.USER.send_message(
                 chat_id=Translation.LOG_CHANNEL,
                 text=f".del text {msg.chat.id} {msg.message_id} {query}",
                 schedule_date=msg.date+autodel
@@ -332,7 +332,7 @@ async def auto_filter(bot:Bot, update:Message):
         print(update.chat.title)
 
 
-async def recacher(group_id, ReCacheInvite=True, ReCacheActive=False, bot=Bot, update=Message):
+def recacher(group_id, ReCacheInvite=True, ReCacheActive=False, bot=Bot, update=Message):
     """
     A Funtion To rechase invite links and active chats of a specific chat
     """
@@ -343,7 +343,7 @@ async def recacher(group_id, ReCacheInvite=True, ReCacheActive=False, bot=Bot, u
             INVITE_LINK.pop(str(group_id))
         
         Links = []
-        chats = await db.find_chat(group_id)
+        chats = db.find_chat(group_id)
         chats = chats["chat_ids"]
         
         if chats:
@@ -355,7 +355,7 @@ async def recacher(group_id, ReCacheInvite=True, ReCacheActive=False, bot=Bot, u
                 
                 chat_id = int(chat_id)
                 
-                Link = await bot.export_chat_invite_link(chat_id)
+                Link = bot.export_chat_invite_link(chat_id)
                 Links.append({"chat_id": chat_id, "chat_name": Name, "invite_link": Link})
 
             INVITE_LINK[str(group_id)] = Links
@@ -365,7 +365,7 @@ async def recacher(group_id, ReCacheInvite=True, ReCacheActive=False, bot=Bot, u
         if ACTIVE_CHATS.get(str(group_id)):
             ACTIVE_CHATS.pop(str(group_id))
         
-        achats = await db.find_active(group_id)
+        achats = db.find_active(group_id)
         achatId = []
         if achats:
             for x in achats["chats"]:
@@ -374,7 +374,7 @@ async def recacher(group_id, ReCacheInvite=True, ReCacheActive=False, bot=Bot, u
             ACTIVE_CHATS[str(group_id)] = achatId
     return 
 
-async def cleanse(query):
+def cleanse(query):
 
     keywords = ["movie", "malayalam", "tamil", "kannada", "hd", "subtitle", "subtitles"]
     query = query.lower()

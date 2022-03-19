@@ -19,7 +19,7 @@ searcher = imdb.IMDb()
 class Helpers() :
 
  
- async def get_movie(my_movie):
+ def get_movie(my_movie):
 
     info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "languages", "full-size cover url", "kind", "localized title"]
     movies = searcher.search_movie(my_movie, results=1)
@@ -78,7 +78,7 @@ class Helpers() :
 
     return movie_info
 
- async def cleanse(query:str):
+ def cleanse(query:str):
 
     keywords = ["movie", "malayalam", "tamil", "kannada", "hd", "subtitle", "subtitles"]
     query = query.lower()
@@ -90,7 +90,7 @@ class Helpers() :
 
     return query
 
- async def all_imdb(query):
+ def all_imdb(query):
 
      print(query)
      post = False
@@ -165,7 +165,7 @@ class Helpers() :
      except Exception as e:
          print(e)
 
- async def list_to_str(l):
+ def list_to_str(l):
 
      if type(l)=="str":
          return l
@@ -173,7 +173,7 @@ class Helpers() :
      return res
 
  
- async def gen_closed_img(text):
+ def gen_closed_img(text):
 
     # Open an Image
     W, H = (640, 640)

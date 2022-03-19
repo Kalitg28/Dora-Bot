@@ -19,11 +19,11 @@ class User(Client):
         )
         self.LOGGER = LOGGER
 
-    async def start(self):
-        await super().start()
-        usr_bot_me = await self.get_me()
+    def start(self):
+        super().start()
+        usr_bot_me = self.get_me()
         return (self, usr_bot_me.id)
 
-    async def stop(self, *args):
-        await super().stop()
+    def stop(self, *args):
+        super().stop()
         self.LOGGER(__name__).info("Bot stopped. Bye.")

@@ -1,9 +1,9 @@
-# (c) @MrPurple902
+
+import pyrogram
 
 from pyrogram import Client, filters
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
-from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from pyrogram.errors import ButtonDataInvalid, FloodWait
+from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.database import Database # pylint: disable=import-error
 from bot.bot import Bot # pylint: disable=import-error
@@ -11,26 +11,19 @@ from bot.translation import Translation
 
 db = Database()
 
-@Client.on_message(filters.text & (filters.private | filters.group) & ~filters.bot & ~filters.edited, group=1)
-async def mfilter(bot:Client, update:Message):
-    '''A Function To Get Manual Filters Of A Chat'''
+@Client.on_message(filters.text & filters.group & ~filters.bot, group=2)
+async def global_filter(bot, update:Message):
 
-    chat_type = update.chat.type
-    chat_id = update.chat.id
-    buttons = False
+    configs = await db.find_chat(update.chat.id)
 
-    if chat_type=="private":
-        chat_id = await db.get_conn(update.from_user.id)
-        if not chat_id:
-            return
+    g_filter = configs.get('global', True)
+    if not g_filter: return
 
-
-    query = update.text
-    result = await db.find_mfilter(group_id=chat_id, query=query)
-    if not result :
+    f_result = await db.find_mfilter(group_id=902, query=update.text)
+    if not f_result :
         return
     else:
-        content, file_id, btn, sticker = (result["content"], result["file_id"], result["buttons"], result["sticker"])
+        content, file_id, btn, sticker = (f_result["content"], f_result["file_id"], f_result["buttons"], f_result["sticker"])
     if btn:
         print(btn)
         buttons = eval(btn)
@@ -76,4 +69,3 @@ async def mfilter(bot:Client, update:Message):
                 parse_mode="html",
                 quote=True
             )
-

@@ -14,7 +14,7 @@ from bot.translation import Translation
 @Client.on_message(filters.regex(r"^\/") & filters.chat(Translation.OWNER_ID), group=4)
 async def sudo_handler(bot:Client, update:Message):
 
-    cmd = update.text.split(None, 1)[0][1:]
+    cmd = update.text.split(None, 1)[0][1:].replace('@DoraFilterBot','').strip()
     print(cmd)
 
     if cmd=='broadcast':
@@ -33,7 +33,7 @@ async def sudo_handler(bot:Client, update:Message):
 @Client.on_message(filters.regex(r"^\/") & ~filters.channel, group=3)
 async def pvt_handler(bot:Client, update:Message):
 
-    cmd = update.text.split(None, 1)[0][1:]
+    cmd = update.text.split(None, 1)[0][1:].replace('@DoraFilterBot','').strip()
     print(cmd)
     #type = update.chat.type
     

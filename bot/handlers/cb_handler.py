@@ -11,9 +11,9 @@ from bot.plugins.inline import inline_imdb
 
 
 @Client.on_inline_query(group=0)
-def inline_search_handler(bot:Client, update:InlineQuery):
+async def inline_search_handler(bot:Client, update:InlineQuery):
 
-    inline_imdb(bot, update)
+    await inline_imdb(bot, update)
 
 @Client.on_callback_query(group=0)
 async def all_callbacks_manager(bot:Client, update:CallbackQuery):

@@ -1,12 +1,11 @@
 import re
-import urllib
 
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid, UserIsBlocked
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
 from bot import Translation, Buttons, VERIFY # pylint: disable=import-error
-from bot.plugins.auto_filter import ( # pylint: disable=import-error
+from bot.handlers.auto_filter import ( # pylint: disable=import-error
     FIND, 
     INVITE_LINK, 
     ACTIVE_CHATS

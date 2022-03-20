@@ -206,17 +206,19 @@ async def help(bot, update):
      
 
 
-async def about(bot, update):
+async def about(bot, update:Message):
 
     await bot.send_chat_action(update.chat.id, "typing")
     
     buttons = Buttons.EN["ABOUT"]
     reply_markup = InlineKeyboardMarkup(buttons)
     
-    await bot.send_photo(
+    await update.reply_photo(
         photo=random.choice(Translation.START_PHOTOS),
+    )
+    await update.reply_text(
         chat_id=update.chat.id,
-        caption=Translation.ABOUT_TEXT,
+        text=Translation["ABOUT"],
         reply_markup=reply_markup,
         parse_mode="html",
         reply_to_message_id=update.message_id

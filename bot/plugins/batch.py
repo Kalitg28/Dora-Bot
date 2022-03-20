@@ -104,7 +104,7 @@ class Batch():
             channel_id, msg1, msg2 = re.findall(r"^a(.+)a(.+)a(.+)", batch)[0]
             channel_id, msg1, msg2 = (int("-100"+Batch.decode(channel_id)), Batch.decode(msg1), Batch.decode(msg2))
             count = 0
-            for id in range(int(msg1), int(msg2)):
+            for id in range(int(msg1), int(msg2)+1):
                 try :
                     message = await bot.get_messages(chat_id=int(channel_id), message_ids=id)
                     file = message.document or\

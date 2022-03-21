@@ -849,6 +849,21 @@ class Database:
 
         return fcol.delete_one({'file_id': file_id})
 
+    async def clear_duplicate(self, stats):
+        deleted = 0
+        done = 0
+        for file in fcol.find():
+            try:
+                count = fcol.find({'file_name': file['file_name']}).count()
+                if count>1:
+                    fcol.delete_one({'_id': file['_id']})
+                    deleted += 1
+                
+                done +=1
+                await stats.edit_text(f"Cleared : {deleted}\nScanned : {done}")
+            except Exception as e:
+                print(e)
+
 
 def getLen(e):
 

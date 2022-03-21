@@ -415,7 +415,7 @@ class Database:
         try:
             for pack in data:
                 try:
-                    if fcol.find_one({'file_name':pack['file_name']}):
+                    if fcol.find_one({'file_id': pack['file_id']}):
                         print('duplicate')
                         continue
                     res =  await fcol.insert_one(pack)

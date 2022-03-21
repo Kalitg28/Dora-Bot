@@ -285,6 +285,7 @@ async def new_files(bot: Bot, update:Message):
                 pass
     except Exception as e:
         print(e)
+        print(f"WTF : {e}")
         return
         
     
@@ -315,6 +316,7 @@ async def new_files(bot: Bot, update:Message):
     data.append(data_packets)
 
     await db.add_filters_reverse(data)
+    print('added')
     return
 
 async def del_filter(bot:Client, update):

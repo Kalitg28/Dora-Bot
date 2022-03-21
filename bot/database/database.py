@@ -416,8 +416,10 @@ class Database:
             for pack in data:
                 try:
                     if self.fcol.find_one({'file_name':pack['file_name']}):
+                        print('duplicate')
                         continue
-                    await self.fcol.insert_one(pack)
+                    res =  await self.fcol.insert_one(pack)
+                    print(f"Inserted {res}")
                 except Exception as e:
                     print(e)
                     await self.fcol.insert_one(pack)

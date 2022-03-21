@@ -13,7 +13,6 @@ searcher = imdb.IMDb()
 async def inline_imdb(bot:Client, update:InlineQuery):
 
     text = update.query
-    print(update)
 
     results = await all_imdb(text)
 

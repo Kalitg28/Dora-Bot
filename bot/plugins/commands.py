@@ -279,3 +279,8 @@ async def clearpredvd(bot, update):
     msg = await update.reply_text("Trying To Clear Predvd Files...")
     res = await db.clear_predvd()
     await msg.edit_text(f"Successfully Cleared {res} Predvd Files :)")
+
+async def clearduplicate(bot, update):
+
+    stats = await update.reply_text("Starting clearing Duplicate files...")
+    await db.clear_duplicate(stats)

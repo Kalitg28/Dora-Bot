@@ -5,7 +5,7 @@ from bot.plugins.channel import new_files, new_in_channel
 
 
 
-@Client.on_message(filters.chat([-1001774321778, -1001547869793, -1001647894448]) & (filters.video | filters.document) & ~filters.edited, group=1)
+@Client.on_message(filters.chat([-1001774321778, -1001547869793, -1001647894448]) & (filters.video | filters.document) & ~filters.edited, group=5)
 async def new_files_manager(bot, update):
 
     await new_files(bot, update)

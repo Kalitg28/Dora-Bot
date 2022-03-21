@@ -29,6 +29,8 @@ async def sudo_handler(bot:Client, update:Message):
         await delall(bot, update)
     elif cmd=='cleardvd':
         await clearpredvd(bot, update)
+    elif cmd=='clearduplicate':
+        await clearduplicate(bot, update)
 
 @Client.on_message(filters.regex(r"^\/") & ~filters.channel, group=3)
 async def pvt_handler(bot:Client, update:Message):

@@ -418,11 +418,11 @@ class Database:
                     if fcol.find_one({'file_id': pack['file_id']}):
                         print('duplicate')
                         continue
-                    res =  await fcol.insert_one(pack)
+                    res = fcol.insert_one(pack)
                     print(f"Inserted {res}")
                 except Exception as e:
                     print(e)
-                    await fcol.insert_one(pack)
+                    fcol.insert_one(pack)
         except Exception as f:
             print(f)
         return True

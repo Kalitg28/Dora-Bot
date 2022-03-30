@@ -310,20 +310,16 @@ async def auto_filter(bot:Bot, update:Message):
             )
 
         except ChatSendMediaForbidden:
-            text+=f"<a href='{movie_info['link']}'> </a>"
-            msg = await update.reply_text(
-                text=text,
-                reply_markup=reply_markup,
-                parse_mode="html"
+            await bot.send_message(
+                chat_id=update.chat.id,
+                text="<b>Admin tharathe Pinne enthina enne ivide pidichu kettiye bie :( ...</b>",
+                parse_mode='html'
             )
+            await update.chat.leave()
 
-            if autodel:
-                await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+autodel
-            )
-
+        except FloodWait:
+            await update.chat.leave()
+            
         except ButtonDataInvalid:
             print(result[0])
         

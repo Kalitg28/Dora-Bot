@@ -26,7 +26,7 @@ USER_SESSION = os.environ.get("USER_SESSION")
 VERIFY = {}
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.WARNING,
     format="[%(asctime)s - %(levelname)s] - %(name)s - %(message)s",
     datefmt='%d-%b-%y %H:%M:%S',
     handlers=[

@@ -206,10 +206,10 @@ class Helpers() :
 async def write_results_to_file(chat_id, name:str, data):
 
     try:
-        if not os.path.exists(f'./data/{chat_id}'):
-            os.mkdir(f'./data/{chat_id}')
+        if not os.path.exists(f'/app/bot/data/{chat_id}'):
+            os.mkdir(f'/app/bot/data/{chat_id}')
 
-        with open(f'./data/{chat_id}/{name}.json','w') as file:
+        with open(f'/app/bot/data/{chat_id}/{name}.json','w') as file:
             json.dump(data, file)
         
         return True
@@ -224,10 +224,10 @@ async def write_results_to_file(chat_id, name:str, data):
 async def read_results_from_file(chat_id, name):
 
     try:
-        if not os.path.exists(f'./data/{chat_id}/{name}.json'):
+        if not os.path.exists(f'/app/bot/data/{chat_id}/{name}.json'):
             return False
 
-        with open(f'./data/{chat_id}/{name}.json', 'r') as file:
+        with open(f'/app/bot/data/{chat_id}/{name}.json', 'r') as file:
             data = json.load(file)
 
         data['results'] = eval(data['results'])

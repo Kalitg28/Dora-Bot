@@ -10,7 +10,9 @@ from bot.database import Database # pylint: disable=import-error
 from bot.bot import Bot
 from bot.translation import Translation # pylint: disable=import-error
 from bot.helpers import(# pylint: disable=import-error 
-Helpers
+Helpers,
+write_results_to_file,
+read_results_from_file
 )
 
 from bot.plugins.batch import Batch
@@ -181,8 +183,10 @@ async def auto_filter(bot:Bot, update:Message):
         len_results = len(results)
         results = None # Free Up Memory
         
-        FIND[query] = {"results": result, "total_len": len_results, "max_pages": max_pages, "all_files": all_files, "per_page": max_per_page} # TrojanzHex's Idea Of Dicts😅
-
+        data = {"results": str(result), "total_len": len_results, "max_pages": max_pages, "all_files": str(all_files), "per_page": max_per_page} # TrojanzHex's Idea Of Dicts😅
+        sucess = await write_results_to_file(chat_id, query, data)
+        if not sucess:
+            print(f"Faled To Write Data Of Query {query} To FIle...")
             
         reply_markup = [[
             InlineKeyboardButton("ɪɴғᴏ", callback_data="answer(INFO)"),

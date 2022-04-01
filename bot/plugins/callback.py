@@ -54,8 +54,7 @@ async def cb_navg(bot, update: CallbackQuery):
         index_val = int(index_val) + 1
     elif btn == "back":
         index_val = int(index_val) - 1
-    
-    achats = ACTIVE_CHATS[str(chat_id)]
+        
     configs = await db.find_chat(chat_id)
     pm_file_chat = configs["configs"]["pm_fchat"]
     show_invite = configs["configs"]["show_invite_link"]

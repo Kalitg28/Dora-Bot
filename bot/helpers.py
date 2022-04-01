@@ -224,10 +224,10 @@ async def write_results_to_file(chat_id:str, name:str, data):
 async def read_results_from_file(chat_id, name):
 
     try:
-        if not os.path.exists(f'/app/bot/data/{chat_id}/{name}'):
+        if not os.path.exists(f'/app/bot/data/{chat_id}/{name}.json'):
             return False
 
-        with open(f'/app/bot/data/{chat_id}/{name}', 'r') as file:
+        with open(f'/app/bot/data/{chat_id}/{name}.json', 'r') as file:
             data = json.load(file)
 
         data['results'] = eval(data['results'])

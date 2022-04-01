@@ -7,12 +7,12 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQ
 
 from bot import start_uptime, Translation, Buttons, VERIFY # pylint: disable=import-error
 from bot.handlers.auto_filter import ( # pylint: disable=import-error
-    FIND, 
     INVITE_LINK, 
     ACTIVE_CHATS
     )
 
-from bot.database import Database # pylint: disable=import-error
+from bot.database import Database
+from bot.helpers import read_results_from_file # pylint: disable=import-error
 
 db = Database()
 
@@ -60,9 +60,13 @@ async def cb_navg(bot, update: CallbackQuery):
     pm_file_chat = configs["configs"]["pm_fchat"]
     show_invite = configs["configs"]["show_invite_link"]
     show_invite = (False if pm_file_chat == True else show_invite)
-    
+
+    FIND = await read_results_from_file(chat_id, query)
+    if not FIND:
+        return await update.answer("Looks Like This Request No LOnger Exists :(")
     results = FIND.get(query).get("results")
     max_pages = FIND.get(query).get("max_pages")
+    FIND = {}
     
     try:
         temp_results = results[index_val].copy()

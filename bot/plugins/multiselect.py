@@ -6,11 +6,11 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQ
 
 from bot import Translation, Buttons, VERIFY # pylint: disable=import-error
 from bot.handlers.auto_filter import ( # pylint: disable=import-error
-    FIND, 
     INVITE_LINK, 
     ACTIVE_CHATS
     )
-from bot.database import Database # pylint: disable=import-error
+from bot.database import Database
+from bot.helpers import read_results_from_file # pylint: disable=import-error
 
 SELECTED = {}
 db = Database()
@@ -46,7 +46,11 @@ async def multiselect(bot:Client, update:CallbackQuery):
         await update.answer("Nice Try :)",show_alert=True)
         return
 
-    res = FIND.get(query).get('results')
+    res = await read_results_from_file(chat_id, query)
+    if not res:
+        return await update.answer("Looks Like This Request No LOnger Exists :(")
+    res = res['results']
+
     try:
         page = res[int(index_val)].copy()
     except Exception as e:
@@ -67,6 +71,7 @@ async def multiselect(bot:Client, update:CallbackQuery):
 
     await update.message.edit_reply_markup(InlineKeyboardMarkup(total_btn))
     await update.answer()
+    res = []
 
 async def select(bot:Client, update:CallbackQuery):
 
@@ -106,6 +111,10 @@ async def select(bot:Client, update:CallbackQuery):
     if not prev:
         SELECTED[str(update.from_user.id)] = {}
         prev = {}
+    FIND = await read_results_from_file(chat_id, query)
+    if not FIND:
+        return await update.answer("Looks Like This Request No LOnger Exists :(")
+
     per_page = FIND.get(query).get('per_page')
     all_files = FIND.get(query).get('all_files')
     file_index = per_page * int(page) + int(index)
@@ -120,6 +129,7 @@ async def select(bot:Client, update:CallbackQuery):
 
     await update.message.edit_reply_markup(InlineKeyboardMarkup(page_btn))
     await update.answer()
+    FIND = {}
 
 
 async def sensel(bot:Client, update:CallbackQuery):
@@ -188,6 +198,10 @@ async def cb_all(bot:Client, update:CallbackQuery):
     chat_id = update.message.chat.id
     try:
         query = re.findall(r"all\((.+)\)", update.data)[0]
+        FIND = await read_results_from_file(chat_id, query)
+        if not FIND:
+            return await update.answer("Looks Like This Request No LOnger Exists :(")
+
         all_files = FIND.get(query).get("all_files")
         settings = await db.find_chat(chat_id)
         fsub = settings.get("fsub", None)
@@ -231,6 +245,8 @@ async def cb_all(bot:Client, update:CallbackQuery):
                 return
 
         await update.answer("Fɪʟᴇs Hᴀᴠᴇ Bᴇᴇɴ Sᴇɴᴛ Tᴏ PM :)", show_alert=True)
+        FIND = {}
+        all_files = []
 
     except Exception as e:
         print(e)

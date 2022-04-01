@@ -1,7 +1,9 @@
 # (c) @MrPurple902
 
 import os
+
 import imdb
+import json
 import random
 from imdb import Movie
 from pyrogram.types import InlineQueryResultPhoto
@@ -16,7 +18,6 @@ from bot.translation import Translation
 
 
 searcher = imdb.IMDb()
-IMDB = {}
 
 class Helpers() :
 
@@ -201,3 +202,37 @@ class Helpers() :
     img.save(path)
 
     return path
+
+async def write_results_to_file(chat_id:str, name:str, data):
+
+    try:
+        if not os.path.exists(f'/app/bot/data/{chat_id}'):
+            os.mkdir(f'/app/bot/data/{chat_id}')
+
+        with open(f'/app/bot/data/{chat_id}/{name}.json','w') as file:
+            json.dump(data, file)
+        
+        return True
+
+    except OSError as e:
+        print(e)
+        return False
+    except Exception as e:
+        print(e)
+        return False
+
+async def read_results_from_file(chat_id, name):
+
+    try:
+        if not os.path.exists(f'/app/bot/data/{chat_id}/{name}'):
+            return False
+
+        with open(f'/app/bot/data/{chat_id}/{name}', 'r') as file:
+            data = json.load(file)
+
+        data['results'] = eval(data['results'])
+        data['all_files'] = eval(data['all_files'])
+        return data
+
+    except Exception as e:
+        print(e)

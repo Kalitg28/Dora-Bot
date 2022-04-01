@@ -20,26 +20,10 @@ async def all_callbacks_manager(bot:Client, update:CallbackQuery):
 
     query = update.data
 
-    if query.startswith('navigate('):
-        await cb_navg(bot, update)
-    elif query.startswith('multi('):
-        await multiselect(bot, update)
-    elif query.startswith('sel('):
-        await select(bot, update)
-    elif query.startswith('sensel('):
-        await sensel(bot, update)
-    elif query.startswith('all('):
-        await cb_all(bot, update)
-    elif query.startswith('settings('):
+    if query.startswith('settings('):
         await cb_settings(bot, update)
     elif query=='close':
         await callback_data(bot, update)
-    elif query=='instruct':
-        await callback_data(bot, update)
-    elif query=='ignore':
-        await ignore(bot, update)
-    elif query.startswith('answer('):
-        await answer_alert(bot, update)
     elif query=='stats':
         await cb_stats(bot, update)
     elif query.startswith('edit_c('):
@@ -74,12 +58,3 @@ async def all_callbacks_manager(bot:Client, update:CallbackQuery):
         await cb_accuracy(bot, update)
     elif query.startswith('set('):
         await cb_set(bot, update)
-    elif query.startswith('alert('):
-        await alerter(bot, update)
-    elif query.startswith('edit_t('):
-        await edit_t(bot, update)
-    elif query.startswith('edit_m('):
-        await edit_m(bot, update)
-    else:
-        print(query)
-        update.answer("Nee Etha Mwonusee...", show_alert=True)

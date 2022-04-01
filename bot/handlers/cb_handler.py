@@ -5,15 +5,8 @@ from pyrogram.types import CallbackQuery, InlineQuery
 
 from bot.plugins.callback import *
 from bot.plugins.custom_cb import *
-from bot.plugins.multiselect import *
 from bot.plugins.inline import inline_imdb
 
-
-
-@Client.on_inline_query(group=0)
-async def inline_search_handler(bot:Client, update:InlineQuery):
-
-    await inline_imdb(bot, update)
 
 @Client.on_callback_query(group=0)
 async def all_callbacks_manager(bot:Client, update:CallbackQuery):

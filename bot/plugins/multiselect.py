@@ -1,3 +1,4 @@
+import pyrogram
 import re
 
 from pyrogram import Client, filters

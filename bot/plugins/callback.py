@@ -64,8 +64,8 @@ async def cb_navg(bot, update: CallbackQuery):
     FIND = await read_results_from_file(chat_id, query)
     if not FIND:
         return await update.answer("Looks Like This Request No LOnger Exists :(")
-    results = FIND.get(query).get("results")
-    max_pages = FIND.get(query).get("max_pages")
+    results = FIND.get("results")
+    max_pages = FIND.get("max_pages")
     FIND = {}
     
     try:

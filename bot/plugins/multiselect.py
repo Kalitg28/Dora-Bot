@@ -116,8 +116,8 @@ async def select(bot:Client, update:CallbackQuery):
     if not FIND:
         return await update.answer("Looks Like This Request No LOnger Exists :(")
 
-    per_page = FIND.get(query).get('per_page')
-    all_files = FIND.get(query).get('all_files')
+    per_page = FIND.get('per_page')
+    all_files = FIND.get('all_files')
     file_index = per_page * int(page) + int(index)
     unique_id = all_files[file_index]
 
@@ -203,7 +203,7 @@ async def cb_all(bot:Client, update:CallbackQuery):
         if not FIND:
             return await update.answer("Looks Like This Request No LOnger Exists :(")
 
-        all_files = FIND.get(query).get("all_files")
+        all_files = FIND.get("all_files")
         settings = await db.find_chat(chat_id)
         fsub = settings.get("fsub", None)
 

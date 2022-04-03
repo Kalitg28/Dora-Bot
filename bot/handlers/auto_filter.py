@@ -249,7 +249,7 @@ async def auto_filter(bot:Bot, update:Message):
     language=movie_info['language'],
     runtime=movie_info['runtime']
 )
-        text.append(f"<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>")
+        text+=f"<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>"
 
 
         try:

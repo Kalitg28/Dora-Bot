@@ -67,6 +67,7 @@ async def start(bot:Client , update:Message):
     await bot.send_chat_action(update.chat.id, "typing")
     
     if file_uid:
+        print(file_uid)
         if file_uid.startswith('fsub'):
             try:
                 id, from_chat, message_id = re.findall(r'fsubz(.+)z', file_uid)[0].split('a', 2)

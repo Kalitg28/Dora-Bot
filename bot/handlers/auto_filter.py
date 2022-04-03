@@ -3,7 +3,7 @@ import asyncio
 
 from pyrogram import filters, Client
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import ButtonDataInvalid, FloodWait, ChatSendMediaForbidden
+from pyrogram.errors import ButtonDataInvalid, FloodWait, ChatSendMediaForbidden, SlowmodeWait
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, WebpageMediaEmpty
 
 from bot.database import Database # pylint: disable=import-error
@@ -61,7 +61,7 @@ async def auto_filter(bot:Bot, update:Message):
     if not configs:
         return
     movie = await Helpers.cleanse(update.text)
-    movie_info = await Helpers.get_movie(movie)
+    movie_info, poster = await Helpers.get_movie(movie)
     
     max_pages = configs["configs"]["max_pages"] # maximum page result of a query
     max_results = configs["configs"]["max_results"] # maximum total result of a query
@@ -76,9 +76,6 @@ async def auto_filter(bot:Bot, update:Message):
     if not filters and movie_info:
         
         filters = await db.search_media(movie_info["title"], max_results+5)
-
-        if not filters:
-            filters = await db.search_media(movie_info["localized title"], max_results+5)
     
     if filters:
         all_files = []
@@ -214,30 +211,7 @@ async def auto_filter(bot:Bot, update:Message):
                 parse_mode="html"
             )
 
-        elif movie_info and movie_info["full-size cover url"]=="Unknown":
-
-            text = f"""
-⍞ ᴛɪᴛʟᴇ : <a href='{movie_info['link']}'>{movie_info['title']}</a>
-⌗ ɢᴇɴʀᴇ : <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
-★ ʀᴀᴛɪɴɢ : <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
-⎚ ᴠᴏᴛᴇs : <code>{movie_info["votes"]} </code>
-⌥ ʀᴜɴᴛɪᴍᴇ : <code>{movie_info["runtimes"]}</code>
-⌬ ʟᴀɴɢᴜᴀɢᴇs : <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
-〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
-⎙ ʀᴇsᴜʟᴛs : <code>{len_results}</code>
-
-<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
-        """
-
-            msg = await bot.send_message(
-                chat_id = update.chat.id,
-                text=text,
-                reply_markup=reply_markup,
-                parse_mode="html",
-                reply_to_message_id=update.message_id
-            )
-
-        elif movie_info["full-size cover url"]=="Unknown":
+        elif not poster:
             msg = await update.reply_text(
                 text=f"<b>I'ᴠᴇ Fᴏᴜɴᴅ {len_results} Rᴇsᴜʟᴛs Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ <code>{update.text}</code></b>",
                 reply_markup=reply_markup,
@@ -252,22 +226,35 @@ async def auto_filter(bot:Bot, update:Message):
             )
             return
 
-        text = f"""
-⍞ ᴛɪᴛʟᴇ : <a href='{movie_info['link']}'>{movie_info['title']}</a>
-⌗ ɢᴇɴʀᴇ : <code>{await Helpers.list_to_str(movie_info["genres"])}</code>
-★ ʀᴀᴛɪɴɢ : <a href='{movie_info['rating_link']}'>{movie_info["rating"]} / 10</a>
-⎚ ᴠᴏᴛᴇs : <code>{movie_info["votes"]} </code>
-⌥ ʀᴜɴᴛɪᴍᴇ : <code>{movie_info["runtimes"]}</code>
-⌬ ʟᴀɴɢᴜᴀɢᴇs : <code>{await Helpers.list_to_str(movie_info['languages'])}</code>
-〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ : <a href='{movie_info['release_link']}'>{movie_info["original air date"]}</a>
-⎙ ʀᴇsᴜʟᴛs : <code>{len_results}</code>
+        text = """
+⍞ ᴛɪᴛʟᴇ : {title}
+⌗ ɢᴇɴʀᴇ : {genres}
+★ ʀᴀᴛɪɴɢ : {rating}
+⎚ ᴠᴏᴛᴇs : {votes}
+⌥ ʀᴜɴᴛɪᴍᴇ : {runtime}
+⌬ ʟᴀɴɢᴜᴀɢᴇs : {language}
+〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ : {release}
+⎙ Writers : <code>{writers}</code>
 
-<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>
-        """
+""".format(
+    title=movie_info['title'],
+    rating=movie_info['rating'],
+    votes=movie_info['votes'],
+    genres=movie_info['genres'],
+    director=movie_info['director'],
+    writers=movie_info['writers'],
+    stars=movie_info['stars'],
+    release=movie_info['release'],
+    plot=movie_info['plot'],
+    language=movie_info['language'],
+    runtime=movie_info['runtime']
+)
+        text.append(f"<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>")
+
 
         try:
             msg = await bot.send_photo(
-                photo=movie_info["full-size cover url"],
+                photo=poster,
                 chat_id = update.chat.id,
                 caption=text,
                 reply_markup=reply_markup,
@@ -321,7 +308,7 @@ async def auto_filter(bot:Bot, update:Message):
             )
             await update.chat.leave()
 
-        except FloodWait:
+        except SlowmodeWait:
             await update.chat.leave()
             
         except ButtonDataInvalid:

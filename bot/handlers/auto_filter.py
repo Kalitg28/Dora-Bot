@@ -227,14 +227,15 @@ async def auto_filter(bot:Bot, update:Message):
             return
 
         text = """
-⍞ ᴛɪᴛʟᴇ : {title}
-⌗ ɢᴇɴʀᴇ : {genres}
-★ ʀᴀᴛɪɴɢ : {rating}
-⎚ ᴠᴏᴛᴇs : {votes}
-⌥ ʀᴜɴᴛɪᴍᴇ : {runtime}
-⌬ ʟᴀɴɢᴜᴀɢᴇs : {language}
-〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ : {release}
-⎙ Writers : <code>{writers}</code>
+<b>⍞ ᴛɪᴛʟᴇ :</b> {title}
+<b>⌗ ɢᴇɴʀᴇ :</b> {genres}
+<b>★ ʀᴀᴛɪɴɢ :</b> {rating}
+<b>⎚ ᴠᴏᴛᴇs :</b> {votes}
+<b>⌥ ʀᴜɴᴛɪᴍᴇ :</b> {runtime}
+<b>⌬ ʟᴀɴɢᴜᴀɢᴇs :</b> {language}
+<b>〄 ʀᴇʟᴇᴀꜱᴇ ᴅᴀᴛᴇ :</b> {release}
+<b>⎙ ᴅɪʀᴇᴄᴛᴏʀ :</b> {director}
+<b>⛤ ᴀᴄᴛᴏʀs :</b> {stars}
 
 """.format(
     title=movie_info['title'],
@@ -249,7 +250,7 @@ async def auto_filter(bot:Bot, update:Message):
     language=movie_info['language'],
     runtime=movie_info['runtime']
 )
-        text+=f"<i>🅒 Uᴘʟᴏᴀᴅᴇᴅ Bʏ {update.chat.title}</i>"
+        text+=f"<i>🅒 ᑌᑭᏞᝪᗩᗞᗴᗞ ᗷᎩ: {update.chat.title}</i>"
 
 
         try:

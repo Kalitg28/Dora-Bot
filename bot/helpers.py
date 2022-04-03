@@ -171,7 +171,7 @@ async def write_results_to_file(chat_id, name:str, data):
         if not os.path.exists(f'data/{chat_id}'):
             os.mkdir(f'data/{chat_id}')
 
-        with open(f'/data/{chat_id}/{name}.json','w') as file:
+        with open(f'data/{chat_id}/{name}.json','w') as file:
             json.dump(data, file)
         
         return True
@@ -253,7 +253,7 @@ def get_imdb_info(id):
         base : html.HtmlElement = main.find("./div/section/div/div[1]")
         
         storyline:html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Storyline']/div[2]")
-        genres = href_list_string(storyline.findall("./ul[2]/li[1]/div/ul/li"))
+        genres = href_list_string(storyline.findall("./ul[2]/li[@data-testid='storyline-genres']/div/ul/li"))
         plot = is_available(storyline.find("./div[@data-testid='storyline-plot-summary']/div[1]/div"))
         
         details: html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Details']/div[2]/ul")

@@ -5,6 +5,8 @@ import os
 import imdb
 import json
 import random
+import requests
+
 from imdb import Movie
 from pyrogram.types import InlineQueryResultPhoto
 from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
@@ -13,6 +15,8 @@ from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeybo
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+
+from lxml import html
 
 from bot.translation import Translation
 
@@ -24,63 +28,19 @@ class Helpers() :
  
  async def get_movie(my_movie):
 
-    info = ["title", "rating", "votes", "genres", "runtimes", "original air date", "languages", "full-size cover url", "kind", "localized title"]
     movies = searcher.search_movie(my_movie, results=1)
     if len(movies)<1:
         return False
     try:
-       movie_id = movies[0].movieID
+       id = movies[0].movieID
     except IndexError:
         return False
 
-    movie: Movie = searcher.get_movie(movie_id, info=Movie.Movie.default_info)
+    poster = movies[0].get("full-size cover url")
 
-    movie_info = {}
+    return get_imdb_info(id), poster
 
-    for key in info :
-
-        try :
-
-            movie_info[key] = movie.get(key)
-            if not movie_info[key]:
-                movie_info[key] = "Unknown"
-
-        except Exception as e :
-
-            print(e)
-
-    movie_info['id'] = movie_id
-    movie_info['link'] = f"https://imdb.com/title/tt{movie_id}"
-    movie_info['rating_link'] = f"https://imdb.com/title/tt{movie_id}/ratings"
-    movie_info['release_link'] = f"https://imdb.com/title/tt{movie_id}/releaseinfo"
-
-    air_date = movie.get("original air date", None)
-    if not air_date:
-
-        movie_info["originl air date"] = movie.get("year")
     
-
-    try :
-
-        runtime = int(movie_info["runtimes"][0])
-
-        if runtime>=60:
-            
-            movie_info["runtimes"] = f"{int(runtime/60)}hr {runtime%60}mins"
-
-        else :
-
-            movie_info.pop("runtimes")
-            movie_info["runtimes"] = f"{runtime} mins"
-        link = f"https://imdb.com/title/tt{movie.movieID}"
-        movie_info['link'] = link
-
-    except Exception as e:
-        print(e)
-        return False
-
-    return movie_info
-
  async def cleanse(query:str):
 
     keywords = ["movie", "malayalam", "tamil", "kannada", "hd", "subtitle", "subtitles"]
@@ -206,10 +166,12 @@ class Helpers() :
 async def write_results_to_file(chat_id, name:str, data):
 
     try:
-        if not os.path.exists(f'/app/bot/data/{chat_id}'):
-            os.mkdir(f'/app/bot/data/{chat_id}')
+        if not os.path.exists('data/'):
+            os.mkdir('data')
+        if not os.path.exists(f'data/{chat_id}'):
+            os.mkdir(f'data/{chat_id}')
 
-        with open(f'/app/bot/data/{chat_id}/{name}.json','w') as file:
+        with open(f'/data/{chat_id}/{name}.json','w') as file:
             json.dump(data, file)
         
         return True
@@ -224,10 +186,10 @@ async def write_results_to_file(chat_id, name:str, data):
 async def read_results_from_file(chat_id, name):
 
     try:
-        if not os.path.exists(f'/app/bot/data/{chat_id}/{name}.json'):
+        if not os.path.exists(f'data/{chat_id}/{name}.json'):
             return False
 
-        with open(f'/app/bot/data/{chat_id}/{name}.json', 'r') as file:
+        with open(f'data/{chat_id}/{name}.json', 'r') as file:
             data = json.load(file)
 
         data['results'] = eval(data['results'])
@@ -236,3 +198,83 @@ async def read_results_from_file(chat_id, name):
 
     except Exception as e:
         print(e)
+
+def href_list_string(items:list()):
+    """A Function to convert list elements to string"""
+
+    if len(items) < 1:
+        return "Unknown"
+    
+    string = ''
+
+    for item in items:
+
+        a = item.find('./a')
+        href = a.attrib['href']
+
+        string += f"<a href='imdb.com{href}'>{a.text}</a>  "
+
+    return string
+
+def is_available(x):
+    """A Proffessional Function to return default if text attrib absent"""
+
+    if x is None:
+        return "Unknown"
+    return x.text
+
+def get_imdb_info(id):
+
+    """A Function To Scrape The Imdb page of a Movie to get details"""
+
+    title, rating, votes, director, writers, stars, genres, plot, runtime = ("Unknown","Unknown","Unknown","Unknown","Unknown","Unknown","Unknown","Unknown","Unknown")
+
+    try:
+        link = f"https://www.imdb.com/title/tt{id}/"
+        resp = requests.get(link)
+        page = resp.content
+        
+        print("Fetched webpage successsfully...")
+        
+        root: html.HtmlElement = html.fromstring(page).body
+        main: html.HtmlElement = root.find("./div[2]/main/div/section[1]")
+        
+        head: html.HtmlElement = main.find("./section/div[3]/section/section")
+        title = is_available(head.find("./div[1]/div[1]/h1"))
+        title = f"<a href='{link}'>{title}</a>"
+        rating = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[@data-testid='hero-rating-bar__aggregate-rating__score']/span[1]"))
+        votes = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[3]"))
+        
+        people: html.HtmlElement = head.find("./div[3]/div[2]/div[1]/div[3]/ul")
+        director = href_list_string(people.findall("./li[1]/div/ul/li"))
+        writers = href_list_string(people.findall("./li[2]/div/ul/li"))
+        stars = href_list_string(people.findall("./li[3]/div/ul/li"))
+        
+        base : html.HtmlElement = main.find("./div/section/div/div[1]")
+        
+        storyline:html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Storyline']/div[2]")
+        genres = href_list_string(storyline.findall("./ul[2]/li[1]/div/ul/li"))
+        plot = is_available(storyline.find("./div[@data-testid='storyline-plot-summary']/div[1]/div"))
+        
+        details: html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Details']/div[2]/ul")
+        release = href_list_string(details.findall("./li[@data-testid='title-details-releasedate']/div/ul/li"))
+        language = href_list_string(details.findall("./li[@data-testid='title-details-languages']/div/ul/li"))
+        runtime = base.find("./section[@cel_widget_id='StaticFeature_TechSpecs']/div[2]/ul/li[@data-testid='title-techspec_runtime']/div").text_content()
+        
+    except Exception as e:
+        print(e)
+
+    return dict(
+        title=title,
+        link=link,
+        rating=rating,
+        votes=votes,
+        director=director,
+        writers=writers,
+        stars=stars,
+        genres=genres,
+        plot=plot,
+        release=release,
+        language=language,
+        runtime=runtime
+    )

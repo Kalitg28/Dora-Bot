@@ -6,6 +6,7 @@ import imdb
 import json
 import random
 import requests
+import pyrogram
 
 from imdb import Movie
 from pyrogram.types import InlineQueryResultPhoto

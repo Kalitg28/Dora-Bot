@@ -184,7 +184,7 @@ def href_list_string(items:list()):
         a = item.find('./a')
         href = a.attrib['href']
 
-        string += f"<a href='imdb.com{href}'>{a.text}</a>  "
+        string += f"<a href='imdb.com{href}'>{a.text}</a> •"
 
     return string
 

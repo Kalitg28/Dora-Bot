@@ -53,7 +53,7 @@ async def all_imdb(query):
         for result in results:
               movie = get_imdb_info(result.movieID, False)
               url = result.get("full-size cover url", random.choice(Translation.START_PHOTOS))
-              caption = f"        <b><u>{movie.get('title', ' ')}</b></u>\n"
+              caption = f"        <b><u>{movie.get('title', ' ')}</u></b>\n"
               caption+=f"\n<b>𝚁𝙰𝚃𝙸𝙽𝙶</b> : {movie['rating']}" if movie['rating'] else ''
               caption+=f"\n<b>𝚅𝙾𝚃𝙴𝚂</b> : {movie['votes']}" if movie['votes'] else ''
               caption+=f"\n<b>𝙶𝙴𝙽𝚁𝙴𝚂</b> : {movie['genres']}" if movie['genres'] else ''
@@ -62,7 +62,7 @@ async def all_imdb(query):
               caption+=f"\n<b>𝚁𝚄𝙽𝚃𝙸𝙼𝙴</b> : {movie['runtime']}" if movie['runtime'] else ''
               caption+=f"\n<b>𝙳𝙸𝚁𝙴𝙲𝚃𝙾𝚁 :</b> {movie['director']}" if movie['director'] else ''
               caption+=f"\n<b>𝙰𝙲𝚃𝙾𝚁𝚂 :</b> {movie['stars']}" if movie['stars'] else ''
-              caption+=f"\n<b>Storyline</b> : <code>{[movie['plot']]}</code>..." if movie['plot'] else ''
+              caption+=f"\n<b>𝚂𝚃𝙾𝚁𝚈𝙻𝙸𝙽𝙴</b> : <code>{[movie['plot']]}</code>..." if movie['plot'] else ''
               caption+=f"\n<a href='{movie['link']}'>Read More...</a>"
               if post : caption+="\n\n<b>🅒 Powered By @DM_Linkz</b>"
               

@@ -1,5 +1,6 @@
 import re
 import asyncio
+import pyrogram
 
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid
@@ -7,12 +8,12 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQ
 
 from bot import start_uptime, Translation, Buttons, VERIFY # pylint: disable=import-error
 from bot.handlers.auto_filter import ( # pylint: disable=import-error
-    FIND, 
     INVITE_LINK, 
     ACTIVE_CHATS
     )
 
-from bot.database import Database # pylint: disable=import-error
+from bot.database import Database
+from bot.helpers import read_results_from_file # pylint: disable=import-error
 
 db = Database()
 
@@ -54,15 +55,18 @@ async def cb_navg(bot, update: CallbackQuery):
         index_val = int(index_val) + 1
     elif btn == "back":
         index_val = int(index_val) - 1
-    
-    achats = ACTIVE_CHATS[str(chat_id)]
+        
     configs = await db.find_chat(chat_id)
     pm_file_chat = configs["configs"]["pm_fchat"]
     show_invite = configs["configs"]["show_invite_link"]
     show_invite = (False if pm_file_chat == True else show_invite)
-    
-    results = FIND.get(query).get("results")
-    max_pages = FIND.get(query).get("max_pages")
+
+    FIND = await read_results_from_file(chat_id, query)
+    if not FIND:
+        return await update.answer("Looks Like This Request No LOnger Exists :(")
+    results = FIND.get("results")
+    max_pages = FIND.get("max_pages")
+    FIND = {}
     
     try:
         temp_results = results[index_val].copy()

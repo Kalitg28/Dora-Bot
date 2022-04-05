@@ -1,5 +1,7 @@
 # (c) @MrPurple902
 
+import pyrogram
+
 from pyrogram import Client, filters
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery

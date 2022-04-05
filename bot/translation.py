@@ -166,7 +166,7 @@ Go to Settings > AutoDelete to Disable or set an AutoDelete time
 "https://telegra.ph/file/d3b342fff878ce7ca52e1.jpg",
 "https://telegra.ph/file/32588838b794901decb4e.jpg",
 "https://telegra.ph/file/f99cc60a64a6b90812329.jpg",
-" https://telegra.ph/file/d3b342fff878ce7ca52e1.jpg",
+"https://telegra.ph/file/d3b342fff878ce7ca52e1.jpg",
 "https://telegra.ph/file/e20a11858086041780540.jpg",
 "https://telegra.ph/file/31d202c0fe21f9e7a5aaf.jpg",
 "https://telegra.ph/file/763283331f5359edc6d1b.jpg",
@@ -177,7 +177,7 @@ Go to Settings > AutoDelete to Disable or set an AutoDelete time
     OWNER_ID = 1093541873
     LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))
 
-    DORA_FIGLET = """
+    DORA_FIGLET = r"""
 :::::::-.      ...    :::::::..    :::.     
  ;;,   `';, .;;;;;;;. ;;;;``;;;;   ;;`;;    
  `[[     [[,[[     \[[,[[[,/[[['  ,[[ '[[,  

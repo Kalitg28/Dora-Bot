@@ -188,11 +188,11 @@ def href_list_string(items:list()):
 
     return string
 
-def is_available(x):
+def is_available(x, default="Unknown"):
     """A Proffessional Function to return default if text attrib absent"""
 
     if x is None:
-        return "Unknown"
+        return default
     return x.text
 
 def get_imdb_info(id, default='Unknown'):
@@ -210,10 +210,10 @@ def get_imdb_info(id, default='Unknown'):
         main: html.HtmlElement = root.find("./div[2]/main/div/section[1]")
         
         head: html.HtmlElement = main.find("./section/div[3]/section/section")
-        title = is_available(head.find("./div[1]/div[1]/h1"))
+        title = is_available(head.find("./div[1]/div[1]/h1"), default)
         title = f"<a href='{link}'>{title}</a>"
-        rating = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[@data-testid='hero-rating-bar__aggregate-rating__score']/span[1]"))
-        votes = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[3]"))
+        rating = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[@data-testid='hero-rating-bar__aggregate-rating__score']/span[1]"), default)
+        votes = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[3]"), default)
         
         people: html.HtmlElement = head.find("./div[3]/div[2]/div[1]/div[3]/ul")
         director = href_list_string(people.findall("./li[1]/div/ul/li"))
@@ -224,7 +224,7 @@ def get_imdb_info(id, default='Unknown'):
         
         storyline:html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Storyline']/div[2]")
         genres = href_list_string(storyline.findall("./ul[2]/li[@data-testid='storyline-genres']/div/ul/li"))
-        plot = is_available(storyline.find("./div[@data-testid='storyline-plot-summary']/div[1]/div"))
+        plot = is_available(storyline.find("./div[@data-testid='storyline-plot-summary']/div[1]/div"), default)
         
         details: html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Details']/div[2]/ul")
         release = href_list_string(details.findall("./li[@data-testid='title-details-releasedate']/div/ul/li"))

@@ -17,6 +17,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
     results = await all_imdb(text)
 
     if results:
+        print("Log1")
 
         await update.answer(
             results=results,
@@ -28,6 +29,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
         
             
     else :
+        print('log2')
 
         await update.answer(results=[],
                         cache_time=0,
@@ -36,22 +38,23 @@ async def inline_imdb(bot:Client, update:InlineQuery):
 
 async def all_imdb(query):
 
-     query = query.strip()
-     print(query)
-     post = False
-
-     if "post:" in query:
-         query = query.replace("post:",'')
-         post = True
-
-     results = searcher.search_movie(query, results=2)
-     Product = []
-     try:
+          print("Log3 ")
+          query = query.strip()
+          print(query)
+          post = False      
+          if "post:" in query:
+              query = query.replace("post:",'')
+              post = True      
+          results = searcher.search_movie(query, results=2)
+          Product = []
+     
           if len(results)<=0: 
               return False
           for result in results:
 
+                print("Log4")
                 movie = get_imdb_info(result.movieID, False)
+                print("Log5")
 
                 url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))
                 caption = f"        <b><u>{movie.get('title', ' ')}</b></u>\n"
@@ -60,7 +63,7 @@ async def all_imdb(query):
                 caption+=f"\n🗳️ <b>𝚅𝙾𝚃𝙴𝚂</b> : {movie['votes']}" if movie['votes'] else ''
                 caption+=f"\n🧬 <b>𝙶𝙴𝙽𝚁𝙴𝚂</b> : {movie['genres']}" if movie['genres'] else ''
                 caption+=f"\n⌬ <b>𝙻𝙰𝙽𝙶𝚄𝙰𝙶𝙴𝚂 :</b> {movie['language']}" if movie['language'] else ''
-                caption+=f"\n📅 <b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['released']}" if movie['released'] else ''
+#                caption+=f"\n📅 <b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['released']}" if movie['released'] else ''
                 caption+=f"\n⏱️ <b>𝚁𝚄𝙽𝚃𝙸𝙼𝙴</b> : {movie['runtime']}" if movie['runtime'] else ''
                 caption+=f"\n⎙ <b>𝙳𝙸𝚁𝙴𝙲𝚃𝙾𝚁 :</b> {movie['director']}" if movie['director'] else ''
                 caption+=f"\n⛤ <b>𝙰𝙲𝚃𝙾𝚁𝚂 :</b> {movie['stars']}" if movie['stars'] else ''
@@ -80,7 +83,6 @@ async def all_imdb(query):
                     reply_markup=InlineKeyboardMarkup(buttons),
                     parse_mode='html'
                 ))
+          print(Product)
           return Product
 
-     except Exception as e:
-         print(e)

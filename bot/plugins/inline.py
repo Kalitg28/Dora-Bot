@@ -17,7 +17,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
     results = await all_imdb(text)
 
     if results:
-        print("Log1")
+
 
         await update.answer(
             results=results,
@@ -29,7 +29,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
         
             
     else :
-        print('log2')
+
 
         await update.answer(results=[],
                         cache_time=0,
@@ -38,51 +38,46 @@ async def inline_imdb(bot:Client, update:InlineQuery):
 
 async def all_imdb(query):
 
-          print("Log3 ")
-          query = query.strip()
-          print(query)
-          post = False      
-          if "post:" in query:
-              query = query.replace("post:",'')
-              post = True      
-          results = searcher.search_movie(query, results=2)
-          Product = []
-     
-          if len(results)<=0: 
-              return False
-          for result in results:
-
-                print("Log4")
-                movie = get_imdb_info(result.movieID, False)
-                print("Log5")
-
-                url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))
-                caption = f"        <b><u>{movie.get('title', ' ')}</b></u>\n"
-
-                caption+=f"\n🌟 <b>𝚁𝙰𝚃𝙸𝙽𝙶</b> : {movie['rating']}" if movie['rating'] else ''
-                caption+=f"\n🗳️ <b>𝚅𝙾𝚃𝙴𝚂</b> : {movie['votes']}" if movie['votes'] else ''
-                caption+=f"\n🧬 <b>𝙶𝙴𝙽𝚁𝙴𝚂</b> : {movie['genres']}" if movie['genres'] else ''
-                caption+=f"\n⌬ <b>𝙻𝙰𝙽𝙶𝚄𝙰𝙶𝙴𝚂 :</b> {movie['language']}" if movie['language'] else ''
-#                caption+=f"\n📅 <b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['released']}" if movie['released'] else ''
-                caption+=f"\n⏱️ <b>𝚁𝚄𝙽𝚃𝙸𝙼𝙴</b> : {movie['runtime']}" if movie['runtime'] else ''
-                caption+=f"\n⎙ <b>𝙳𝙸𝚁𝙴𝙲𝚃𝙾𝚁 :</b> {movie['director']}" if movie['director'] else ''
-                caption+=f"\n⛤ <b>𝙰𝙲𝚃𝙾𝚁𝚂 :</b> {movie['stars']}" if movie['stars'] else ''
-                caption+=f"\n🗺️ <b>Storyline</b> : <code>{[movie['plot']]}</code>..." if movie['plot'] else ''
-                caption+=f"\n<a href='{movie['link']}'>Read More...</a>"
-
-                if post : caption+="\n\n<b>🅒 Powered By @DM_Linkz</b>"
-                
-                year = movie.get("year", "")
-                
-                buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]] if not post else [[InlineKeyboardButton("Join For More..", url="https://t.me/DM_Linkz")]]
-                Product.append(InlineQueryResultPhoto(
-                    photo_url=url,
-                    thumb_url=url,
-                    title=movie.get("title","") + f" {year}",
-                    caption=caption,
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                    parse_mode='html'
-                ))
-          print(Product)
-          return Product
-
+    try:
+        query = query.strip()
+        print(query)
+        post = False      
+        if "post:" in query:
+            query = query.replace("post:",'')
+            post = True      
+        results = searcher.search_movie(query, results=2)
+        Product = []
+    
+        if len(results)<=0: 
+            return False
+        for result in results:
+              movie = get_imdb_info(result.movieID, False)
+              url = result.get("full-size cover url", random.choice(Translation.START_PHOTOS))
+              caption = f"        <b><u>{movie.get('title', ' ')}</b></u>\n"
+              caption+=f"\n<b>𝚁𝙰𝚃𝙸𝙽𝙶</b> : {movie['rating']}" if movie['rating'] else ''
+              caption+=f"\n<b>𝚅𝙾𝚃𝙴𝚂</b> : {movie['votes']}" if movie['votes'] else ''
+              caption+=f"\n<b>𝙶𝙴𝙽𝚁𝙴𝚂</b> : {movie['genres']}" if movie['genres'] else ''
+              caption+=f"\n<b>𝙻𝙰𝙽𝙶𝚄𝙰𝙶𝙴𝚂 :</b> {movie['language']}" if movie['language'] else ''
+              caption+=f"\n<b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['released']}" if movie['released'] else ''
+              caption+=f"\n<b>𝚁𝚄𝙽𝚃𝙸𝙼𝙴</b> : {movie['runtime']}" if movie['runtime'] else ''
+              caption+=f"\n<b>𝙳𝙸𝚁𝙴𝙲𝚃𝙾𝚁 :</b> {movie['director']}" if movie['director'] else ''
+              caption+=f"\n<b>𝙰𝙲𝚃𝙾𝚁𝚂 :</b> {movie['stars']}" if movie['stars'] else ''
+              caption+=f"\n<b>Storyline</b> : <code>{[movie['plot']]}</code>..." if movie['plot'] else ''
+              caption+=f"\n<a href='{movie['link']}'>Read More...</a>"
+              if post : caption+="\n\n<b>🅒 Powered By @DM_Linkz</b>"
+              
+              year = movie.get("year", "")
+              
+              buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]] if not post else [[InlineKeyboardButton("Join For More..", url="https://t.me/DM_Linkz")]]
+              Product.append(InlineQueryResultPhoto(
+                  photo_url=url,
+                  thumb_url=url,
+                  title=movie.get("title","") + f" {year}",
+                  caption=caption,
+                  reply_markup=InlineKeyboardMarkup(buttons),
+                  parse_mode='html'
+              ))
+        return Product
+    except Exception as e:
+        print(e)
+        return False

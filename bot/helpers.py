@@ -31,11 +31,11 @@ class Helpers() :
 
     movies = searcher.search_movie(my_movie, results=1)
     if len(movies)<1:
-        return False
+        return False, False
     try:
        id = movies[0].movieID
     except IndexError:
-        return False
+        return False, False
 
     poster = movies[0].get("full-size cover url")
 

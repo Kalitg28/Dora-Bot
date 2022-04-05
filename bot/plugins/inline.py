@@ -22,7 +22,7 @@ async def inline_imdb(bot:Client, update:InlineQuery):
             results=results,
             cache_time=0,
             switch_pm_text=f"Heres What I Found For {text}",
-            switch_pm_parameter="",
+            switch_pm_parameter="idk",
             next_offset=""
         )
         
@@ -32,4 +32,4 @@ async def inline_imdb(bot:Client, update:InlineQuery):
         await update.answer(results=[],
                         cache_time=0,
                         switch_pm_text=f'No Results Were Found For {text}',
-                        switch_pm_parameter='')
+                        switch_pm_parameter='idk')

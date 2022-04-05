@@ -199,7 +199,7 @@ def get_imdb_info(id, default='Unknown'):
 
     """A Function To Scrape The Imdb page of a Movie to get details"""
 
-    title, rating, votes, director, writers, stars, genres, plot, runtime = (default,default,default,default,default,default,default,default,default)
+    title, rating, votes, director, writers, stars, genres, plot, runtime, release = (default,default,default,default,default,default,default,default,default,default)
 
     try:
         link = f"https://www.imdb.com/title/tt{id}/"

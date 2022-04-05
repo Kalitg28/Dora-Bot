@@ -58,7 +58,7 @@ async def all_imdb(query):
               caption+=f"\n<b>𝚅𝙾𝚃𝙴𝚂</b> : {movie['votes']}" if movie['votes'] else ''
               caption+=f"\n<b>𝙶𝙴𝙽𝚁𝙴𝚂</b> : {movie['genres']}" if movie['genres'] else ''
               caption+=f"\n<b>𝙻𝙰𝙽𝙶𝚄𝙰𝙶𝙴𝚂 :</b> {movie['language']}" if movie['language'] else ''
-              caption+=f"\n<b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['released']}" if movie['released'] else ''
+              caption+=f"\n<b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['release']}" if movie['release'] else ''
               caption+=f"\n<b>𝚁𝚄𝙽𝚃𝙸𝙼𝙴</b> : {movie['runtime']}" if movie['runtime'] else ''
               caption+=f"\n<b>𝙳𝙸𝚁𝙴𝙲𝚃𝙾𝚁 :</b> {movie['director']}" if movie['director'] else ''
               caption+=f"\n<b>𝙰𝙲𝚃𝙾𝚁𝚂 :</b> {movie['stars']}" if movie['stars'] else ''

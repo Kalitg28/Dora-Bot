@@ -39,7 +39,7 @@ class Helpers() :
 
     poster = movies[0].get("full-size cover url")
 
-    return get_imdb_info(id), poster
+    return (get_imdb_info(id), poster)
 
     
  async def cleanse(query:str):
@@ -68,60 +68,31 @@ class Helpers() :
           if len(results)<1: return False
           for result in results:
 
-                movie = searcher.get_movie(result.movieID, info=Movie.Movie.default_info)
+                movie = get_imdb_info(result.movieID, False)
                 if len(movie)<1: return False
 
-                url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))
+                url = result.get("full-size cover url", random.choice(Translation.START_PHOTOS))
                 caption = ""
 
-                rating = movie.get("rating", None)
-                if rating :
-                  caption+=f"🌟 <b>Rating</b> : {rating}"
-               
-                votes = movie.get("votes", None)
-                if votes:
-                   caption+=f"🗳️ <b>Votes</b> : {votes}"
-
-                genres = movie.get("genres", None)
-                if genres:
-                   caption+=f"🧬 <b>Genres</b> : {genres}"
-
-                released = movie.get("original air date", None)
-                if released:
-                    caption+=f"📅 <b>Released</b> : {released}"
-                else:
-                    released = movie.get("year", None)
-                    if released:
-                        caption+=f"📅 <b>Released</b> : {released}"
-
-                duration = movie.get("runtimes", None)
-                if duration :
-                    try :
-                        duration = duration[0]
-                        runtime = int(duration)
-                        if runtime<60:
-                            caption+=f"⏱️ <b>Duration</b> : {duration}mins"
-                        else:
-                            caption+=f"⏱️ <b>Duration</b> : {runtime/60}hr {runtime%60}mins"
-                    except Exception as e:
-                        print(e)
-
-                plot = movie.get("plot", None)
-                if plot:
-                    caption+=f"🗺️ <b>Storyline</b> : <code>{plot[0]}</code>..."
-
-                caption+=f"<a href='https://imdb.com/title/tt/{movie.movieID}'>Read More...</a>"
+                caption+=f"\n🌟 <b>𝚁𝙰𝚃𝙸𝙽𝙶</b> : {movie['rating']}" if movie['rating'] else ''
+                caption+=f"\n🗳️ <b>𝚅𝙾𝚃𝙴𝚂</b> : {movie['votes']}" if movie['votes'] else ''
+                caption+=f"\n🧬 <b>𝙶𝙴𝙽𝚁𝙴𝚂</b> : {movie['genres']}" if movie['genres'] else ''
+                caption+=f"\n⌬ <b>𝙻𝙰𝙽𝙶𝚄𝙰𝙶𝙴𝚂 :</b> {movie['language']}" if movie['language'] else ''
+                caption+=f"\n📅 <b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['released']}" if movie['released'] else ''
+                caption+=f"\n⏱️ <b>𝚁𝚄𝙽𝚃𝙸𝙼𝙴</b> : {movie['runtime']}" if movie['runtime'] else ''
+                caption+=f"\n⎙ <b>𝙳𝙸𝚁𝙴𝙲𝚃𝙾𝚁 :</b> {movie['director']}" if movie['director'] else ''
+                caption+=f"\n⛤ <b>𝙰𝙲𝚃𝙾𝚁𝚂 :</b> {movie['stars']}" if movie['stars'] else ''
+                caption+=f"\n🗺️ <b>Storyline</b> : <code>{[movie['plot']]}</code>..." if movie['plot'] else ''
+                caption+=f"\n<a href='{movie['link']}'>Read More...</a>"
 
                 if post : caption+="\n\nBy @DM_Linkz"
-                
-                year = movie.get("year", "")
                 
                 
                 buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]] if not post else [[InlineKeyboardButton("Join For More..", url="https://t.me/DM_Linkz")]]
                 Product.append(InlineQueryResultPhoto(
                     photo_url=url,
                     thumb_url=url,
-                    title=movie.get("title","") + f" {year}",
+                    title=movie.get("title",""),
                     caption=caption,
                     reply_markup=InlineKeyboardMarkup(buttons)
                 ))
@@ -224,18 +195,16 @@ def is_available(x):
         return "Unknown"
     return x.text
 
-def get_imdb_info(id):
+def get_imdb_info(id, default='Unknown'):
 
     """A Function To Scrape The Imdb page of a Movie to get details"""
 
-    title, rating, votes, director, writers, stars, genres, plot, runtime = ("Unknown","Unknown","Unknown","Unknown","Unknown","Unknown","Unknown","Unknown","Unknown")
+    title, rating, votes, director, writers, stars, genres, plot, runtime = (default,default,default,default,default,default,default,default,default)
 
     try:
         link = f"https://www.imdb.com/title/tt{id}/"
         resp = requests.get(link)
         page = resp.content
-        
-        print("Fetched webpage successsfully...")
         
         root: html.HtmlElement = html.fromstring(page).body
         main: html.HtmlElement = root.find("./div[2]/main/div/section[1]")

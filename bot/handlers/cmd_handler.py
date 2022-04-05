@@ -8,7 +8,7 @@ from bot.plugins.broadcast import *
 from bot.plugins.channel import connect, delall, disconnect
 from bot.plugins.commands import *
 from bot.plugins import mfilter, gfilter, settings
-from bot.plugins.custom_cmd import delcaption, delspell, setcaption, setspell, toggle_af
+from bot.plugins.custom_cmd import delcaption, delfsub, delspell, setcaption, setfsub, setspell, toggle_af, toggle_autodel, toggle_gf
 from bot.translation import Translation
 
 @Client.on_message(filters.regex(r"^\/") & filters.chat(Translation.OWNER_ID), group=4)
@@ -89,5 +89,13 @@ async def pvt_handler(bot:Client, update:Message):
         await setcaption(bot, update)
     elif cmd=='delcaption':
         await delcaption(bot, update)
+    elif cmd=='globalfilter':
+        await toggle_gf(bot, update)
+    elif cmd=='autodelete':
+        await toggle_autodel(bot, update)
+    elif cmd=='setfsub':
+        await setfsub(bot, update)
+    elif cmd=='delfsub':
+        await delfsub(bot, update)
 
     

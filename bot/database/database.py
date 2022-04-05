@@ -415,12 +415,14 @@ class Database:
         try:
             for pack in data:
                 try:
-                    if self.fcol.find_one({'file_name':pack['file_name']}):
+                    if fcol.find_one({'file_id': pack['file_id']}):
+                        print('duplicate')
                         continue
-                    await self.fcol.insert_one(pack)
+                    res = fcol.insert_one(pack)
+                    print(f"Inserted {res}")
                 except Exception as e:
                     print(e)
-                    await self.fcol.insert_one(pack)
+                    fcol.insert_one(pack)
         except Exception as f:
             print(f)
         return True
@@ -848,6 +850,21 @@ class Database:
     async def del_file(self, file_id: str):
 
         return fcol.delete_one({'file_id': file_id})
+
+    async def clear_duplicate(self, stats):
+        deleted = 0
+        done = 0
+        for file in fcol.find():
+            try:
+                count = fcol.find({'file_name': file['file_name']}).count()
+                if count>1:
+                    fcol.delete_one({'_id': file['_id']})
+                    deleted += 1
+                
+                done +=1
+                await stats.edit_text(f"Cleared : {deleted}\nScanned : {done}")
+            except Exception as e:
+                print(e)
 
 
 def getLen(e):

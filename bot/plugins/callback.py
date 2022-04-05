@@ -6,7 +6,7 @@ from pyrogram.errors import FloodWait, UserNotParticipant, PeerIdInvalid
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
 from bot import start_uptime, Translation, Buttons, VERIFY # pylint: disable=import-error
-from bot.plugins.auto_filter import ( # pylint: disable=import-error
+from bot.handlers.auto_filter import ( # pylint: disable=import-error
     FIND, 
     INVITE_LINK, 
     ACTIVE_CHATS
@@ -17,7 +17,6 @@ from bot.database import Database # pylint: disable=import-error
 db = Database()
 
 
-@Client.on_callback_query(filters.regex(r"navigate\((.+)\)"), group=4)
 async def cb_navg(bot, update: CallbackQuery):
     """
     A Callback Funtion For The Next Button Appearing In Results
@@ -116,7 +115,6 @@ async def cb_navg(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"settings"), group=3)
 async def cb_settings(bot, update: CallbackQuery):
     """
     A Callback Funtion For Back Button in /settings Command
@@ -313,7 +311,6 @@ async def cb_settings(bot, update: CallbackQuery):
         )
 
 
-@Client.on_callback_query(filters.regex(r"mr_count\((.+)\)"), group=4)
 async def cb_max_buttons(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Result To Be Shown Per Page
@@ -426,7 +423,6 @@ async def cb_max_buttons(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"mp_count\((.+)\)"), group=4)
 async def cb_max_page(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Maximum Result Pages To Be Shown
@@ -501,7 +497,6 @@ async def cb_max_page(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"mf_count\((.+)\)"), group=4)
 async def cb_max_results(bot, update: CallbackQuery):
     """
     A Callback Funtion For Changing The Count Of Maximum Files TO Be Fetched From Database
@@ -579,7 +574,6 @@ async def cb_max_results(bot, update: CallbackQuery):
         text, reply_markup=reply_markup, parse_mode="html"
     )
 
-@Client.on_callback_query(filters.regex(r"accuracy\((.+)\)"), group=4)
 async def cb_accuracy(bot, update: CallbackQuery):
     """
     A Callaback Funtion to control the accuracy of matching results
@@ -676,7 +670,6 @@ async def cb_accuracy(bot, update: CallbackQuery):
 
 
 
-@Client.on_callback_query(filters.regex(r"set\((.+)\)"), group=4)
 async def cb_set(bot, update: CallbackQuery):
     """
     A Callback Funtion Support For config()
@@ -765,7 +758,6 @@ async def cb_set(bot, update: CallbackQuery):
         text, reply_markup=reply_markup, parse_mode="html"
     )
 
-@Client.on_callback_query(filters.regex(r"^(start|help|about|close|instruct)$"), group=4)
 async def callback_data(bot, update: CallbackQuery):
     await bot.send_chat_action(update.message.chat.id, "typing")
 
@@ -814,7 +806,6 @@ async def callback_data(bot, update: CallbackQuery):
         await update.answer("-Pʟᴇᴀsᴇ Cʜᴇᴄᴋ Tʜᴇ Sᴘᴇʟʟɪɴɢ Oғ Tʜᴇ Mᴏᴠɪᴇ\n-Mᴀᴋᴇ Sᴜʀᴇ Iᴛ Is Rᴇʟᴇᴀsᴇᴅ\n-Aᴠᴏɪᴅ Uɴɴᴇᴄᴇssᴀʀʏ Wᴏʀᴅs", show_alert=True)
      
 
-@Client.on_callback_query(filters.regex(r"edit_c\((.+)\)"), group=3)
 async def edit_caption(bot:Client, update: CallbackQuery):
 
     STRING = re.findall(r"edit_c\((.+)\)", update.data)[0]
@@ -843,7 +834,6 @@ async def edit_caption(bot:Client, update: CallbackQuery):
     await bot.send_chat_action(update.message.chat.id, "cancel")
      
 
-@Client.on_callback_query(filters.regex(r"alert\((.+)\)"), group=5)
 async def alerter(bot:Client, update: CallbackQuery):
 
     id, index = re.findall(r"alert\((.+)\)", update.data)[0].split("|",1)
@@ -854,7 +844,7 @@ async def alerter(bot:Client, update: CallbackQuery):
         return
 
     await update.answer(text, show_alert=True)
-@Client.on_callback_query(filters.regex(r"edit_t\((.+)\)"), group=5)
+
 async def edit_t(bot:Client, update: CallbackQuery):
 
     id, index = re.findall(r"edit_t\((.+)\)", update.data)[0].split("|",1)
@@ -876,7 +866,6 @@ async def edit_t(bot:Client, update: CallbackQuery):
 
     await update.answer()
 
-@Client.on_callback_query(filters.regex(r"edit_m\((.+)\)"), group=5)
 async def edit_m(bot:Client, update: CallbackQuery):
 
     id = re.findall(r"edit_m\((.+)\)", update.data)[0]
@@ -900,7 +889,6 @@ async def edit_m(bot:Client, update: CallbackQuery):
 
     await update.answer()
 
-@Client.on_callback_query(filters.regex("stats"), group=4)
 async def cb_stats(bot:Client, update:CallbackQuery):
 
     try:
@@ -916,12 +904,10 @@ async def cb_stats(bot:Client, update:CallbackQuery):
     except Exception as e:
         print(e)
     
-@Client.on_callback_query(filters.regex("ignore"), group=5)
 async def ignore(bot:Client, update:CallbackQuery):
 
     await update.answer("Yᴏᴜ Hᴀᴠᴇ Hɪᴛ A Wᴀʟʟ 💥🧱🚗", show_alert=True)
 
-@Client.on_callback_query(filters.regex(r'answer\((.+)\)'), group=5)
 async def answer_alert(bot:Client, update:CallbackQuery):
 
     key = re.findall(r'answer\((.+)\)', update.data)[0]

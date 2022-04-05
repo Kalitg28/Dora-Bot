@@ -47,11 +47,11 @@ async def all_imdb(query):
      results = searcher.search_movie(query, results=2)
      Product = []
      try:
-          if len(results)<1: return False
+          if len(results)<=0: 
+              return False
           for result in results:
 
-                movie = get_imdb_info(result.movieID, info=Movie.default_info)
-                if len(movie)<1: return False
+                movie = get_imdb_info(result.movieID, False)
 
                 url = movie.get("full-size cover url", random.choice(Translation.START_PHOTOS))
                 caption = f"        <b><u>{movie.get('title', ' ')}</b></u>\n"

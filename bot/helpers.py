@@ -184,9 +184,9 @@ def href_list_string(items:list()):
         a = item.find('./a')
         href = a.attrib['href']
 
-        string += f"<a href='imdb.com{href}'>{a.text}</a> •"
+        string += f" • <a href='imdb.com{href}'>{a.text}</a>"
 
-    return string
+    return string+' •'
 
 def is_available(x, default="Unknown"):
     """A Proffessional Function to return default if text attrib absent"""

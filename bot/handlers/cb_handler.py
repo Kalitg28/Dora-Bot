@@ -1,3 +1,5 @@
+# (c) @Jisin0
+
 import re
 
 from pyrogram import Client, filters

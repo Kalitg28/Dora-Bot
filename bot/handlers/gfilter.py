@@ -1,3 +1,4 @@
+# (c) @Jisin0
 
 import pyrogram
 

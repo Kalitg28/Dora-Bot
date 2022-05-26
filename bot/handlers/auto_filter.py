@@ -1,3 +1,5 @@
+# (c) @Jisin0
+
 import re
 import asyncio
 
@@ -88,16 +90,16 @@ async def auto_filter(bot:Bot, update:Message):
             # from B to MiB
             
             if file_size < 1024:
-                file_size = f"[{file_size} B]"
+                file_size = f"{file_size} B]"
             elif file_size < (1024**2):
-                file_size = f"[{str(round(file_size/1024, 2))} KB]"
+                file_size = f"{str(round(file_size/1024, 2))} KB"
             elif file_size < (1024**3):
-                file_size = f"[{str(round(file_size/(1024**2), 2))} MB]"
+                file_size = f"{str(round(file_size/(1024**2), 2))} MB"
             elif file_size < (1024**4):
-                file_size = f"[{str(round(file_size/(1024**3), 2))} GB]"
+                file_size = f"{str(round(file_size/(1024**3), 2))} GB"
             
             
-            file_size = "" if file_size == ("[0 B]") else file_size
+            file_size = "" if file_size == ("0 B") else file_size
 
             unique_id = filter.get("unique_id")
             if not FIND.get("bot_details"):
@@ -121,7 +123,7 @@ async def auto_filter(bot:Bot, update:Message):
                     ]]
                 
                 else:
-                    button_text = f"{file_size} {file_name}"
+                    button_text = f"『 {file_size} 』 {file_name}"
                     results+=[[
                     InlineKeyboardButton(button_text, url=file_link)
                 ]]
@@ -226,7 +228,11 @@ async def auto_filter(bot:Bot, update:Message):
             )
             return
 
-        text = """
+        if movie_info:
+
+            try:
+
+                text = """
 <b>⍞ 𝚃𝙸𝚃𝙻𝙴 :</b> {title}
 <b>★ 𝚁𝙰𝚃𝙸𝙽𝙶 :</b> <i>{rating} / 10</i>
 <b>⎚ 𝚅𝙾𝚃𝙴𝚂 :</b> <i>{votes}</i>
@@ -250,73 +256,66 @@ async def auto_filter(bot:Bot, update:Message):
     language=movie_info['language'],
     runtime=movie_info['runtime']
 )
-        text+=f"<i>🅒 ᑌᑭᏞᝪᗩᗞᗴᗞ ᗷᎩ: {update.chat.title}</i>"
+                text+=f"<i>🅒 ᑌᑭᏞᝪᗩᗞᗴᗞ ᗷᎩ: {update.chat.title}</i>"
 
-
-        try:
-            msg = await bot.send_photo(
-                photo=poster,
-                chat_id = update.chat.id,
-                caption=text,
-                reply_markup=reply_markup,
-                parse_mode="html",
-                reply_to_message_id=update.message_id
-            )
-
-            if autodel:
-                await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del photo {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+autodel
-            )
-
-        except MediaEmpty:
-
-            text+=f"<a href='{movie_info['link']}'> </a>"
-            msg = await update.reply_text(
-                text=text,
-                reply_markup=reply_markup,
-                parse_mode="html"
-            )
-
-            if autodel:
-                await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+autodel
-            )
-        except WebpageMediaEmpty:
-
-            text+=f"<a href='{movie_info['link']}'> </a>"
-            msg = await update.reply_text(
-                text=text,
-                reply_markup=reply_markup,
-                parse_mode="html"
-            )
-
-            if autodel:
-                await bot.USER.send_message(
-                chat_id=Translation.LOG_CHANNEL,
-                text=f".del text {msg.chat.id} {msg.message_id} {query}",
-                schedule_date=msg.date+autodel
-            )
-
-        except ChatSendMediaForbidden:
-            await bot.send_message(
-                chat_id=update.chat.id,
-                text="<b>Admin tharathe Pinne enthina enne ivide pidichu kettiye bie :( ...</b>",
-                parse_mode='html'
-            )
-            await update.chat.leave()
-
-        except SlowmodeWait:
-            await update.chat.leave()
+                msg = await bot.send_photo(
+                    photo=poster,
+                    chat_id = update.chat.id,
+                    caption=text,
+                    reply_markup=reply_markup,
+                    parse_mode="html",
+                    reply_to_message_id=update.message_id
+                )
+    
+                if autodel:
+                    await bot.USER.send_message(
+                    chat_id=Translation.LOG_CHANNEL,
+                    text=f".del photo {msg.chat.id} {msg.message_id} {query}",
+                    schedule_date=msg.date+autodel
+                )
+    
+            except MediaEmpty:
+    
+                text+=f"<a href='{movie_info['link']}'> </a>"
+                msg = await update.reply_text(
+                    text=text,
+                    reply_markup=reply_markup,
+                    parse_mode="html"
+                )
+    
+                if autodel:
+                    await bot.USER.send_message(
+                    chat_id=Translation.LOG_CHANNEL,
+                    text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                    schedule_date=msg.date+autodel
+                )
+            except WebpageMediaEmpty:
+    
+                text+=f"<a href='{movie_info['link']}'> </a>"
+                msg = await update.reply_text(
+                    text=text,
+                    reply_markup=reply_markup,
+                    parse_mode="html"
+                )
+    
+                if autodel:
+                    await bot.USER.send_message(
+                    chat_id=Translation.LOG_CHANNEL,
+                    text=f".del text {msg.chat.id} {msg.message_id} {query}",
+                    schedule_date=msg.date+autodel
+                )
+    
+            except ChatSendMediaForbidden:
+                print(f"No Admin :( {update.chat.title}")
+    
+            except SlowmodeWait:
+                await update.chat.leave()
+                
+            except ButtonDataInvalid:
+                print(result[0])
             
-        except ButtonDataInvalid:
-            print(result[0])
-        
-        except Exception as e:
-            print(e)
+            except Exception as e:
+                print(e)
 
         print(update.chat.title)
 

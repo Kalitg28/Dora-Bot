@@ -1,4 +1,4 @@
-# (c) @MrPurple902
+# (c) @Jisin0
 
 import os
 import re
@@ -22,6 +22,7 @@ mcol = db["Manual_Filters"]
 ccol = db["Connections"]
 main = db["Main"]
 fcol = db["Filter_Collection"]
+bcol = db["ClonedBots"]
 
 def_config = dict(
                 accuracy=0.70,
@@ -866,6 +867,45 @@ class Database:
             except Exception as e:
                 print(e)
 
+             ###########Clone Bots Methods###########
+    async def add_new_bot(self, bot_token, botid, username, owner, time) -> bool:
+        try:
+            prev = bcol.find_one(
+                {'_id': botid}
+            )
+            if prev: 
+                return False
+            else:
+                bcol.insert_one(
+                    {
+                        '_id': botid,
+                        'bot_token': bot_token,
+                        'username': username,
+                        'owner': owner,
+                        'created': time,
+                        'active': True
+                    }
+                )
+        except Exception as e:
+            print(e)
+
+    async def bot_add_user(self, botid, userid):
+        bcol.update_one(
+            {'_id': botid},
+            {'$addToSet': {'users': userid}}
+        )
+
+    async def set_bot_settings(self, botid, key, value):
+        bcol.update_one(
+            {'_id': botid},
+            {'$set': {key: value}}
+        )
+    async def get_bot_setting(self, botid, key, default=None):
+        doc:dict = bcol.find_one(
+            {'_id': botid},
+            {key: 1}
+        )
+        return doc.get(key, default)
 
 def getLen(e):
 

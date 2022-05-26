@@ -5,28 +5,29 @@
 import os
 import logging
 import time
+from flask import Flask
 
 from logging.handlers import RotatingFileHandler
 
 from .translation import Translation
-from .helpers import Helpers
 from .buttons import Buttons
+from .helpers import Helpers
 
 # Change Accordingly While Deploying To A VPS
-APP_ID = int(os.environ.get("APP_ID"))
+APP_ID = int(os.environ.get("APP_ID",123))
 
-API_HASH = os.environ.get("API_HASH")
+API_HASH = os.environ.get("API_HASH",'okda')
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
+BOT_TOKEN = os.environ.get("BOT_TOKEN",'innapidicho')
 
-DB_URI = os.environ.get("DB_URI")
+DB_URI = os.environ.get("DB_URI",'enichumvenam')
 
-USER_SESSION = os.environ.get("USER_SESSION")
+USER_SESSION = os.environ.get("USER_SESSION",'lo')
 
 VERIFY = {}
 
 logging.basicConfig(
-    level=logging.WARNING,
+    level=logging.INFO,
     format="[%(asctime)s - %(levelname)s] - %(name)s - %(message)s",
     datefmt='%d-%b-%y %H:%M:%S',
     handlers=[

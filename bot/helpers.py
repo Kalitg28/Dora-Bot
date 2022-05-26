@@ -1,14 +1,12 @@
-# (c) @MrPurple902
+# (c) @Jisin0
 
 import os
 
-import imdb
 import json
-import random
-import requests
+import urllib3
+import aiohttp
 import pyrogram
 
-from imdb import Movie
 from pyrogram.types import InlineQueryResultPhoto
 from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
 from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
@@ -19,27 +17,21 @@ from PIL import ImageFont
 
 from lxml import html
 
-from bot.translation import Translation
-
-
-searcher = imdb.IMDb()
-
 class Helpers() :
 
  
  async def get_movie(my_movie):
 
-    movies = searcher.search_movie(my_movie, results=1)
-    if len(movies)<1:
+    movies = await search_imdb(my_movie, max=1)
+    if not movies:
         return False, False
+    id = movies[0]['id']
+    print(id)
     try:
-       id = movies[0].movieID
-    except IndexError:
-        return False, False
-
-    poster = movies[0].get("full-size cover url")
-
-    return (get_imdb_info(id), poster)
+        poster = movies[0]['i']['imageUrl']
+    except:
+        poster=False
+    return (await get_imdb_info(id), poster)
 
     
  async def cleanse(query:str):
@@ -56,49 +48,49 @@ class Helpers() :
 
  async def all_imdb(query):
 
-     print(query)
-     post = False
-     if "post:" in query: 
-         query = query.replace("post:",'') 
-         post = True
-     results = searcher.search_movie(query, results=2)
-     Product = []
-     try:
-          if len(results)<1: return False
-          for result in results:
-
-                movie = get_imdb_info(result.movieID, False)
-                if len(movie)<1: return False
-
-                url = result.get("full-size cover url", random.choice(Translation.START_PHOTOS))
-                caption = ""
-
-                caption+=f"\n🌟 <b>𝚁𝙰𝚃𝙸𝙽𝙶</b> : {movie['rating']}" if movie['rating'] else ''
-                caption+=f"\n🗳️ <b>𝚅𝙾𝚃𝙴𝚂</b> : {movie['votes']}" if movie['votes'] else ''
-                caption+=f"\n🧬 <b>𝙶𝙴𝙽𝚁𝙴𝚂</b> : {movie['genres']}" if movie['genres'] else ''
-                caption+=f"\n⌬ <b>𝙻𝙰𝙽𝙶𝚄𝙰𝙶𝙴𝚂 :</b> {movie['language']}" if movie['language'] else ''
-                caption+=f"\n📅 <b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['released']}" if movie['released'] else ''
-                caption+=f"\n⏱️ <b>𝚁𝚄𝙽𝚃𝙸𝙼𝙴</b> : {movie['runtime']}" if movie['runtime'] else ''
-                caption+=f"\n⎙ <b>𝙳𝙸𝚁𝙴𝙲𝚃𝙾𝚁 :</b> {movie['director']}" if movie['director'] else ''
-                caption+=f"\n⛤ <b>𝙰𝙲𝚃𝙾𝚁𝚂 :</b> {movie['stars']}" if movie['stars'] else ''
-                caption+=f"\n🗺️ <b>Storyline</b> : <code>{[movie['plot']]}</code>..." if movie['plot'] else ''
-                caption+=f"\n<a href='{movie['link']}'>Read More...</a>"
-
-                if post : caption+="\n\nBy @DM_Linkz"
-                
-                
-                buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]] if not post else [[InlineKeyboardButton("Join For More..", url="https://t.me/DM_Linkz")]]
-                Product.append(InlineQueryResultPhoto(
-                    photo_url=url,
-                    thumb_url=url,
-                    title=movie.get("title",""),
-                    caption=caption,
-                    reply_markup=InlineKeyboardMarkup(buttons)
-                ))
-          return Product
-
-     except Exception as e:
-         print(e)
+    try:
+        query = query.strip()
+        print(query)
+        post = False      
+        if "post:" in query:
+            query = query.replace("post:",'')
+            post = True      
+        results = await search_imdb(query, 3)
+        Product = []
+    
+        if len(results)<=0: 
+            return False
+        for result in results:
+              movie = await get_imdb_info(result['id'], False)
+              url = result['i'].get("imageUrl", "https://static.turbosquid.com/Preview/2020/08/18__04_34_57/Still_1.jpgC9E5FEBE-F1D6-43A0-AAAF-75B860A036D3Large.jpg")
+              caption = f"        <b><u>{movie.get('title', ' ')}</u></b>\n"
+              caption+=f"\n<b>𝚁𝙰𝚃𝙸𝙽𝙶</b> : {movie['rating']}" if movie['rating'] else ''
+              caption+=f"\n<b>𝚅𝙾𝚃𝙴𝚂</b> : {movie['votes']}" if movie['votes'] else ''
+              caption+=f"\n<b>𝙶𝙴𝙽𝚁𝙴𝚂</b> : {movie['genres']}" if movie['genres'] else ''
+              caption+=f"\n<b>𝙻𝙰𝙽𝙶𝚄𝙰𝙶𝙴𝚂 :</b> {movie['language']}" if movie['language'] else ''
+              caption+=f"\n<b>𝚁𝙴𝙻𝙴𝙰𝚂𝙴𝙳</b> : {movie['release']}" if movie['release'] else ''
+              caption+=f"\n<b>𝚁𝚄𝙽𝚃𝙸𝙼𝙴</b> : {movie['runtime']}" if movie['runtime'] else ''
+              caption+=f"\n<b>𝙳𝙸𝚁𝙴𝙲𝚃𝙾𝚁 :</b> {movie['director']}" if movie['director'] else ''
+              caption+=f"\n<b>𝙰𝙲𝚃𝙾𝚁𝚂 :</b> {movie['stars']}" if movie['stars'] else ''
+              caption+=f"\n<b>Storyline</b> : <code>{movie['plot']}</code>..." if movie['plot'] else ''
+              caption = caption[:1000] +f"\n<a href='{movie['link']}'>Read More...</a>"
+              if post : caption+="\n\n<b>🅒 Powered By @DM_Linkz</b>"
+              
+              year = movie.get("year", "")
+              
+              buttons = [[InlineKeyboardButton("Search Again", switch_inline_query_current_chat=query)],[InlineKeyboardButton("New Search", switch_inline_query_current_chat='')]] if not post else [[InlineKeyboardButton("Join For More..", url="https://t.me/DM_Linkz")]]
+              Product.append(InlineQueryResultPhoto(
+                  photo_url=url,
+                  thumb_url=url,
+                  title=movie.get("rawtitle","") + f" {year}",
+                  caption=caption,
+                  reply_markup=InlineKeyboardMarkup(buttons),
+                  parse_mode='html'
+              ))
+        return Product
+    except Exception as e:
+        print(e)
+        return False
 
  async def list_to_str(l):
 
@@ -171,6 +163,23 @@ async def read_results_from_file(chat_id, name):
     except Exception as e:
         print(e)
 
+async def search_imdb(q:str, max:int=1):
+    """Search Imdb For Results"""
+
+    url = urllib3.util.parse_url(f"https://v2.sg.media-imdb.com/suggestion/titles/{q[0]}/{q}.json").url
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                res = await resp.json()
+                results = res.get('d', False)
+                if results:
+                    return results[0:max]
+                else:
+                    return False
+    except Exception as e:
+        print(e)
+        return False
+
 def href_list_string(items:list()):
     """A Function to convert list elements to string"""
 
@@ -184,9 +193,9 @@ def href_list_string(items:list()):
         a = item.find('./a')
         href = a.attrib['href']
 
-        string += f" • <a href='imdb.com{href}'>{a.text}</a>"
+        string += f"<a href='imdb.com{href}'>{a.text}</a>  "
 
-    return string+' •'
+    return string
 
 def is_available(x, default="Unknown"):
     """A Proffessional Function to return default if text attrib absent"""
@@ -195,48 +204,59 @@ def is_available(x, default="Unknown"):
         return default
     return x.text
 
-def get_imdb_info(id, default='Unknown'):
+async def get_imdb_info(id, default='Unknown'):
 
     """A Function To Scrape The Imdb page of a Movie to get details"""
 
-    title, rating, votes, director, writers, stars, genres, plot, runtime, release, language = (default,default,default,default,default,default,default,default,default,default,default)
+    rawtitle, title, rating, votes, director, writers, stars, genres, plot, runtime, release, language = (default,default,default,default,default,default,default,default,default,default,default,default)
 
     try:
-        link = f"https://www.imdb.com/title/tt{id}/"
-        resp = requests.get(link)
-        page = resp.content
+        url = f"https://www.imdb.com/title/{id}/"
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:
+                    page = await resp.text()
+        except Exception as e:
+            print(e)
+            return False
         
         root: html.HtmlElement = html.fromstring(page).body
         main: html.HtmlElement = root.find("./div[2]/main/div/section[1]")
         
-        head: html.HtmlElement = main.find("./section/div[3]/section/section")
-        title = is_available(head.find("./div[1]/div[1]/h1"), default)
-        title = f"<a href='{link}'>{title}</a>"
-        rating = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[@data-testid='hero-rating-bar__aggregate-rating__score']/span[1]"), default)
-        votes = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[3]"), default)
-        
-        people: html.HtmlElement = head.find("./div[3]/div[2]/div[1]/div[3]/ul")
-        director = href_list_string(people.findall("./li[1]/div/ul/li"))
-        writers = href_list_string(people.findall("./li[2]/div/ul/li"))
-        stars = href_list_string(people.findall("./li[3]/div/ul/li"))
-        
-        base : html.HtmlElement = main.find("./div/section/div/div[1]")
-        
-        storyline:html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Storyline']/div[2]")
-        genres = href_list_string(storyline.findall("./ul[2]/li[@data-testid='storyline-genres']/div/ul/li"))
-        plot = is_available(storyline.find("./div[@data-testid='storyline-plot-summary']/div[1]/div"), default)
-        
-        details: html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Details']/div[2]/ul")
-        release = href_list_string(details.findall("./li[@data-testid='title-details-releasedate']/div/ul/li"))
-        language = href_list_string(details.findall("./li[@data-testid='title-details-languages']/div/ul/li"))
-        runtime = base.find("./section[@cel_widget_id='StaticFeature_TechSpecs']/div[2]/ul/li[@data-testid='title-techspec_runtime']/div").text_content()
-        
+        try:
+            head: html.HtmlElement = main.find("./section/div[3]/section/section")
+            rawtitle = is_available(head.find("./div[1]/div[1]/h1"), default)
+            title = f"<a href='{url}'>{rawtitle}</a>"
+            rating = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[@data-testid='hero-rating-bar__aggregate-rating__score']/span[1]"), default)
+            votes = is_available(head.find("./div[1]/div[2]/div/div[@data-testid='hero-rating-bar__aggregate-rating']/a/div/div/div[2]/div[3]"), default)
+            
+            people: html.HtmlElement = head.find("./div[3]/div[2]/div[1]/div[3]/ul")
+            director = href_list_string(people.findall("./li[1]/div/ul/li"))
+            writers = href_list_string(people.findall("./li[2]/div/ul/li"))
+            stars = href_list_string(people.findall("./li[3]/div/ul/li"))
+        except:
+            pass
+
+        try:
+            base : html.HtmlElement = main.find("./div/section/div/div[1]")
+            
+            storyline:html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Storyline']/div[2]")
+            genres = href_list_string(storyline.findall("./ul[2]/li[@data-testid='storyline-genres']/div/ul/li"))
+            plot = is_available(storyline.find("./div[@data-testid='storyline-plot-summary']/div[1]/div"), default)
+            
+            details: html.HtmlElement = base.find("./section[@cel_widget_id='StaticFeature_Details']/div[2]/ul")
+            release = href_list_string(details.findall("./li[@data-testid='title-details-releasedate']/div/ul/li"))
+            language = href_list_string(details.findall("./li[@data-testid='title-details-languages']/div/ul/li"))
+            runtime = base.find("./section[@cel_widget_id='StaticFeature_TechSpecs']/div[2]/ul/li[@data-testid='title-techspec_runtime']/div").text_content()
+        except:
+            pass
     except Exception as e:
         print(e)
 
     return dict(
+        rawtitle=rawtitle,
         title=title,
-        link=link,
+        link=url,
         rating=rating,
         votes=votes,
         director=director,
@@ -246,5 +266,6 @@ def get_imdb_info(id, default='Unknown'):
         plot=plot,
         release=release,
         language=language,
-        runtime=runtime
+        runtime=runtime,
+        id=id
     )

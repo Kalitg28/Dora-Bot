@@ -40,3 +40,6 @@ class Bot(Client):
     async def stop(self, *args):
         await super().stop()
         self.LOGGER(__name__).info("Bot stopped. Bye.")
+
+#flaskapp = Flask(__name__)
+#FLASK = threading.Thread(target=flaskapp.run, kwargs={'port': os.environ.get('PORT',3000)})

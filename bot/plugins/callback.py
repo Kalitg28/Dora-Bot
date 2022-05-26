@@ -809,10 +809,23 @@ async def callback_data(bot, update: CallbackQuery):
     elif query_data == "instruct":
         await update.answer("-Pʟᴇᴀsᴇ Cʜᴇᴄᴋ Tʜᴇ Sᴘᴇʟʟɪɴɢ Oғ Tʜᴇ Mᴏᴠɪᴇ\n-Mᴀᴋᴇ Sᴜʀᴇ Iᴛ Is Rᴇʟᴇᴀsᴇᴅ\n-Aᴠᴏɪᴅ Uɴɴᴇᴄᴇssᴀʀʏ Wᴏʀᴅs", show_alert=True)
      
-
 async def edit_caption(bot:Client, update: CallbackQuery):
 
+    await update.answer()
+    
     STRING = re.findall(r"edit_c\((.+)\)", update.data)[0]
+
+    if STRING=="FORMAT":
+        await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+    elif STRING=="SPELL":
+        await update.message.edit(text=Translation.EN[STRING], parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]))
+    else :
+        await update.message.edit(text=Translation.EN[STRING].format(update.from_user.mention), parse_mode="html", reply_markup=InlineKeyboardMarkup(Buttons.EN[STRING]), disable_web_page_preview=True)
+
+
+async def edit_e(bot:Client, update: CallbackQuery):
+
+    STRING = re.findall(r"edit_e\((.+)\)", update.data)[0]
 
     await bot.send_chat_action(update.message.chat.id, "typing")
     await update.answer()
@@ -907,6 +920,10 @@ async def cb_stats(bot:Client, update:CallbackQuery):
         )
     except Exception as e:
         print(e)
+
+async def transnoresult(bot:Client, update:CallbackQuery):
+
+    lang = re.findall(r'transnoresult\(.+\)')
     
 async def ignore(bot:Client, update:CallbackQuery):
 

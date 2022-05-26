@@ -1,115 +1,92 @@
+# (c) @Jisin0
+
 import re
 
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import PeerIdInvalid, UserIsBot
+from pyrogram.errors import PeerIdInvalid, UserIsBot, UserIsBlocked
 from bot.database import Database
 from bot.translation import Translation
-
-from pymongo.cursor import Cursor
 
 db = Database()
 
 async def connected_cast(bot:Client, update:Message) :
 
-    media = False
-    markup = False
+    caption = None
+    markup = None
 
     results = await db.all_connected()
     count = 0
+    block = 0
+    err=0
     status = await bot.send_message(
         chat_id=update.chat.id,
         text="Starting Broadcast...."
     )
     if update.reply_to_message.caption:
-        media = True
+        caption = update.reply_to_message.caption.html
     if update.reply_to_message.reply_markup:
         markup = InlineKeyboardMarkup(update.reply_to_message.reply_markup.inline_keyboard)
     for result in results:
 
         id = result["_id"]
         try:
-         if media :
-            if not markup:
-                sent = await update.reply_to_message.copy(
+            sent = await update.reply_to_message.copy(
                     chat_id=id,
-                    caption=update.reply_to_message.caption.html,
-                    parse_mode="html"
-                )
-            else :
-                sent = await update.reply_to_message.copy(
-                    chat_id=id,
-                    caption=update.reply_to_message.caption.html,
+                    caption=caption,
                     parse_mode="html",
                     reply_markup=markup
                 )
-         else :
-            if not markup:
-                sent = await update.reply_to_message.copy(
-                    chat_id=id,
-                )
-            else :
-                sent = await update.reply_to_message.copy(
-                    chat_id=id,
-                    reply_markup=markup
-                )
-         count+=1
-         await status.edit(f"Broadcasted Successfully To {count} Users")
-         await bot.send_message(Translation.OWNER_ID, sent.chat.title)
+
+            count+=1
+            await status.edit(f"Current broadcast stats:\nSuccess: {count}\nBlocked: {block}\nError: {err}")
+            await bot.send_message(Translation.OWNER_ID, sent.chat.title)
         except PeerIdInvalid:
-            pass
+            err+=1
+        except UserIsBlocked:
+            block+=1
         except Exception as e:
             print(e)
+            err+=1
 
 async def broadcast_all(bot:Client, update:Message) :
 
-    media = False
-    markup = False
+    caption = None
+    markup = None
 
     results = await db.all_users()
     count = 0
+    block = 0
+    err=0
     status = await bot.send_message(
         chat_id=update.chat.id,
         text="Starting Broadcast...."
     )
     if update.reply_to_message.caption:
-        media = True
+        caption = update.reply_to_message.caption.html
     if update.reply_to_message.reply_markup:
         markup = InlineKeyboardMarkup(update.reply_to_message.reply_markup.inline_keyboard)
     for result in results:
 
         id = result["_id"]
         try:
-         if media :
-            if not markup:
-                await update.reply_to_message.copy(
+            sent = await update.reply_to_message.copy(
                     chat_id=id,
-                    caption=update.reply_to_message.caption.html,
-                    parse_mode="html"
-                )
-            else :
-                await update.reply_to_message.copy(
-                    chat_id=id,
-                    caption=update.reply_to_message.caption.html,
+                    caption=caption,
                     parse_mode="html",
                     reply_markup=markup
                 )
-         else :
-            if not markup:
-                await update.reply_to_message.copy(
-                    chat_id=id,
-                )
-            else :
-                await update.reply_to_message.copy(
-                    chat_id=id,
-                    reply_markup=markup
-                )
-         count+=1
-         await status.edit(f"Broadcasted Successfully To {count} Users")
+
+            count+=1
+            await status.edit(f"Current broadcast stats:\nSuccess: {count}\nBlocked: {block}\nError: {err}")
+            await bot.send_message(Translation.OWNER_ID, sent.chat.title)
         except PeerIdInvalid:
-            pass
+            err+=1
+        except UserIsBlocked:
+            block+=1
         except Exception as e:
             print(e)
+            err+=1
 
 async def broadcast(bot:Client, update:Message) :
 

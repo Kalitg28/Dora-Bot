@@ -1,9 +1,13 @@
 Dnspython
 Motor
-Pyrogram
+Pyrogram==1.4.0
+Tgcrypto
 Pymongo
 Requests 
-TgCrypto
 IMDbPY
 Pyromod
 pillow
+flask[async]
+gunicorn
+aiohttp
+python-telegram-bot

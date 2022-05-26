@@ -35,6 +35,9 @@
     "buildpacks": [
         {
             "url": "heroku/python"
+        },
+        {
+            "url": "https://github.com/benoitc/gunicorn.git"
         }
     ],
     "formation": {

@@ -81,7 +81,7 @@ async def start(bot:Bot, update:Message):
     
                 update.reply_text(
                     f"<i><b>Successfully Uploaded Your Requested File </b></i>: \n<code>{file_name}</code>\n\nClick The Button Below To Reach Your File 👇",
-                    reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Click Here", url=f"t.me/DoraFilterBot/{msg.message_id}")]]),
+                    reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Click Here", url=f"t.me/Dora_MV_Bot/{msg.message_id}")]]),
                     parse_mode='HTML'
                 )
             except Unauthorized:

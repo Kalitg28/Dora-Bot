@@ -4,7 +4,7 @@ import re
 
 from pymongo import MongoClient
 
-DB_NAME = os.environ.get("DB_NAME", "Adv_Auto_Filter")
+DB_NAME = os.environ.get("DB_NAME", "Cluster0")
 DB_URI = os.environ.get("DB_URI")
 
 
@@ -17,7 +17,7 @@ class Database:
         self.bcol = db["ClonedBots"]
         self.main = db["Main"]
         self.fcol = db["Filter_Collection"]
-        self.owner = 1093541873
+        self.owner = 6004928770
 
     async def add_user(self, botid, userid):
         self.bcol.update_one(

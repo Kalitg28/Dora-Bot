@@ -231,7 +231,7 @@ async def connect(bot: Client, update: Message):
                 member = await bot.get_chat_member(update.chat.id, update.from_user.id)
                 if not member.status in ('creator','administrator'):
                     return
-            buttons = [[InlineKeyboardButton("Connect To PM", url=f"https://t.me/DoraFilterBot?start=connect{update.chat.id}")]]
+            buttons = [[InlineKeyboardButton("Connect To PM", url=f"http://t.me/Dora_MV_Bot?start=connect{update.chat.id}")]]
             await update.reply_text("Click On The Button Below To Connect To This Chat To Get PM Powers(Admins Only) :)", reply_markup=InlineKeyboardMarkup(buttons))
             return
 

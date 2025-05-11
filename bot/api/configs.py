@@ -14,10 +14,10 @@ class DICTIONARY(object):
 """,
 "ABOUT":"""𝙰𝚋𝚘𝚞𝚝 𝚖𝚎 𝚊𝚗𝚍 𝚑𝚘𝚠 𝙸 𝚠𝚘𝚛𝚔:-
 
-𝙸'𝚖 𝚊 𝚙𝚎𝚛𝚜𝚘𝚗𝚊𝚕𝚒𝚣𝚎𝚍 𝚌𝚕𝚘𝚗𝚎 𝚘𝚏 @DoraFilterBot 𝚋𝚞𝚒𝚕𝚝 𝚋𝚢 <a href='tg://user?id={owner}'>𝙼𝚢 𝙼𝚊𝚜𝚝𝚎𝚛</a>
+𝙸'𝚖 𝚊 𝚙𝚎𝚛𝚜𝚘𝚗𝚊𝚕𝚒𝚣𝚎𝚍 𝚌𝚕𝚘𝚗𝚎 𝚘𝚏 @Dora_MV_Bot 𝚋𝚞𝚒𝚕𝚝 𝚋𝚢 <a href='tg://user?id={owner}'>𝙼𝚢 𝙼𝚊𝚜𝚝𝚎𝚛</a>
 
 𝚆𝚊𝚗𝚗𝚊 𝚋𝚞𝚒𝚕𝚍 𝚢𝚘𝚞𝚛 𝚘𝚠𝚗 𝚋𝚘𝚝 𝚓𝚞𝚜𝚝 𝚕𝚒𝚔𝚎 𝚖𝚎...?
-𝙲𝚑𝚎𝚌𝚔𝚘𝚞𝚝 𝚊 <a href='t.me/DoraFilterBot?start=clonetutorial'>𝚀𝚞𝚒𝚌𝚔 𝚅𝚒𝚍𝚎𝚘 𝚃𝚞𝚝𝚘𝚛𝚒𝚊𝚕</a> 𝚒𝚗 𝚓𝚞𝚜𝚝 𝟹 𝚎𝚊𝚜𝚢 𝚜𝚝𝚎𝚙𝚜
+𝙲𝚑𝚎𝚌𝚔𝚘𝚞𝚝 𝚊 <a href='t.me/Dora_MV_Bot?start=clonetutorial'>𝚀𝚞𝚒𝚌𝚔 𝚅𝚒𝚍𝚎𝚘 𝚃𝚞𝚝𝚘𝚛𝚒𝚊𝚕</a> 𝚒𝚗 𝚓𝚞𝚜𝚝 𝟹 𝚎𝚊𝚜𝚢 𝚜𝚝𝚎𝚙𝚜
 """,
 "COMMANDS": """
 𝙷𝚎𝚛𝚎 𝚒𝚜 𝚊 𝚕𝚒𝚜𝚝 𝚘𝚏 𝚖𝚢 𝚊𝚟𝚊𝚒𝚕𝚊𝚋𝚕𝚎 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜:
@@ -41,7 +41,7 @@ class BUTTONS(object):
 "ABOUT": [
     [InlineKeyboardButton('Stats', callback_data='stats'),
     InlineKeyboardButton("Home", callback_data='edit(START)')],
-    [InlineKeyboardButton("Make Your Very Own Bot", url='t.me/DoraFilterBot?start=clonetutorial')]
+    [InlineKeyboardButton("Make Your Very Own Bot", url='t.me/Dora_MV_Bot?start=clonetutorial')]
 ],
 "DEFAULT": [
     [InlineKeyboardButton("H O M E", callback_data='edit(START)')]
